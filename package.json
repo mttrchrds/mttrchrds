@@ -12,13 +12,14 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.9.0",
-    "styled-components": "5.3.5",
-    "process": "^0.11.10"
+    "styled-components": "5.3.5"
   },
   "devDependencies": {
+    "babel-plugin-styled-components": "^2.0.7",
     "eslint": "^8.36.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-react": "^7.32.2",
-    "prettier": "^2.8.7"
+    "prettier": "^2.8.7",
+    "process": "^0.11.10"
   }
 }

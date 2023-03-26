@@ -1,8 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import Layout from '../layout/Layout'
-import BadaBing from '../BadaBing'
+import Layout from '../layout/layout'
+import BadaBing from '../bada_bing'
 
 const StyledHome = styled.div`
   height: 100vh;

@@ -7,7 +7,7 @@ import router from './router'
 
 import theme from './styles/theme'
 
-import GlobalStyles from './components/GlobalStyles'
+import GlobalStyles from './components/global_styles'
 
 const container = document.getElementById('app')
 const root = createRoot(container)

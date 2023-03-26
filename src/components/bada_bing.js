@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { mqMin } from '../helpers/media-queries'
+import { mqMin } from '../helpers/media_queries'
 
 const StyledBadaBing = styled.div`
   .banner {

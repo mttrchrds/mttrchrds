@@ -29,7 +29,7 @@ const StyledScreenTime = styled.div`
 `
 
 const ScreenTime = () => {
-  [data, setData] = useState([])
+  const [data, setData] = useState([])
 
   useEffect(() => {
     axios.get(`${process.env.API_DOMAIN}/api/shows/`)

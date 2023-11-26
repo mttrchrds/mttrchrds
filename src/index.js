@@ -13,10 +13,8 @@ const container = document.getElementById('app')
 const root = createRoot(container)
 
 root.render(
-  <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <GlobalStyles />
-      <RouterProvider router={router} />
-    </ThemeProvider>
-  </React.StrictMode>,
+  <ThemeProvider theme={theme}>
+    <GlobalStyles />
+    <RouterProvider router={router} />
+  </ThemeProvider>
 )

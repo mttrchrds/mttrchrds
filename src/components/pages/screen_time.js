@@ -32,22 +32,6 @@ const StyledScreenTime = styled.div`
       background-color: gray;
     }
   }
-  .shows {
-    display: flex;
-    &__item {
-      margin-bottom: 30px;
-      margin-right: 30px;
-      &__name {
-        font-weight: bold;
-        margin-bottom: 5px;
-        font-size: 16px;
-      }
-      &__creator {
-        margin-bottom: 10px;
-        font-size: 14px;
-      }
-    }
-  }
 `
 
 const StyledThumbnail = styled.div`
@@ -125,14 +109,12 @@ const parseActivities = activities => {
 }
 
 const ScreenTime = () => {
-  const [activities, setActivities] = useState([])
+  const [timelineDays, setTimelineDays] = useState([])
   const [pagingMonth, setPagingMonth] = useState('')
   const [pagingYear, setPagingYear] = useState('')
   const [enableLoadMore, setEnableLoadMore] = useState(true)
 
   useEffect(() => {
-    let tmpActivities = []
-    
     let newMonth = currentMonth - pagingLengthInMonths
     let newYear = currentYear
     
@@ -144,41 +126,21 @@ const ScreenTime = () => {
     const queryStart = `${newYear}-${formatNumber(newMonth)}-01`
     const queryEnd = `${currentYear}-${formatNumber(currentMonth)}-${formatNumber(currentDay)}`
 
-    axios.get(`${process.env.API_DOMAIN}/api/timeline-ongoing/`)
-    .then(apiResponse => {
-      const payload = _get(apiResponse, 'data', [])
-      if (payload.length > 0) {
-        tmpActivities = payload
-      }
-    })
-    .then(() => {
-      axios.get(`${process.env.API_DOMAIN}/api/timeline/?start=${queryStart}&end=${queryEnd}`)
-        .then(apiResponse => {
-          const payload = _get(apiResponse, 'data', [])
-          if (payload.length > 0) {
-            tmpActivities = [
-              ...tmpActivities,
-              ...payload,
-            ]
-          }
-        })
-        .then(() => {
-          // setActivities(tmpActivities)
-          setActivities(parseActivities(tmpActivities))
+    axios.get(`${process.env.API_DOMAIN}/api/timeline/?start=${queryStart}&end=${queryEnd}`)
+      .then(apiResponse => {
+        const payload = _get(apiResponse, 'data', [])
+        console.log({payload})
+        if (payload.length > 0) {
+          setTimelineDays(payload)
           setPagingMonth(newMonth)
           setPagingYear(newYear)
-        })
-        .catch(error => {
-          console.log(error)
-        })
-    })
-    .catch(function (error) {
-      console.log(error)
-    })
+        }
+      })
+      .catch(error => {
+        console.log(error)
+      })
 
   }, [])
-
-  console.log({activities})
 
   const handleLoadMore = e => {
     e.preventDefault()
@@ -204,10 +166,11 @@ const ScreenTime = () => {
     axios.get(`${process.env.API_DOMAIN}/api/timeline/?start=${queryStart}&end=${queryEnd}`)
       .then(apiResponse => {
         const payload = _get(apiResponse, 'data', [])
+        console.log({payload})
         if (payload.length > 0) {
-          setActivities([
-            ...activities,
-            ...parseActivities(payload),
+          setTimelineDays([
+            ...timelineDays,
+            ...payload,
           ]
           )
           setPagingMonth(startMonth)
@@ -227,7 +190,7 @@ const ScreenTime = () => {
         <StyledScreenTime>
             <div className="primary">
               <Timeline
-                activities={activities} 
+                timelineDays={timelineDays} 
                 endYear={pagingYear}
                 endMonth={pagingMonth} 
               />
@@ -239,14 +202,6 @@ const ScreenTime = () => {
             </div>
             <div className="secondary">
               <GameShow />
-            </div>
-            <div className="shows">
-              {/* {activities.map(a => (
-                <div className="shows__item" key={a.id}>
-                  <div className="shows__item__name">{_get(a, 'game_activity') ? _get(a, ['game_activity', 'name']) : _get(a, ['show_activity', 'name'])}</div>
-                  <StyledThumbnail src={_get(a, 'game_activity') ? _get(a, ['game_activity', 'thumbnail_url']) : _get(a, ['show_activity', 'thumbnail_url'])} className="shows__item__img" />
-                </div>
-              ))} */}
             </div>
         </StyledScreenTime>
       </Container>

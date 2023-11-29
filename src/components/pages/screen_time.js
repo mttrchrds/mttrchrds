@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
 import _get from 'lodash/get'
-import { DateTime } from 'luxon'
 
 import { mqMin } from '../../helpers/media_queries'
 
@@ -34,43 +33,7 @@ const StyledScreenTime = styled.div`
   }
 `
 
-const StyledThumbnail = styled.div`
-  width: 40px;
-  height: 40px;
-  background-image: url(${props => props.src});
-  background-repeat: no-repeat;
-  background-size: cover;
-  border-radius: 50%;
-`
-
-const date = new Date();
-export const currentYear = date.getFullYear();
-export const currentMonth = date.getMonth() + 1
-export const currentDay = date.getDate()
-
-const pagingLengthInMonths = 3
-
-let activeColourIndex = 0
-
-const activityColours = [
-  '#40a4d8',
-  '#33beb7',
-  '#b2c444',
-  '#fecc2f',
-  '#f8a227',
-  '#f66220',
-  '#dc3839',
-  '#ee6579',
-  '#9d60d1',
-]
-
-export const getDaysInMonth = (year, month) => {
-  // Returns the number of days in a particular month
-  const targetDate = new Date(Number(year), Number(month), 0)
-  return targetDate.getDate()
-}
-
-export const formatNumber = n => {
+const formatNumber = n => {
   // Returns a number in 03 format instead of 3
   return n.toLocaleString('en-US', {
     minimumIntegerDigits: 2,
@@ -78,34 +41,17 @@ export const formatNumber = n => {
   })
 }
 
-const generateActiveColourIndex = () => {
-  const totalColours = activityColours.length
-  if (activeColourIndex === totalColours - 1) {
-    activeColourIndex = 0
-  } else {
-    activeColourIndex++
-  }
-}
+const date = new Date();
+export const currentYear = date.getFullYear();
+export const currentMonth = formatNumber(date.getMonth() + 1)
+export const currentDay = formatNumber(date.getDate())
 
-const parseActivities = activities => {
-  // Fills null end dates with current date
-  // Adds a colour for each activity
-  // Calculates number of days
-  // Adds Luxon DateTimes for each date
-  let parsedActivities = []
-  activities.map(a => {
-    const new_end_at = a.end_at === null ? `${currentYear}-${formatNumber(currentMonth)}-${formatNumber(currentDay)}` : a.end_at
-    parsedActivities.push({
-      ...a,
-      'end_at': new_end_at,
-      'colour': activityColours[activeColourIndex],
-      'days': Math.ceil(DateTime.fromISO(new_end_at).diff(DateTime.fromISO(a.start_at), 'days').toObject().days),
-      'start_at_datetime': DateTime.fromISO(a.start_at),
-      'end_at_datetime': DateTime.fromISO(new_end_at),
-    })
-    generateActiveColourIndex()
-  })
-  return parsedActivities
+const pagingLengthInMonths = 3
+
+const getDaysInMonth = (year, month) => {
+  // Returns the number of days in a particular month
+  const targetDate = new Date(Number(year), Number(month), 0)
+  return targetDate.getDate()
 }
 
 const ScreenTime = () => {
@@ -163,7 +109,17 @@ const ScreenTime = () => {
     const queryStart = `${startYear}-${formatNumber(startMonth)}-01`
     const queryEnd = `${endYear}-${formatNumber(endMonth)}-${formatNumber(getDaysInMonth(endYear, endMonth))}`
 
-    axios.get(`${process.env.API_DOMAIN}/api/timeline/?start=${queryStart}&end=${queryEnd}`)
+    // Pass current channel list to API when loading more
+    const finalDay = timelineDays.length > 0 ? timelineDays[timelineDays.length - 1] : {}
+    const finalChannels = _get(finalDay, 'channels', undefined)
+    const finalChannelsParsed = finalChannels.map(fc => {
+      if (fc) {
+        return fc.id
+      }
+      return null
+    })
+
+    axios.get(`${process.env.API_DOMAIN}/api/timeline/?start=${queryStart}&end=${queryEnd}&channels=${finalChannelsParsed}`)
       .then(apiResponse => {
         const payload = _get(apiResponse, 'data', [])
         console.log({payload})

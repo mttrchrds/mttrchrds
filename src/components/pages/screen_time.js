@@ -42,13 +42,13 @@ const formatNumber = n => {
 }
 
 const date = new Date();
-export const currentYear = date.getFullYear();
-export const currentMonth = formatNumber(date.getMonth() + 1)
-export const currentDay = formatNumber(date.getDate())
+const currentYear = date.getFullYear();
+const currentMonth = date.getMonth() + 1
+const currentDay = date.getDate()
 
 const pagingLengthInMonths = 3
 
-const getDaysInMonth = (year, month) => {
+export const getDaysInMonth = (year, month) => {
   // Returns the number of days in a particular month
   const targetDate = new Date(Number(year), Number(month), 0)
   return targetDate.getDate()
@@ -148,7 +148,10 @@ const ScreenTime = () => {
               <Timeline
                 timelineDays={timelineDays} 
                 endYear={pagingYear}
-                endMonth={pagingMonth} 
+                endMonth={pagingMonth}
+                currentDay={formatNumber(currentDay)}
+                currentMonth={formatNumber(currentMonth)}
+                currentYear={String(currentYear)}
               />
               {enableLoadMore && (
                 <div>

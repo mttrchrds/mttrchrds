@@ -6,6 +6,7 @@ import _find from 'lodash/find'
 import _get from 'lodash/get'
 
 import Activity from './activity'
+import { getDaysInMonth } from '../pages/screen_time'
 
 const dayHeight = 50
 
@@ -87,6 +88,9 @@ const Timeline = props => {
               {...channelActivity}
               colour={activityColour}
               dayHeight={dayHeight}
+              currentDay={props.currentDay}
+              currentMonth={props.currentMonth}
+              currentYear={props.currentYear}
             />
           </div>
         </div>
@@ -98,15 +102,26 @@ const Timeline = props => {
     }
   }
 
+  const renderDayLabel = (day, index) => {
+    if (day.month === props.currentMonth && day.year === props.currentYear) {
+      if (index === 0) {
+        return `${DateTime.fromISO(day.date).toLocaleString({ month: 'long' })}, ${day.year}`
+      }
+      return ' '
+    } else {
+      const totalDays = getDaysInMonth(Number(day.year), Number(day.month))
+      if (totalDays === Number(day.day)) {
+        return `${DateTime.fromISO(day.date).toLocaleString({ month: 'long' })}, ${day.year}`
+      }
+      return ' '
+    }
+  }
+
   const renderDays = () => {
-    return props.timelineDays.map(d => {
+    return props.timelineDays.map((d, i) => {
       return (
         <div className="day" key={d.date} data-date={`${d.year}-${d.month}-${d.day}`}>
-          <div className="day__label">
-            {/* TODO always add current month at top (unless final day, see below) */}
-            {/* TODO change this so it is displayed on the last day of the month */}
-            {d.day === '01' ? `${DateTime.fromISO(d.date).toLocaleString({ month: 'long' })}, ${d.year}` : ` `}
-          </div>
+          <div className="day__label">{renderDayLabel(d,i)}</div>
           <div className="day__channels">
             {renderChannel(5, d)}
             {renderChannel(3, d)}
@@ -134,6 +149,9 @@ Timeline.defaultProps = {
 
 Timeline.propTypes = {
   timelineDays: PropTypes.array,
+  currentDay: PropTypes.string.isRequired,
+  currentMonth: PropTypes.string.isRequired,
+  currentYear: PropTypes.string.isRequired,
 }
 
 export default Timeline

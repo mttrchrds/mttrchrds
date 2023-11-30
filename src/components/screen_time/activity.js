@@ -6,8 +6,6 @@ import _get from 'lodash/get'
 
 import { mqMin } from '../../helpers/media_queries'
 
-import { currentDay, currentMonth, currentYear } from '../pages/screen_time'
-
 const StyledActivity = styled.div`
   min-height: ${props => props.height}px;
   background-color: ${props => props.colour};
@@ -25,7 +23,7 @@ const Activity = props => {
   const activityDetail = _get(props, ['show_activity']) === null ? _get(props, ['game_activity']) : _get(props, ['show_activity'])
   const activityPlatform = _get(props, ['show_platform']) === null ? _get(props, ['game_platform']) : _get(props, ['show_platform'])
   const isShow = _get(props, ['show_activity']) === null ? false : true
-  const new_end_at = _get(props, ['end_at']) === null ? `${currentYear}-${currentMonth}-${currentDay}` : _get(props, ['end_at'])
+  const new_end_at = _get(props, ['end_at']) === null ? `${props.currentYear}-${props.currentMonth}-${props.currentDay}` : _get(props, ['end_at'])
   const daysTotal = Math.ceil(DateTime.fromISO(new_end_at).diff(DateTime.fromISO(_get(props, ['start_at'])), 'days').toObject().days)
   return (
     <StyledActivity dayHeight={props.dayHeight} height={daysTotal * props.dayHeight} colour={props.colour} thumbnail={_get(activityDetail, ['thumbnail_url'])}>
@@ -49,6 +47,9 @@ Activity.propTypes = {
   game_activity: PropTypes.object,
   game_platform: PropTypes.object,
   completed: PropTypes.bool.isRequired,
+  currentDay: PropTypes.string.isRequired,
+  currentMonth: PropTypes.string.isRequired,
+  currentYear: PropTypes.string.isRequired,
 }
 
 export default Activity

@@ -36,24 +36,30 @@ const generateActiveColourIndex = () => {
 }
 
 const StyledTimeline = styled.div`
-  overflow: hidden;
-  .day {
-    display: flex;
-    min-height: ${dayHeight}px;
-    &__label {
-      display: flex;
-      width: 20%;
-      flex-shrink: 0;
+  display: flex;
+  .day-labels {
+    width: 20%;
+    &__row {
+      height: ${dayHeight}px;
+      background-color: red;
+      &--sticky {
+        position: sticky;
+        top: 0;
+      }
     }
-    &__channels {
-      width: 80%;
+  }
+  .day-channels {
+    width: 80%;
+    overflow: hidden;
+    &__row {
       display: flex;
+      height: ${dayHeight}px;
       justify-content: space-evenly;
-      &__channel {
-        position: relative;
-        &__activity {
-          position: absolute;
-        }
+    }
+    &__channel {
+      position: relative;
+      &__activity {
+        position: absolute;
       }
     }
   }
@@ -82,8 +88,8 @@ const Timeline = props => {
       // Update the active colour index
       generateActiveColourIndex()
       return (
-        <div className="day__channels__channel" data-channel={channelIndex}>
-          <div className="day__channels__channel__activity">
+        <div className="day-channels__channel" data-channel={channelIndex}>
+          <div className="day-channels__channel__activity">
             <Activity
               {...channelActivity}
               colour={activityColour}
@@ -97,40 +103,48 @@ const Timeline = props => {
       )
     } else {
       return (
-        <div className="day__channels__channel">&nbsp;</div>
+        <div className="day-channels__channel">&nbsp;</div>
       )
     }
   }
 
-  const renderDayLabel = (day, index) => {
+  const calculateDayLabel = (day, index) => {
     if (day.month === props.currentMonth && day.year === props.currentYear) {
       if (index === 0) {
-        return `${DateTime.fromISO(day.date).toLocaleString({ month: 'long' })}, ${day.year}`
+        return 'Today'
       }
-      return ' '
+      return null
     } else {
       const totalDays = getDaysInMonth(Number(day.year), Number(day.month))
       if (totalDays === Number(day.day)) {
         return `${DateTime.fromISO(day.date).toLocaleString({ month: 'long' })}, ${day.year}`
       }
-      return ' '
+      return null
     }
   }
 
-  const renderDays = () => {
+  const renderLabels = () => {
     return props.timelineDays.map((d, i) => {
+      const dayLabel = calculateDayLabel(d, i)
       return (
-        <div className="day" key={d.date} data-date={`${d.year}-${d.month}-${d.day}`}>
-          <div className="day__label">{renderDayLabel(d,i)}</div>
-          <div className="day__channels">
-            {renderChannel(5, d)}
-            {renderChannel(3, d)}
-            {renderChannel(1, d)}
-            {renderChannel(0, d)}
-            {renderChannel(2, d)}
-            {renderChannel(4, d)}
-            {renderChannel(6, d)}
-          </div>
+        <div className={dayLabel ? 'day-labels__row day-labels__row--sticky' : 'day-labels__row'} key={`label-${d.date}`} data-date={`${d.year}-${d.month}-${d.day}`}>
+          {dayLabel === null ? ' ' : dayLabel}
+        </div>
+      )
+    })
+  }
+
+  const renderChannels = () => {
+    return props.timelineDays.map(d => {
+      return (
+        <div className="day-channels__row" key={`channels-${d.date}`} data-date={`${d.year}-${d.month}-${d.day}`}>
+          {renderChannel(5, d)}
+          {renderChannel(3, d)}
+          {renderChannel(1, d)}
+          {renderChannel(0, d)}
+          {renderChannel(2, d)}
+          {renderChannel(4, d)}
+          {renderChannel(6, d)}
         </div>
       )
     })
@@ -138,7 +152,12 @@ const Timeline = props => {
 
   return (
     <StyledTimeline>
-      {renderDays()}
+      <div className="day-labels">
+        {renderLabels()}
+      </div>
+      <div className="day-channels">
+        {renderChannels()}
+      </div>
     </StyledTimeline>
   )
 }

@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { DateTime } from 'luxon'
 import _get from 'lodash/get'
+import axios from 'axios'
 
 import { mqMin } from '../../helpers/media_queries'
+
+import { LayoutContext } from '../layout/layout'
 
 const StyledActivity = styled.div`
   min-height: ${props => props.height}px;
@@ -20,13 +23,47 @@ const StyledActivity = styled.div`
 `
 
 const Activity = props => {
+  const { setActiveGameShow, setActiveGameShowLoading } = useContext(LayoutContext)
+
   const activityDetail = _get(props, ['show_activity']) === null ? _get(props, ['game_activity']) : _get(props, ['show_activity'])
   const activityPlatform = _get(props, ['show_platform']) === null ? _get(props, ['game_platform']) : _get(props, ['show_platform'])
   const isShow = _get(props, ['show_activity']) === null ? false : true
   const new_end_at = _get(props, ['end_at']) === null ? `${props.currentYear}-${props.currentMonth}-${props.currentDay}` : _get(props, ['end_at'])
   const daysTotal = Math.ceil(DateTime.fromISO(new_end_at).diff(DateTime.fromISO(_get(props, ['start_at'])), 'days').toObject().days)
+
+  const handleClickActivity = e => {
+    e.preventDefault()
+    let endpointPath = `/api/games/`
+    let gameShowId = _get(props, ['game_activity', 'id'])
+    if (isShow) {
+      endpointPath = `/api/shows/`
+      gameShowId = _get(props, ['show_activity', 'id'])
+    }
+    setActiveGameShowLoading(true)
+    /* eslint-disable-next-line no-undef */
+    axios.get(`${process.env.API_DOMAIN}${endpointPath}${gameShowId}`)
+      .then(apiResponse => {
+        const payload = _get(apiResponse, 'data', [])
+        console.log({payload})
+        if (payload) {
+          setActiveGameShow(payload)
+          setActiveGameShowLoading(false)
+        }
+      })
+      .catch(error => {
+        console.log(error)
+        setActiveGameShowLoading(false)
+      })
+  }
+
   return (
-    <StyledActivity dayHeight={props.dayHeight} height={daysTotal * props.dayHeight} colour={props.colour} thumbnail={_get(activityDetail, ['thumbnail_url'])}>
+    <StyledActivity 
+      dayHeight={props.dayHeight} 
+      height={daysTotal * props.dayHeight} 
+      colour={props.colour} 
+      thumbnail={_get(activityDetail, ['thumbnail_url'])}
+      onClick={handleClickActivity}
+    >
       <div className="activity-head"></div>
       <div className="activity-tail"></div>
     </StyledActivity>

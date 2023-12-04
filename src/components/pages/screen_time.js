@@ -11,24 +11,25 @@ import Timeline from '../screen_time/timeline'
 import GameShow from '../screen_time/game_show'
 
 const StyledScreenTime = styled.div`
-  display: flex;
   color: white;
   .primary {
     width: 100%;
-    flex-shrink: 0;
     background-color: darkgray;
   }
   .secondary {
     display: none;
   }
   @media ${props => mqMin(props.theme.breakPoints.md)} {
+    display: flex;
     .primary {
+      display: block;
       width: 65%;
+      flex-shrink: 0;
     }
     .secondary {
-      display: flex;
-      flex-grow: 1;
+      display: block;
       background-color: gray;
+      flex-grow: 1;
     }
   }
 `
@@ -72,6 +73,7 @@ const ScreenTime = () => {
     const queryStart = `${newYear}-${formatNumber(newMonth)}-01`
     const queryEnd = `${currentYear}-${formatNumber(currentMonth)}-${formatNumber(currentDay)}`
 
+    /* eslint-disable-next-line no-undef */
     axios.get(`${process.env.API_DOMAIN}/api/timeline/?start=${queryStart}&end=${queryEnd}`)
       .then(apiResponse => {
         const payload = _get(apiResponse, 'data', [])
@@ -119,6 +121,7 @@ const ScreenTime = () => {
       return null
     })
 
+    /* eslint-disable-next-line no-undef */
     axios.get(`${process.env.API_DOMAIN}/api/timeline/?start=${queryStart}&end=${queryEnd}&channels=${finalChannelsParsed}`)
       .then(apiResponse => {
         const payload = _get(apiResponse, 'data', [])

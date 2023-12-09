@@ -1,158 +1,156 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { DateTime } from 'luxon'
-import _filter from 'lodash/filter'
 import _find from 'lodash/find'
 import _get from 'lodash/get'
-import _findIndex from 'lodash/findIndex'
 
-const dayHeight = 20
+import Activity from './activity'
+import { getDaysInMonth } from '../pages/screen_time'
+
+const dayHeight = 50
+const channelWidth = 50
+
+let renderedActivities = []
+
+let activeColourIndex = 0
+
+const activityColours = [
+  '#40a4d8',
+  '#33beb7',
+  '#b2c444',
+  '#fecc2f',
+  '#f8a227',
+  '#f66220',
+  '#dc3839',
+  '#ee6579',
+  '#9d60d1',
+]
+
+const generateActiveColourIndex = () => {
+  const totalColours = activityColours.length
+  if (activeColourIndex === totalColours - 1) {
+    activeColourIndex = 0
+  } else {
+    activeColourIndex++
+  }
+}
 
 const StyledTimeline = styled.div`
-  .day {
-    display: flex;
-    min-height: ${dayHeight}px;
-    &__label {
-      display: flex;
-      width: 20%;
-      flex-shrink: 0;
+  display: flex;
+  .day-labels {
+    width: 20%;
+    background-color: #1E2639;
+    &__row {
+      height: ${dayHeight}px;
+      &--sticky {
+        position: sticky;
+        top: 0;
+      }
     }
-    &__channels {
-      width: 80%;
+  }
+  .day-channels {
+    width: 80%;
+    overflow: hidden;
+    background-color: #1B2335;
+    &__row {
       display: flex;
+      height: ${dayHeight}px;
       justify-content: space-evenly;
-      &__channel {
+    }
+    &__channel {
+      width: 50px;
+      &--active {
         position: relative;
-        &__activity {
-          position: absolute;
-        }
+      }
+      &__activity {
+        position: absolute;
       }
     }
   }
 `
 
 const Timeline = props => {
-  const [days, setDays] = useState([])
-  
-  const renderedActivities = useRef([])
-
   useEffect(() => {
-    let tmpEarliestDate = ''
-    let tmpLatestDate = ''
-    if (props.activities.length > 0) {
-      // Find date range for current data set
-      props.activities.map(a => {
-        let startAt_date = DateTime.fromISO(a.start_at)
-        if (tmpEarliestDate) {
-          if (startAt_date < tmpEarliestDate) {
-            tmpEarliestDate = startAt_date
-          }
-        } else {
-          tmpEarliestDate = startAt_date
-        }
-        let endAt_date = DateTime.fromISO(a.end_at)
-        if (tmpLatestDate) {
-          if (endAt_date > tmpLatestDate) {
-            tmpLatestDate = endAt_date
-          }
-        } else {
-          tmpLatestDate = endAt_date
-        }
-      })
-      // Build array of days in date range which are rendered in the timeline
-      // Each day also calculates which activity goes in which vertical channel
-      let tmpDays = []
-      let channels = [
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-      ]
-      for (let i = tmpLatestDate; i >= tmpEarliestDate; i = i.minus({ days: 1 })) {
-        // Remove item from channel when start_at has passed
-        channels = channels.map(c => {
-          const activity = _find(props.activities, a => a.id === c)
-          if (_get(activity, 'start_at') === i.plus({ days: 1 }).toISODate()) {
-            return ''
-          } else {
-            return c
-          }
-        })
-        const todayActivities = _filter(props.activities, a => a.end_at === i.toISODate())
-        todayActivities.map(a => {
-          // Find first empty channel
-          const channelIndex = _findIndex(channels, c => c === '')
-          // Put activity in the channel
-          channels[channelIndex] = a.id
-        })
-        tmpDays.push({
-          'DateTime': i,
-          'formattedDate': i.toISODate(),
-          'day': i.day,
-          'month': i.month,
-          'year': i.year,
-          'channels': channels,
-        })
-      }
-      // Reset rendered so everything is rendered again on page load
-      renderedActivities.current = []
-      setDays(tmpDays)
+    if (props.timelineDays.length > 0) {
+      // Reset rendering variables when new data is loaded
+      renderedActivities = []
+      activeColourIndex = 0
     }
-  }, [props.activities])
+  }, [props.timelineDays])
 
   const renderChannel = (channelIndex, day) => {
-    const channelActivityId = _get(day, ['channels', channelIndex])
+    const channelActivityId = _get(day, ['channels', channelIndex, 'id'])
     // Render activity if end_at is current day and it's not been rendered before
-    if (channelActivityId && !_find(renderedActivities.current, r => r === channelActivityId)) {
-      // Set as being rendered
-      renderedActivities.current = [
-        ...renderedActivities.current,
+    if (channelActivityId && !_find(renderedActivities, r => r === channelActivityId)) {
+      // Set activity as rendered
+      renderedActivities = [
+        ...renderedActivities,
         channelActivityId,
       ]
-      const channelActivity = _find(_get(props, 'activities', []), a => a.id === channelActivityId)
+      const channelActivity = _get(day, ['channels', channelIndex])
+      const activityColour = activityColours[activeColourIndex]
+      // Update the active colour index
+      generateActiveColourIndex()
       return (
-        <div className="day__channels__channel">
-          <div 
-            className="day__channels__channel__activity"
-            style={{
-              height: `${_get(channelActivity, ['days']) * dayHeight}px`,
-              backgroundColor: _get(channelActivity, ['colour'])
-            }}
-          >
-            {_get(channelActivity, ['show_activity']) === null 
-            ? _get(channelActivity, ['game_activity', 'name']) 
-            : _get(channelActivity, ['show_activity', 'name'])}
+        <div className="day-channels__channel day-channels__channel--active" data-channel={channelIndex}>
+          <div className="day-channels__channel__activity">
+            <Activity
+              {...channelActivity}
+              activityColour={activityColour}
+              dayHeight={dayHeight}
+              channelWidth={channelWidth}
+              currentDay={props.currentDay}
+              currentMonth={props.currentMonth}
+              currentYear={props.currentYear}
+            />
           </div>
-          
         </div>
       )
     } else {
       return (
-        <div className="day__channels__channel">&nbsp;</div>
+        <div className="day-channels__channel">&nbsp;</div>
       )
     }
   }
 
-  const renderDays = () => {
-    return days.map(d => {
+  const calculateDayLabel = (day, index) => {
+    if (day.month === props.currentMonth && day.year === props.currentYear) {
+      if (index === 0) {
+        return 'Today'
+      }
+      return null
+    } else {
+      const totalDays = getDaysInMonth(Number(day.year), Number(day.month))
+      if (totalDays === Number(day.day)) {
+        return `${DateTime.fromISO(day.date).toLocaleString({ month: 'long' })}, ${day.year}`
+      }
+      return null
+    }
+  }
+
+  const renderLabels = () => {
+    return props.timelineDays.map((d, i) => {
+      const dayLabel = calculateDayLabel(d, i)
       return (
-        <div className="day" key={d.formattedDate} data-day={d.day}>
-          <div className="day__label">
-            {d.day === 1 ? `${d.DateTime.toLocaleString({ month: 'long' })}, ${d.year}` : ` `}
-          </div>
-          <div className="day__channels">
-            {renderChannel(5, d)}
-            {renderChannel(3, d)}
-            {renderChannel(1, d)}
-            {renderChannel(0, d)}
-            {renderChannel(2, d)}
-            {renderChannel(4, d)}
-            {renderChannel(6, d)}
-          </div>
+        <div className={dayLabel ? 'day-labels__row day-labels__row--sticky' : 'day-labels__row'} key={`label-${d.date}`} data-date={`${d.year}-${d.month}-${d.day}`}>
+          {dayLabel === null ? ' ' : dayLabel}
+        </div>
+      )
+    })
+  }
+
+  const renderChannels = () => {
+    return props.timelineDays.map(d => {
+      return (
+        <div className="day-channels__row" key={`channels-${d.date}`} data-date={`${d.year}-${d.month}-${d.day}`}>
+          {renderChannel(5, d)}
+          {renderChannel(3, d)}
+          {renderChannel(1, d)}
+          {renderChannel(0, d)}
+          {renderChannel(2, d)}
+          {renderChannel(4, d)}
+          {renderChannel(6, d)}
         </div>
       )
     })
@@ -160,18 +158,25 @@ const Timeline = props => {
 
   return (
     <StyledTimeline>
-      <div>[Hello world]</div>
-      {renderDays()}
+      <div className="day-labels">
+        {renderLabels()}
+      </div>
+      <div className="day-channels">
+        {renderChannels()}
+      </div>
     </StyledTimeline>
   )
 }
 
 Timeline.defaultProps = {
-  activities: [],
+  timelineDays: [],
 }
 
 Timeline.propTypes = {
-  activities: PropTypes.array,
+  timelineDays: PropTypes.array,
+  currentDay: PropTypes.string.isRequired,
+  currentMonth: PropTypes.string.isRequired,
+  currentYear: PropTypes.string.isRequired,
 }
 
 export default Timeline

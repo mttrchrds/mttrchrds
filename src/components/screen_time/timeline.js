@@ -9,6 +9,7 @@ import Activity from './activity'
 import { getDaysInMonth } from '../pages/screen_time'
 
 const dayHeight = 50
+const channelWidth = 50
 
 let renderedActivities = []
 
@@ -39,9 +40,9 @@ const StyledTimeline = styled.div`
   display: flex;
   .day-labels {
     width: 20%;
+    background-color: #1E2639;
     &__row {
       height: ${dayHeight}px;
-      background-color: red;
       &--sticky {
         position: sticky;
         top: 0;
@@ -51,13 +52,17 @@ const StyledTimeline = styled.div`
   .day-channels {
     width: 80%;
     overflow: hidden;
+    background-color: #1B2335;
     &__row {
       display: flex;
       height: ${dayHeight}px;
       justify-content: space-evenly;
     }
     &__channel {
-      position: relative;
+      width: 50px;
+      &--active {
+        position: relative;
+      }
       &__activity {
         position: absolute;
       }
@@ -88,12 +93,13 @@ const Timeline = props => {
       // Update the active colour index
       generateActiveColourIndex()
       return (
-        <div className="day-channels__channel" data-channel={channelIndex}>
+        <div className="day-channels__channel day-channels__channel--active" data-channel={channelIndex}>
           <div className="day-channels__channel__activity">
             <Activity
               {...channelActivity}
-              colour={activityColour}
+              activityColour={activityColour}
               dayHeight={dayHeight}
+              channelWidth={channelWidth}
               currentDay={props.currentDay}
               currentMonth={props.currentMonth}
               currentYear={props.currentYear}

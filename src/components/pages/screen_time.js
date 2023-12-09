@@ -28,7 +28,7 @@ const StyledScreenTime = styled.div`
     }
     .secondary {
       display: block;
-      background-color: gray;
+      background-color: #2A3550;
       flex-grow: 1;
     }
   }

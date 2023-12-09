@@ -5,10 +5,10 @@ import PropTypes from 'prop-types'
 export const LayoutContext = createContext()
 
 const StyledLayout = styled.div`
+  background-color: #0D1017;
   .layout-header {
     width: 100%;
     height: 80px;
-    background-color: deeppink;
     color: yellow;
     display: flex;
     align-items: center;

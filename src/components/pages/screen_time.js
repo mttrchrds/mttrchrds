@@ -23,12 +23,13 @@ const StyledScreenTime = styled.div`
     display: flex;
     .primary {
       display: block;
-      width: 65%;
+      width: 70%;
       flex-shrink: 0;
     }
     .secondary {
       display: block;
       background-color: #2A3550;
+      padding: 20px;
       flex-grow: 1;
     }
   }

@@ -38,6 +38,9 @@ const generateActiveColourIndex = () => {
 
 const StyledTimeline = styled.div`
   display: flex;
+  padding-top: 20px;
+  padding-left: 20px;
+  background: linear-gradient(90deg, #1E2639 1.46%, #1B2335 100%);
   .day-labels {
     width: 20%;
     background-color: #1E2639;
@@ -45,18 +48,23 @@ const StyledTimeline = styled.div`
       height: ${dayHeight}px;
       &--sticky {
         position: sticky;
-        top: 0;
+        top: 20px;
+        background-color: #1E2639;
       }
     }
   }
   .day-channels {
     width: 80%;
     overflow: hidden;
-    background-color: #1B2335;
+    background: linear-gradient(90deg, #1E2639 1.46%, #1B2335 100%);
     &__row {
       display: flex;
       height: ${dayHeight}px;
       justify-content: space-evenly;
+      border-bottom: 1px solid #80808021;
+      &--highlight {
+        border-bottom: 1px solid #ffffff29;
+      }
     }
     &__channel {
       width: 50px;
@@ -141,9 +149,16 @@ const Timeline = props => {
   }
 
   const renderChannels = () => {
+    let dayCounter = 1
     return props.timelineDays.map(d => {
+      let highlight = false
+      if (dayCounter % 7 === 0) {
+        highlight = true
+      }
+      dayCounter++
+      const rowClass = highlight ? `day-channels__row day-channels__row--highlight` : `day-channels__row`
       return (
-        <div className="day-channels__row" key={`channels-${d.date}`} data-date={`${d.year}-${d.month}-${d.day}`}>
+        <div className={rowClass} key={`channels-${d.date}`} data-date={`${d.year}-${d.month}-${d.day}`}>
           {renderChannel(5, d)}
           {renderChannel(3, d)}
           {renderChannel(1, d)}

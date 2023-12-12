@@ -9,7 +9,7 @@ import { LayoutContext } from '../layout/layout'
 
 const StyledGameShow = styled.div`
   position: sticky;
-  top: 0;
+  top: 20px;
   .game-show {
     &__image {
       img {

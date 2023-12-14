@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { DateTime } from 'luxon'
@@ -18,42 +18,57 @@ const StyledActivity = styled.div`
   cursor: pointer;
   .activity-head {
     position: absolute;
+    z-index: 3;
     top: 0;
-    width: ${props => props.channelWidth}px;
-    height: ${props => props.channelWidth}px;
+    width: ${props => props.activityHover ? `60` : props.channelWidth}px;
+    height: ${props => props.activityHover ? `60` : props.channelWidth}px;
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: ${props => props.activityColour};
+    filter: ${props => props.activityHover ? `brightness(130%)` : `brightness(100%)`};
     border-radius: 50%;
+    transition: all 0.1s ease-in-out;
     &__inner {
-      width: ${props => props.channelWidth - 2}px;
-      height: ${props => props.channelWidth - 2}px;
+      /* width: ${props => props.channelWidth - 2}px;
+      height: ${props => props.channelWidth - 2}px; */
+      width: ${props => props.activityHover ? `${props.channelWidth + 6}` : `${props.channelWidth - 2}`}px;
+      height: ${props => props.activityHover ? `${props.channelWidth + 6}` : `${props.channelWidth - 2}`}px;
       background-image: url(${props => props.thumbnail});
       background-repeat: no-repeat;
       background-size: cover;
       border-radius: 50%;
+      transition: all 0.1s ease-in-out;
     }
   }
   .activity-spine {
+    position: relative;
+    z-index: 1;
     background-color: ${props => props.activityColour};
     height: ${props => props.activityHeight - 10}px;
     width: ${props => props.channelWidth - 10}px;
     border-radius: 20px;
+    filter: ${props => props.activityHover ? `brightness(130%)` : `brightness(100%)`};
+    transition: all 0.1s ease-in-out;
   }
   .activity-tail {
     position: absolute;
+    z-index: 2;
     svg {
       position: relative;
       bottom: 5px;
-      fill: black;
-      opacity: 0.5;
+      fill: ${props => props.activityColour};
+      filter: brightness(75%);
+      filter: ${props => props.activityHover ? `brightness(60%)` : `brightness(75%)`};
+      transition: all 0.1s ease-in-out;
     }
   }
 `
 
 const Activity = props => {
   const { setActiveGameShow, activeGameShow, setActiveGameShowLoading } = useContext(LayoutContext)
+
+  const [activityHover, setActivityHover] = useState(false)
 
   const activityDetail = _get(props, ['show_activity']) === null ? _get(props, ['game_activity']) : _get(props, ['show_activity'])
   // const activityPlatform = _get(props, ['show_platform']) === null ? _get(props, ['game_platform']) : _get(props, ['show_platform'])
@@ -89,6 +104,14 @@ const Activity = props => {
     }
   }
 
+  const handleMouseEnterActivity = () => {
+    setActivityHover(true)
+  }
+  
+  const handleMouseLeaveActivity = () => {
+    setActivityHover(false)
+  }
+
   const renderTail = () => {
     if (isShow) {
       return (
@@ -109,6 +132,9 @@ const Activity = props => {
       activityColour={props.activityColour} 
       thumbnail={_get(activityDetail, ['thumbnail_url'])}
       onClick={handleClickActivity}
+      onMouseEnter={handleMouseEnterActivity}
+      onMouseLeave={handleMouseLeaveActivity}
+      activityHover={activityHover}
     >
       <div className="activity-head">
         <div className="activity-head__inner"></div>

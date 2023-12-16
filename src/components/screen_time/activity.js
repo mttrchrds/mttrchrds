@@ -7,7 +7,7 @@ import axios from 'axios'
 
 // import { mqMin } from '../../helpers/media_queries'
 
-import { LayoutContext } from '../layout/layout'
+import { ScreenTimeContext } from '../../providers/screen_time_provider'
 
 const StyledActivity = styled.div`
   width: ${props => props.channelWidth}px;
@@ -66,14 +66,21 @@ const StyledActivity = styled.div`
 `
 
 const Activity = props => {
-  const { setActiveGameShow, activeGameShow, setActiveGameShowLoading } = useContext(LayoutContext)
+  const { 
+    setActiveGameShow,
+    activeGameShow,
+    setActiveGameShowLoading,
+    currentDay,
+    currentMonth,
+    currentYear,
+  } = useContext(ScreenTimeContext)
 
   const [activityHover, setActivityHover] = useState(false)
 
   const activityDetail = _get(props, ['show_activity']) === null ? _get(props, ['game_activity']) : _get(props, ['show_activity'])
   // const activityPlatform = _get(props, ['show_platform']) === null ? _get(props, ['game_platform']) : _get(props, ['show_platform'])
   const isShow = _get(props, ['show_activity']) === null ? false : true
-  const new_end_at = _get(props, ['end_at']) === null ? `${props.currentYear}-${props.currentMonth}-${props.currentDay}` : _get(props, ['end_at'])
+  const new_end_at = _get(props, ['end_at']) === null ? `${currentYear}-${currentMonth}-${currentDay}` : _get(props, ['end_at'])
   const daysTotal = Math.ceil(DateTime.fromISO(new_end_at).diff(DateTime.fromISO(_get(props, ['start_at'])), 'days').toObject().days)
 
   const handleClickActivity = e => {
@@ -91,7 +98,6 @@ const Activity = props => {
       axios.get(`${process.env.API_DOMAIN}${endpointPath}${gameShowId}`)
         .then(apiResponse => {
           const payload = _get(apiResponse, 'data', [])
-          console.log({payload})
           if (payload) {
             setActiveGameShow(payload)
             setActiveGameShowLoading(false)
@@ -160,9 +166,6 @@ Activity.propTypes = {
   game_activity: PropTypes.object,
   game_platform: PropTypes.object,
   completed: PropTypes.bool.isRequired,
-  currentDay: PropTypes.string.isRequired,
-  currentMonth: PropTypes.string.isRequired,
-  currentYear: PropTypes.string.isRequired,
 }
 
 export default Activity

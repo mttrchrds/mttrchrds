@@ -5,7 +5,7 @@ import _get from 'lodash/get'
 
 import { mqMin } from '../../helpers/media_queries'
 
-import { LayoutContext } from '../layout/layout'
+import { ScreenTimeContext } from '../../providers/screen_time_provider'
 
 const StyledGameShow = styled.div`
   position: sticky;
@@ -22,9 +22,9 @@ const StyledGameShow = styled.div`
 `
 
 const GameShow = () => {
-  const { activeGameShow, activeGameShowLoading } = useContext(LayoutContext)
+  const { activeGameShow, activeGameShowLoading } = useContext(ScreenTimeContext)
 
-  console.log({activeGameShow})
+  // console.log({activeGameShow})
 
   const renderActiveGameShow = () => {
     return (

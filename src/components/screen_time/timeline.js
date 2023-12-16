@@ -1,45 +1,18 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { DateTime } from 'luxon'
-import _find from 'lodash/find'
 import _get from 'lodash/get'
 
+import { getDaysInMonth, formatDateNumber } from '../../helpers/date_times'
+
 import Activity from './activity'
-import { getDaysInMonth } from '../pages/screen_time'
 
 const dayHeight = 50
 const channelWidth = 50
 
-let renderedActivities = []
-
-let activeColourIndex = 0
-
-const activityColours = [
-  '#40a4d8',
-  '#33beb7',
-  '#b2c444',
-  '#fecc2f',
-  '#f8a227',
-  '#f66220',
-  '#dc3839',
-  '#ee6579',
-  '#9d60d1',
-]
-
-const generateActiveColourIndex = () => {
-  const totalColours = activityColours.length
-  if (activeColourIndex === totalColours - 1) {
-    activeColourIndex = 0
-  } else {
-    activeColourIndex++
-  }
-}
-
 const StyledTimeline = styled.div`
   display: flex;
-  padding-top: 20px;
-  padding-left: 20px;
   background: linear-gradient(90deg, #1E2639 1.46%, #1B2335 100%);
   .day-labels {
     width: 20%;
@@ -55,7 +28,7 @@ const StyledTimeline = styled.div`
   }
   .day-channels {
     width: 80%;
-    overflow: hidden;
+    /* overflow: hidden; */
     background: linear-gradient(90deg, #1E2639 1.46%, #1B2335 100%);
     &__row {
       display: flex;
@@ -79,38 +52,22 @@ const StyledTimeline = styled.div`
 `
 
 const Timeline = props => {
-  useEffect(() => {
-    if (props.timelineDays.length > 0) {
-      // Reset rendering variables when new data is loaded
-      renderedActivities = []
-      activeColourIndex = 0
-    }
-  }, [props.timelineDays])
+  const date = new Date();
+  const currentMonth = formatDateNumber(date.getMonth() + 1)
+  const currentYear = String(date.getFullYear())
 
   const renderChannel = (channelIndex, day) => {
     const channelActivityId = _get(day, ['channels', channelIndex, 'id'])
-    // Render activity if end_at is current day and it's not been rendered before
-    if (channelActivityId && !_find(renderedActivities, r => r === channelActivityId)) {
-      // Set activity as rendered
-      renderedActivities = [
-        ...renderedActivities,
-        channelActivityId,
-      ]
+    if (channelActivityId) {
       const channelActivity = _get(day, ['channels', channelIndex])
-      const activityColour = activityColours[activeColourIndex]
-      // Update the active colour index
-      generateActiveColourIndex()
       return (
         <div className="day-channels__channel day-channels__channel--active" data-channel={channelIndex}>
           <div className="day-channels__channel__activity">
             <Activity
               {...channelActivity}
-              activityColour={activityColour}
               dayHeight={dayHeight}
               channelWidth={channelWidth}
-              currentDay={props.currentDay}
-              currentMonth={props.currentMonth}
-              currentYear={props.currentYear}
+              activityColour={_get(day, ['channelColours', channelIndex])}
             />
           </div>
         </div>
@@ -123,7 +80,7 @@ const Timeline = props => {
   }
 
   const calculateDayLabel = (day, index) => {
-    if (day.month === props.currentMonth && day.year === props.currentYear) {
+    if (day.month === currentMonth && day.year === currentYear) {
       if (index === 0) {
         return 'Today'
       }
@@ -189,9 +146,6 @@ Timeline.defaultProps = {
 
 Timeline.propTypes = {
   timelineDays: PropTypes.array,
-  currentDay: PropTypes.string.isRequired,
-  currentMonth: PropTypes.string.isRequired,
-  currentYear: PropTypes.string.isRequired,
 }
 
 export default Timeline

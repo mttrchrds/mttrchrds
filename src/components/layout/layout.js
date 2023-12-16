@@ -1,8 +1,6 @@
-import React, { createContext, useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-
-export const LayoutContext = createContext()
 
 const StyledLayout = styled.div`
   background-color: #0D1017;
@@ -18,21 +16,11 @@ const StyledLayout = styled.div`
 `
 
 const Layout = props => {
-  const [activeGameShow, setActiveGameShow] = useState(null)
-  const [activeGameShowLoading, setActiveGameShowLoading] = useState(false)
-
   return (
-    <LayoutContext.Provider value={{
-      activeGameShow,
-      setActiveGameShow,
-      activeGameShowLoading,
-      setActiveGameShowLoading,
-    }}>
-      <StyledLayout>
-        <div className="layout-header">[HEADER]</div>
-        <div className="layout-body">{props.children}</div>
-      </StyledLayout>
-    </LayoutContext.Provider>
+    <StyledLayout>
+      <div className="layout-header">[HEADER]</div>
+      <div className="layout-body">{props.children}</div>
+    </StyledLayout>
   )
 }
 

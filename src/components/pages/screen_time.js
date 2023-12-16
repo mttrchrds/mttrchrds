@@ -1,14 +1,26 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef, memo, useContext } from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
 import _get from 'lodash/get'
+import PropTypes from 'prop-types'
 
 import { mqMin } from '../../helpers/media_queries'
+import { formatDateNumber, getDaysInMonth } from '../../helpers/date_times'
+
+import { ScreenTimeContext } from '../../providers/screen_time_provider'
 
 import Layout from '../layout/layout'
 import Container from '../layout/container'
 import Timeline from '../screen_time/timeline'
 import GameShow from '../screen_time/game_show'
+
+const TimelineMemoized = memo(function TimelineMemo(props) {
+  return <Timeline timelineDays={props.timelineDays} />
+})
+
+TimelineMemoized.propTypes = {
+  timelineDays: PropTypes.array,
+}
 
 const StyledScreenTime = styled.div`
   color: white;
@@ -35,54 +47,70 @@ const StyledScreenTime = styled.div`
   }
 `
 
-const formatNumber = n => {
-  // Returns a number in 03 format instead of 3
-  return n.toLocaleString('en-US', {
-    minimumIntegerDigits: 2,
-    useGrouping: false
-  })
-}
-
-const date = new Date();
-const currentYear = date.getFullYear();
-const currentMonth = date.getMonth() + 1
-const currentDay = date.getDate()
-
 const pagingLengthInMonths = 3
 
-export const getDaysInMonth = (year, month) => {
-  // Returns the number of days in a particular month
-  const targetDate = new Date(Number(year), Number(month), 0)
-  return targetDate.getDate()
-}
+const activityColours = [
+  '#40a4d8',
+  '#33beb7',
+  '#b2c444',
+  '#fecc2f',
+  '#f8a227',
+  '#f66220',
+  '#dc3839',
+  '#ee6579',
+  '#9d60d1',
+]
 
 const ScreenTime = () => {
+  const { setCurrentDay, setCurrentMonth, setCurrentYear } = useContext(ScreenTimeContext)
+
+  // Array of arrays. Each top level array is array of parsed timelineDays for each memoized <Timeline /> component
   const [timelineDays, setTimelineDays] = useState([])
-  const [pagingMonth, setPagingMonth] = useState('')
-  const [pagingYear, setPagingYear] = useState('')
-  const [enableLoadMore, setEnableLoadMore] = useState(true)
+  const [displayLoading, setDisplayLoading] = useState(false)
+  // Returns true if the component at the bottom of the timeline (i.e. intersection) is visible. Used for infinite loading
+  const [intersection, setIntersection] = useState(false)
+
+  const observerTarget = useRef(null)
+  const initialLoadCompleted = useRef(false)
+  const pagingMonth = useRef('')
+  const pagingYear = useRef('')
+  // A record of activity ids, used to ensure parsed timelineDays doesn't have duplicate entries
+  const renderedActivityIds = useRef([])
+  // A store of the raw data returned from API (i.e. not parsed)
+  const timelineDaysUnparsed = useRef([])
+  const activeColourIndex = useRef(0)
 
   useEffect(() => {
-    let newMonth = currentMonth - pagingLengthInMonths
-    let newYear = currentYear
+    const date = new Date();
+    const cYear = date.getFullYear()
+    const cMonth = date.getMonth() + 1
+    const cDay = date.getDate()
+
+    setCurrentDay(formatDateNumber(cDay))
+    setCurrentMonth(formatDateNumber(cMonth))
+    setCurrentYear(String(cYear))
+
+    let newMonth = cMonth - pagingLengthInMonths
+    let newYear = cYear
     
     if (newMonth < 1) {
       newMonth = 12 + newMonth
       newYear = newYear - 1
     }
 
-    const queryStart = `${newYear}-${formatNumber(newMonth)}-01`
-    const queryEnd = `${currentYear}-${formatNumber(currentMonth)}-${formatNumber(currentDay)}`
+    const queryStart = `${newYear}-${formatDateNumber(newMonth)}-01`
+    const queryEnd = `${cYear}-${formatDateNumber(cMonth)}-${formatDateNumber(cDay)}`
 
     /* eslint-disable-next-line no-undef */
     axios.get(`${process.env.API_DOMAIN}/api/timeline/?start=${queryStart}&end=${queryEnd}`)
       .then(apiResponse => {
         const payload = _get(apiResponse, 'data', [])
-        console.log({payload})
         if (payload.length > 0) {
-          setTimelineDays(payload)
-          setPagingMonth(newMonth)
-          setPagingYear(newYear)
+          setTimelineDays([parsePayload(payload)])
+          timelineDaysUnparsed.current = payload
+          pagingMonth.current = newMonth
+          pagingYear.current = newYear
+          initialLoadCompleted.current = true
         }
       })
       .catch(error => {
@@ -91,30 +119,105 @@ const ScreenTime = () => {
 
   }, [])
 
-  const handleLoadMore = e => {
-    e.preventDefault()
-    let startMonth = pagingMonth - pagingLengthInMonths
-    let startYear = pagingYear
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      entries => {
+        if (entries[0].isIntersecting) {
+          setIntersection(true)
+        } else {
+          setIntersection(false)
+        }
+      }
+    );
+  
+    if (observerTarget.current) {
+      observer.observe(observerTarget.current);
+    }
+  
+    return () => {
+      if (observerTarget.current) {
+        observer.unobserve(observerTarget.current);
+      }
+    };
+  }, [observerTarget])
+
+  useEffect(() => {
+    if (intersection && initialLoadCompleted.current === true) {
+      handleLoadMore()
+    }
+  }, [intersection])
+
+  const generateActiveColourIndex = () => {
+    const totalColours = activityColours.length
+    if (activeColourIndex.current === totalColours - 1) {
+      activeColourIndex.current = 0
+    } else {
+      activeColourIndex.current = activeColourIndex.current + 1
+    }
+  }
+
+  const parsePayload = payload => {
+    // Payload is parsed so logic is outside Memoized <Timeline /> component
+    // Removes duplicate activities from payload and sets activity colour
+    let tmpPayload = []
+    payload.map(p => {
+      let tmpChannelColours = []
+      const tmpChannels = _get(p, 'channels', []).map(c => {
+        if (c === null) {
+          tmpChannelColours.push(null)
+          return c
+        } else {
+          if (renderedActivityIds.current.includes(_get(c, 'id'))) {
+            tmpChannelColours.push(null)
+            return null
+          } else {
+            tmpChannelColours.push(activityColours[activeColourIndex.current])
+            generateActiveColourIndex()
+            renderedActivityIds.current = [
+              ...renderedActivityIds.current,
+              _get(c, 'id'),
+            ]
+            return c
+          }
+        }
+      })
+      tmpPayload.push({
+        date: p.date,
+        day: p.day,
+        month: p.month,
+        year: p.year,
+        channels: tmpChannels,
+        channelColours: tmpChannelColours,
+      })
+    })
+    return tmpPayload
+  }
+  
+  const handleLoadMore = () => {
+    setDisplayLoading(true)
+
+    let startMonth = pagingMonth.current - pagingLengthInMonths
+    let startYear = pagingYear.current
     
     if (startMonth < 1) {
       startMonth = 12 + startMonth
       startYear = startYear - 1
     }
     
-    let endMonth = pagingMonth - 1
-    let endYear = pagingYear
+    let endMonth = pagingMonth.current - 1
+    let endYear = pagingYear.current
     
     if (endMonth === 0) {
       endMonth = 12
       endYear = endYear - 1
     }
 
-    const queryStart = `${startYear}-${formatNumber(startMonth)}-01`
-    const queryEnd = `${endYear}-${formatNumber(endMonth)}-${formatNumber(getDaysInMonth(endYear, endMonth))}`
+    const queryStart = `${startYear}-${formatDateNumber(startMonth)}-01`
+    const queryEnd = `${endYear}-${formatDateNumber(endMonth)}-${formatDateNumber(getDaysInMonth(endYear, endMonth))}`
 
-    // Pass current channel list to API when loading more
-    const finalDay = timelineDays.length > 0 ? timelineDays[timelineDays.length - 1] : {}
-    const finalChannels = _get(finalDay, 'channels', undefined)
+    // Pass latest channel list to API when loading more
+    const finalDay = timelineDaysUnparsed.current.length > 0 ? timelineDaysUnparsed.current[timelineDaysUnparsed.current.length - 1] : {}
+    const finalChannels = _get(finalDay, 'channels', [])
     const finalChannelsParsed = finalChannels.map(fc => {
       if (fc) {
         return fc.id
@@ -126,20 +229,23 @@ const ScreenTime = () => {
     axios.get(`${process.env.API_DOMAIN}/api/timeline/?start=${queryStart}&end=${queryEnd}&channels=${finalChannelsParsed}`)
       .then(apiResponse => {
         const payload = _get(apiResponse, 'data', [])
-        console.log({payload})
+        console.log('load more', payload)
         if (payload.length > 0) {
           setTimelineDays([
             ...timelineDays,
+            parsePayload(payload),
+          ])
+          timelineDaysUnparsed.current = [
+            ...timelineDaysUnparsed.current,
             ...payload,
           ]
-          )
-          setPagingMonth(startMonth)
-          setPagingYear(startYear)
-        } else {
-          setEnableLoadMore(false)
+          pagingMonth.current = startMonth
+          pagingYear.current = startYear
         }
+        setDisplayLoading(false)
       })
       .catch(error => {
+        setDisplayLoading(false)
         console.log(error)
       })
   }
@@ -149,17 +255,16 @@ const ScreenTime = () => {
       <Container>
         <StyledScreenTime>
             <div className="primary">
-              <Timeline
-                timelineDays={timelineDays} 
-                endYear={pagingYear}
-                endMonth={pagingMonth}
-                currentDay={formatNumber(currentDay)}
-                currentMonth={formatNumber(currentMonth)}
-                currentYear={String(currentYear)}
-              />
-              {enableLoadMore && (
+              {timelineDays.map(td => (
+                <TimelineMemoized
+                  key={_get(td, ['0', 'date'])}
+                  timelineDays={td} 
+                />
+              ))}
+              <div ref={observerTarget}></div>
+              {displayLoading && (
                 <div>
-                  <button type="button" onClick={handleLoadMore}>Click me</button>
+                  Loading...
                 </div>
               )}
             </div>

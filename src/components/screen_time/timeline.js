@@ -14,6 +14,9 @@ const channelWidth = 50
 const StyledTimeline = styled.div`
   display: flex;
   background: linear-gradient(90deg, #1E2639 1.46%, #1B2335 100%);
+  &:last-child {
+    overflow: hidden;
+  }
   .day-labels {
     width: 20%;
     background-color: #1E2639;
@@ -32,6 +35,7 @@ const StyledTimeline = styled.div`
     background: linear-gradient(90deg, #1E2639 1.46%, #1B2335 100%);
     &__row {
       display: flex;
+      width: 100%;
       height: ${dayHeight}px;
       justify-content: space-evenly;
       border-bottom: 1px solid #80808021;

@@ -13,6 +13,7 @@ import Layout from '../layout/layout'
 import Container from '../layout/container'
 import Timeline from '../screen_time/timeline'
 import GameShow from '../screen_time/game_show'
+import Spinner from '../spinner'
 
 const TimelineMemoized = memo(function TimelineMemo(props) {
   return <Timeline timelineDays={props.timelineDays} />
@@ -30,6 +31,22 @@ const StyledScreenTime = styled.div`
   }
   .secondary {
     display: none;
+  }
+  .loading-container {
+    height: 50px;
+    display: flex;
+    &__labels {
+      width: 20%;
+      background-color: #1E2639;
+    }
+    &__channels {
+      width: 80%;
+      background: linear-gradient(90deg, #1E2639 1.46%, #1B2335 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      &__spinner {}
+    }
   }
   @media ${props => mqMin(props.theme.breakPoints.md)} {
     display: flex;
@@ -255,18 +272,25 @@ const ScreenTime = () => {
       <Container>
         <StyledScreenTime>
             <div className="primary">
-              {timelineDays.map(td => (
-                <TimelineMemoized
-                  key={_get(td, ['0', 'date'])}
-                  timelineDays={td} 
-                />
-              ))}
+              <div className="timelines">
+                {timelineDays.map(td => (
+                  <TimelineMemoized
+                    key={_get(td, ['0', 'date'])}
+                    timelineDays={td} 
+                  />
+                ))}
+              </div>
               <div ref={observerTarget}></div>
-              {displayLoading && (
-                <div>
-                  Loading...
+              <div className="loading-container">
+                <div className="loading-container__labels"></div>
+                <div className="loading-container__channels">
+                  <div className="loading-container__channels__spinner">
+                    {displayLoading && (
+                      <Spinner />
+                    )}
+                  </div>
                 </div>
-              )}
+              </div>
             </div>
             <div className="secondary">
               <GameShow />

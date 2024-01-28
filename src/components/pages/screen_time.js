@@ -246,7 +246,6 @@ const ScreenTime = () => {
     axios.get(`${process.env.API_DOMAIN}/api/timeline/?start=${queryStart}&end=${queryEnd}&channels=${finalChannelsParsed}`)
       .then(apiResponse => {
         const payload = _get(apiResponse, 'data', [])
-        console.log('load more', payload)
         if (payload.length > 0) {
           setTimelineDays([
             ...timelineDays,

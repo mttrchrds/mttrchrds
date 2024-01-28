@@ -6,7 +6,7 @@ import _get from 'lodash/get'
 
 import { getDaysInMonth, formatDateNumber } from '../../helpers/date_times'
 
-import Activity from './activity'
+import TimelineActivity from './timeline_activity'
 
 const dayHeight = 50
 const channelWidth = 50
@@ -31,7 +31,6 @@ const StyledTimeline = styled.div`
   }
   .day-channels {
     width: 80%;
-    /* overflow: hidden; */
     background: linear-gradient(90deg, #1E2639 1.46%, #1B2335 100%);
     &__row {
       display: flex;
@@ -67,7 +66,7 @@ const Timeline = props => {
       return (
         <div className="day-channels__channel day-channels__channel--active" data-channel={channelIndex}>
           <div className="day-channels__channel__activity">
-            <Activity
+            <TimelineActivity
               {...channelActivity}
               dayHeight={dayHeight}
               channelWidth={channelWidth}

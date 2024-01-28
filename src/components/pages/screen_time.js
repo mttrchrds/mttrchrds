@@ -12,7 +12,7 @@ import { ScreenTimeContext } from '../../providers/screen_time_provider'
 import Layout from '../layout/layout'
 import Container from '../layout/container'
 import Timeline from '../screen_time/timeline'
-import GameShow from '../screen_time/game_show'
+import Activity from '../screen_time/activity'
 import Spinner from '../spinner'
 
 const TimelineMemoized = memo(function TimelineMemo(props) {
@@ -293,7 +293,7 @@ const ScreenTime = () => {
               </div>
             </div>
             <div className="secondary">
-              <GameShow />
+              <Activity />
             </div>
         </StyledScreenTime>
       </Container>

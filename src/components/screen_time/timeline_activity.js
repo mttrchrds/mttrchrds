@@ -69,9 +69,9 @@ const tooltipWidth = 250
 
 const Activity = props => {
   const { 
-    setActiveGameShow,
-    activeGameShow,
-    setActiveGameShowLoading,
+    setActiveActivity,
+    activeActivity,
+    setActiveActivityLoading,
     currentDay,
     currentMonth,
     currentYear,
@@ -90,27 +90,20 @@ const Activity = props => {
 
   const handleClickActivity = e => {
     e.preventDefault()
-    
-    let endpointPath = `/api/games/`
-    let gameShowId = _get(props, ['game_activity', 'id'])
-    if (isShow) {
-      endpointPath = `/api/shows/`
-      gameShowId = _get(props, ['show_activity', 'id'])
-    }
-    if (gameShowId !== _get(activeGameShow, 'id')) {
-      setActiveGameShowLoading(true)
+    if (props.id !== _get(activeActivity, 'id')) {
+      setActiveActivityLoading(true)
       /* eslint-disable-next-line no-undef */
-      axios.get(`${process.env.API_DOMAIN}${endpointPath}${gameShowId}`)
+      axios.get(`${process.env.API_DOMAIN}/api/activities/${props.id}`)
         .then(apiResponse => {
           const payload = _get(apiResponse, 'data', [])
           if (payload) {
-            setActiveGameShow(payload)
-            setActiveGameShowLoading(false)
+            setActiveActivity(payload)
+            setActiveActivityLoading(false)
           }
         })
         .catch(error => {
           console.log(error)
-          setActiveGameShowLoading(false)
+          setActiveActivityLoading(false)
         })
     }
   }

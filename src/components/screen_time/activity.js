@@ -7,7 +7,7 @@ import { mqMin } from '../../helpers/media_queries'
 
 import { ScreenTimeContext } from '../../providers/screen_time_provider'
 
-const StyledGameShow = styled.div`
+const StyledActivity = styled.div`
   position: sticky;
   top: 20px;
   .game-show {
@@ -21,39 +21,41 @@ const StyledGameShow = styled.div`
   }
 `
 
-const GameShow = () => {
-  const { activeGameShow, activeGameShowLoading } = useContext(ScreenTimeContext)
+const Activity = () => {
+  const { activeActivity, activeActivityLoading } = useContext(ScreenTimeContext)
 
-  // console.log({activeGameShow})
+  console.log({activeActivity})
+  // const activityPlatform = _get(activeActivity, ['show_platform']) ? _get(activeActivity, ['show_platform']) : _get(activeActivity, ['game_platform'])
+  const activityItem = _get(activeActivity, ['show_activity']) ? _get(activeActivity, ['show_activity']) : _get(activeActivity, ['game_activity'])
 
   const renderActiveGameShow = () => {
     return (
       <div className="game-show">
-        <div className="game-show__image"><img src={_get(activeGameShow, ['image_url'])} /></div>
+        <div className="game-show__image"><img src={_get(activityItem, ['image_url'])} /></div>
       </div>
     )
   }
 
   const renderContent = () => {
-    if (activeGameShowLoading) {
+    if (activeActivityLoading) {
       return 'Loading...'
     }
     
-    if (activeGameShow) {
+    if (activeActivity) {
       return renderActiveGameShow()
     }
 
     return 'Blank state'
   }
   return (
-    <StyledGameShow>
+    <StyledActivity>
       {renderContent()}
-    </StyledGameShow>
+    </StyledActivity>
   )
 }
 
-GameShow.defaultProps = {}
+Activity.defaultProps = {}
 
-GameShow.propTypes = {}
+Activity.propTypes = {}
 
-export default GameShow
+export default Activity

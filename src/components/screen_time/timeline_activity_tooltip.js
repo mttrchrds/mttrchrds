@@ -27,8 +27,7 @@ const TimelineActivityTooltip = props => {
   const renderTooltipTimestamp = () => {
     const start_at_formatted = DateTime.fromISO(_get(props, ['startAt'])).toLocaleString(DateTime.DATE_FULL)
     if (_get(props, ['endAt'])) {
-      const end_at_formatted = _get(props, ['endAt']) ? DateTime.fromISO(_get(props, ['endAt'])).toLocaleString(DateTime.DATE_FULL) : 'now'
-      return `${start_at_formatted} to ${end_at_formatted}`
+      return `${start_at_formatted} to ${DateTime.fromISO(_get(props, ['endAt'])).toLocaleString(DateTime.DATE_FULL)}`
     }
     return `Started ${start_at_formatted}`
   }

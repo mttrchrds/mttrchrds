@@ -12,8 +12,8 @@ import TimelineActivityTooltip from './timeline_activity_tooltip'
 
 const StyledTimelineActivity = styled.div`
   position: relative;
-  width: ${props => props.channelWidth}px;
-  min-height: ${props => props.activityHeight}px;
+  width: ${props => props.$channelWidth}px;
+  min-height: ${props => props.$activityHeight}px;
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -22,19 +22,19 @@ const StyledTimelineActivity = styled.div`
     position: absolute;
     z-index: 3;
     top: 0;
-    width: ${props => props.activityHover ? `60` : props.channelWidth}px;
-    height: ${props => props.activityHover ? `60` : props.channelWidth}px;
+    width: ${props => props.$activityHover ? `60` : props.$channelWidth}px;
+    height: ${props => props.$activityHover ? `60` : props.$channelWidth}px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: ${props => props.activityColour};
-    filter: ${props => props.activityHover ? `brightness(130%)` : `brightness(100%)`};
+    background-color: ${props => props.$activityColour};
+    filter: ${props => props.$activityHover ? `brightness(130%)` : `brightness(100%)`};
     border-radius: 50%;
     transition: all 0.1s ease-in-out;
     &__inner {
-      width: ${props => props.activityHover ? `${props.channelWidth + 6}` : `${props.channelWidth - 2}`}px;
-      height: ${props => props.activityHover ? `${props.channelWidth + 6}` : `${props.channelWidth - 2}`}px;
-      background-image: url(${props => props.thumbnail});
+      width: ${props => props.$activityHover ? `${props.$channelWidth + 6}` : `${props.$channelWidth - 2}`}px;
+      height: ${props => props.$activityHover ? `${props.$channelWidth + 6}` : `${props.$channelWidth - 2}`}px;
+      background-image: url(${props => props.$thumbnail});
       background-repeat: no-repeat;
       background-size: cover;
       border-radius: 50%;
@@ -44,11 +44,11 @@ const StyledTimelineActivity = styled.div`
   .activity-spine {
     position: relative;
     z-index: 1;
-    background-color: ${props => props.activityColour};
-    height: ${props => props.activityHeight - 10}px;
-    width: ${props => props.channelWidth - 10}px;
+    background-color: ${props => props.$activityColour};
+    height: ${props => props.$activityHeight - 10}px;
+    width: ${props => props.$channelWidth - 10}px;
     border-radius: 20px;
-    filter: ${props => props.activityHover ? `brightness(130%)` : `brightness(100%)`};
+    filter: ${props => props.$activityHover ? `brightness(130%)` : `brightness(100%)`};
     transition: all 0.1s ease-in-out;
   }
   .activity-tail {
@@ -57,9 +57,9 @@ const StyledTimelineActivity = styled.div`
     svg {
       position: relative;
       bottom: 5px;
-      fill: ${props => props.activityColour};
+      fill: ${props => props.$activityColour};
       filter: brightness(75%);
-      filter: ${props => props.activityHover ? `brightness(60%)` : `brightness(75%)`};
+      filter: ${props => props.$activityHover ? `brightness(60%)` : `brightness(75%)`};
       transition: all 0.1s ease-in-out;
     }
   }
@@ -137,15 +137,15 @@ const Activity = props => {
 
   return (
     <StyledTimelineActivity 
-      dayHeight={props.dayHeight}
-      channelWidth={props.channelWidth}
-      activityHeight={daysTotal * props.dayHeight} 
-      activityColour={props.activityColour}
-      thumbnail={_get(activityDetail, ['thumbnail_url'])}
+      $dayHeight={props.dayHeight}
+      $channelWidth={props.channelWidth}
+      $activityHeight={daysTotal * props.dayHeight} 
+      $activityColour={props.activityColour}
+      $thumbnail={_get(activityDetail, ['thumbnail_url'])}
+      $activityHover={activityHover}
       onClick={handleClickActivity}
       onMouseEnter={handleMouseEnterActivity}
       onMouseLeave={handleMouseLeaveActivity}
-      activityHover={activityHover}
       onMouseMove={handleMouseMove}
       ref={timelineActivityRef}
     >

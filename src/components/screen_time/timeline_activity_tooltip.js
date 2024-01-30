@@ -8,9 +8,9 @@ const StyledActivityTooltip = styled.div`
   box-sizing: border-box; 
   position: absolute;
   z-index: 10;
-  width: ${props => props.tooltipWidth}px;
+  width: ${props => props.$tooltipWidth}px;
   padding: 15px;
-  background-color: ${props => props.activityColour};
+  background-color: ${props => props.$activityColour};
   color: #1E2639;
   border-radius: 6px;
   border-top-right-radius: 0;
@@ -39,8 +39,8 @@ const TimelineActivityTooltip = props => {
         top: props.positionY,
         left: props.positionX,
       }}
-      activityColour={props.activityColour}
-      tooltipWidth={props.tooltipWidth}>
+      $activityColour={props.activityColour}
+      $tooltipWidth={props.tooltipWidth}>
       <div className="tooltip-title">{`${props.title} (${props.platform})`}</div>
       <div className="tooltip-timestamp">{renderTooltipTimestamp()}</div>
     </StyledActivityTooltip>

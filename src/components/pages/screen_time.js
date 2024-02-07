@@ -27,7 +27,7 @@ const StyledScreenTime = styled.div`
   color: white;
   .primary {
     width: 100%;
-    background-color: darkgray;
+    background-color: ${props => props.theme.colors.primary};
   }
   .secondary {
     display: none;
@@ -41,7 +41,7 @@ const StyledScreenTime = styled.div`
     }
     &__channels {
       width: 80%;
-      background: linear-gradient(90deg, #1E2639 1.46%, #1B2335 100%);
+      background: linear-gradient(90deg, ${props => props.theme.colors.primary} 1.46%, ${props => props.theme.colors.primary1} 100%);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -54,12 +54,14 @@ const StyledScreenTime = styled.div`
       display: block;
       width: 70%;
       flex-shrink: 0;
+      border-top-left-radius: 4px;
     }
     .secondary {
       display: block;
-      background-color: #2A3550;
+      background-color: ${props => props.theme.colors.secondary};
       padding: 20px;
       flex-grow: 1;
+      border-top-right-radius: 4px;
     }
   }
 `

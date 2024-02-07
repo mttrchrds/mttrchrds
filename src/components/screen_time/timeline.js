@@ -13,25 +13,27 @@ const channelWidth = 50
 
 const StyledTimeline = styled.div`
   display: flex;
-  background: linear-gradient(90deg, #1E2639 1.46%, #1B2335 100%);
-  &:last-child {
-    overflow: hidden;
+  background: linear-gradient(90deg, ${props => props.theme.colors.primary} 1.46%, ${props => props.theme.colors.primary1} 100%);
+  .top-spacer {
+    width: 100%;
+    height: 20px;
   }
   .day-labels {
     width: 20%;
-    background-color: #1E2639;
+    background-color: ${props => props.theme.colors.primary};
     &__row {
       height: ${dayHeight}px;
+      padding-left: 20px;
       &--sticky {
         position: sticky;
         top: 20px;
-        background-color: #1E2639;
+        background-color: ${props => props.theme.colors.primary}
       }
     }
   }
   .day-channels {
     width: 80%;
-    background: linear-gradient(90deg, #1E2639 1.46%, #1B2335 100%);
+    background: linear-gradient(90deg, ${props => props.theme.colors.primary} 1.46%, ${props => props.theme.colors.primary1} 100%);
     &__row {
       display: flex;
       width: 100%;
@@ -50,6 +52,11 @@ const StyledTimeline = styled.div`
       &__activity {
         position: absolute;
       }
+    }
+  }
+  &:last-child {
+    .day-channels {
+      overflow: hidden;
     }
   }
 `
@@ -134,9 +141,11 @@ const Timeline = props => {
   return (
     <StyledTimeline>
       <div className="day-labels">
+        <div className="top-spacer" />
         {renderLabels()}
       </div>
       <div className="day-channels">
+        <div className="top-spacer" />
         {renderChannels()}
       </div>
     </StyledTimeline>

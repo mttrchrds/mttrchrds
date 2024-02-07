@@ -4,8 +4,8 @@ import PropTypes from 'prop-types'
 
 const StyledSpinner = styled.div`
     .spinner {
-      width: ${props => props.spinnerWidth};
-      height: ${props => props.spinnerHeight};
+      width: ${props => props.$spinnerWidth};
+      height: ${props => props.$spinnerHeight};
       border-radius: 50%;
       position: relative;
       animation: rotate 1s linear infinite
@@ -17,7 +17,7 @@ const StyledSpinner = styled.div`
       position: absolute;
       inset: 0px;
       border-radius: 50%;
-      border: ${props => props.spinnerThickness} solid ${props => props.spinnerColor};
+      border: ${props => props.$spinnerThickness} solid ${props => props.$spinnerColor};
       animation: prixClipFix 2s linear infinite ;
     }
 
@@ -37,10 +37,10 @@ const StyledSpinner = styled.div`
 const Spinner = props => {
   return (
     <StyledSpinner 
-      spinnerWidth={props.spinnerWidth}
-      spinnerHeight={props.spinnerHeight}
-      spinnerColor={props.spinnerColor}
-      spinnerThickness={props.spinnerThickness}
+      $spinnerWidth={props.spinnerWidth}
+      $spinnerHeight={props.spinnerHeight}
+      $spinnerColor={props.spinnerColor}
+      $spinnerThickness={props.spinnerThickness}
     >
       <div className="spinner"></div>
     </StyledSpinner>

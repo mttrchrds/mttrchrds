@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import Layout from '../layout/layout'
 import BadaBing from '../bada_bing'
 
 const StyledHome = styled.div`
@@ -42,32 +41,14 @@ const StyledHome = styled.div`
 
 const Home = () => {
   return (
-    <Layout>
-      <StyledHome>
-        <div className="home-bada-bing">
-          <BadaBing />
-        </div>
-        <div className="home-nav">
-          <div className="home-nav__item">
-            <a href="https://twitter.com/mttrchrds" target="blank">
-              Twitter
-            </a>
-          </div>
-          <div className="home-nav__divider">|</div>
-          <div className="home-nav__item">
-            <a rel="me" href="https://mastodonapp.uk/@mttrchrds" target="blank">
-              Mastodon
-            </a>
-          </div>
-          <div className="home-nav__divider">|</div>
-          <div className="home-nav__item">
-            <a href="https://www.strava.com/athletes/mttrchrds" target="blank">
-              Strava
-            </a>
-          </div>
-        </div>
-      </StyledHome>
-    </Layout>
+    <StyledHome>
+      <div className="home-bada-bing">
+        <BadaBing />
+      </div>
+      <div className="home-nav">
+        Grand opening March 2024
+      </div>
+    </StyledHome>
   )
 }
 

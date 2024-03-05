@@ -46,7 +46,7 @@ const Home = () => {
         <BadaBing />
       </div>
       <div className="home-nav">
-        Grand opening March 2024
+        Opening March 2024
       </div>
     </StyledHome>
   )

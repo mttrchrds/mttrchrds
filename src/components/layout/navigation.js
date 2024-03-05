@@ -9,7 +9,7 @@ const StyledNavigation = styled.div`
     padding-right: 4px;
     padding-bottom: 4px;
     padding-left: 10px;
-    background-color: ${props => props.theme.colors.borderLight};
+    background-color: ${props => props.theme.colors.secondary1};
     .brand {
         flex-grow: 1;
         a {
@@ -17,7 +17,7 @@ const StyledNavigation = styled.div`
             &:visited,
             &:active {
                 font-weight: 900;
-                color: ${props => props.theme.colors.background};
+                color: ${props => props.theme.colors.primary};
                 text-decoration: none;
                 letter-spacing: 1px;
                 font-size: ${props => props.theme.typography.sizeLarger};
@@ -35,9 +35,9 @@ const StyledNavigation = styled.div`
             height: 100%;
             width: 23px;
             cursor: pointer;
-            background-color: ${props => props.theme.colors.background1};
+            background-color: ${props => props.theme.colors.secondary};
             &:hover {
-                background-color: ${props => props.theme.colors.text1};
+                background-color: ${props => props.theme.colors.highlight};
             }
         }
     }

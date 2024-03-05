@@ -6,7 +6,7 @@ import Container from './container'
 import Navigation from './navigation'
 
 const StyledLayout = styled.div`
-  min-height: 100vh;
+  min-height: calc(100vh - 80px);
   display: flex;
   flex-direction: column;
   .layout-header {

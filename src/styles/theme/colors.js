@@ -7,4 +7,8 @@ export default {
   primary1: '#1B2335',
   secondary: '#2A3550',
   secondary1: '#374568',
+  background: '#142a14',
+  background1: '#077444',
+  border: '#05b669',
+  borderLight: '#0de688',
 }

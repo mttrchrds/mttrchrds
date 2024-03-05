@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import BadaBing from '../bada_bing'
+import Layout from '../layout/layout'
 
 const StyledHome = styled.div`
   height: 100vh;
@@ -41,14 +41,13 @@ const StyledHome = styled.div`
 
 const Home = () => {
   return (
-    <StyledHome>
-      <div className="home-bada-bing">
-        <BadaBing />
-      </div>
-      <div className="home-nav">
-        Opening March 2024
-      </div>
-    </StyledHome>
+    <Layout>
+      <StyledHome>
+        <div className="home-nav">
+          Opening March 2024
+        </div>
+      </StyledHome>
+    </Layout>
   )
 }
 

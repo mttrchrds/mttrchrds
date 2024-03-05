@@ -25,6 +25,8 @@ TimelineMemoized.propTypes = {
 
 const StyledScreenTime = styled.div`
   color: white;
+  display: flex;
+  flex-grow: 1;
   .primary {
     width: 100%;
     background-color: ${props => props.theme.colors.primary};
@@ -49,7 +51,10 @@ const StyledScreenTime = styled.div`
     }
   }
   @media ${props => mqMin(props.theme.breakPoints.md)} {
-    display: flex;
+    .timeline-container {
+      display: flex;
+      min-height: 100%;
+    }
     .primary {
       display: block;
       width: 70%;
@@ -270,34 +275,36 @@ const ScreenTime = () => {
 
   return (
     <Layout>
-      <Container>
-        <StyledScreenTime>
-            <div className="primary">
-              <div className="timelines">
-                {timelineDays.map(td => (
-                  <TimelineMemoized
-                    key={_get(td, ['0', 'date'])}
-                    timelineDays={td} 
-                  />
-                ))}
-              </div>
-              <div ref={observerTarget}></div>
-              <div className="loading-container">
-                <div className="loading-container__labels"></div>
-                <div className="loading-container__channels">
-                  <div className="loading-container__channels__spinner">
-                    {displayLoading && (
-                      <Spinner />
-                    )}
+      <StyledScreenTime>
+        <Container>
+          <div className="timeline-container">
+              <div className="primary">
+                <div className="timelines">
+                  {timelineDays.map(td => (
+                    <TimelineMemoized
+                      key={_get(td, ['0', 'date'])}
+                      timelineDays={td} 
+                    />
+                  ))}
+                </div>
+                <div ref={observerTarget}></div>
+                <div className="loading-container">
+                  <div className="loading-container__labels"></div>
+                  <div className="loading-container__channels">
+                    <div className="loading-container__channels__spinner">
+                      {displayLoading && (
+                        <Spinner />
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="secondary">
-              <Activity />
-            </div>
-        </StyledScreenTime>
-      </Container>
+              <div className="secondary">
+                <Activity />
+              </div>
+              </div>
+        </Container>
+      </StyledScreenTime>
     </Layout>
   )
 }

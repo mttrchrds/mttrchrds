@@ -8,7 +8,7 @@ import HomeNavigationButton from '../home/home_navigation_button'
 
 const StyledHome = styled.div`
   display: flex;
-  padding-top: 30px;
+  padding-top: 20px;
   .nav {
     display: flex;
     width: 300px;
@@ -79,6 +79,25 @@ const StyledHome = styled.div`
       }
     }
     &__body {
+      &__box {
+        margin-top: 30px;
+        margin-left: 25px;
+        &__primary {
+          background-color: ${props => props.theme.colors.secondary1};
+          height: 30px;
+          width: 100%;
+        }
+        &__secondary {
+          min-height: 500px;
+          border-right: 2px solid ${props => props.theme.colors.primary1};
+          border-bottom: 2px solid ${props => props.theme.colors.primary1};
+          border-left: 2px solid ${props => props.theme.colors.primary1};
+          padding: 20px;
+          font-size: ${props => props.theme.typography.sizeMedium};
+          font-family: 'Silkscreen';
+          color: ${props => props.theme.colors.text};
+        }
+      }
     }
   }
 `
@@ -144,6 +163,8 @@ const Home = () => {
     return null
   }
 
+  const renderContentBody = () => 'Coming soon'
+
   return (
     <Layout>
       <Container>
@@ -168,7 +189,14 @@ const Home = () => {
                 </div>
               </div>
             </div>
-            <div className="content__body"></div>
+            <div className="content__body">
+              <div className="content__body__box">
+                <div className="content__body__box__primary"></div>
+                <div className="content__body__box__secondary">
+                  {renderContentBody()}
+                </div>
+              </div>
+            </div>
           </div>
         </StyledHome>
       </Container>

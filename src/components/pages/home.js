@@ -30,8 +30,10 @@ const StyledHome = styled.div`
   }
   .content {
     flex-grow: 1;
-    &__header {}
-    &__body {}
+    &__header {
+    }
+    &__body {
+    }
   }
 `
 
@@ -57,7 +59,11 @@ const Home = () => {
       enumHomeSectionMusic,
     ]
     return homeSections.map(hs => (
-      <div key={hs} className="nav__primary__item" onClick={e => handleClickSideNavItem(e, hs)}>
+      <div
+        key={hs}
+        className="nav__primary__item"
+        onClick={e => handleClickSideNavItem(e, hs)}
+      >
         <HomeNavigationButton
           active={activeSection === hs ? true : false}
           label={hs}
@@ -75,8 +81,7 @@ const Home = () => {
               <div className="nav__primary__title">MENU</div>
               {renderSideNavigation()}
             </div>
-            <div className="nav__secondary">
-            </div>
+            <div className="nav__secondary"></div>
           </div>
         </StyledHome>
       </Container>

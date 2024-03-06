@@ -80,7 +80,7 @@ const StyledHome = styled.div`
     }
     &__body {
       &__box {
-        margin-top: 30px;
+        margin-top: 40px;
         margin-left: 25px;
         &__primary {
           background-color: ${props => props.theme.colors.secondary1};

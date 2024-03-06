@@ -21,6 +21,7 @@ const StyledNavigation = styled.div`
                 text-decoration: none;
                 letter-spacing: 1px;
                 font-size: ${props => props.theme.typography.sizeLarger};
+                font-family: 'Silkscreen';
             }
             &:hover {
                 color: ${props => props.theme.colors.background};

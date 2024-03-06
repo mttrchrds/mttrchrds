@@ -2,58 +2,77 @@ import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
+const bottomSpacerHeight = '10px'
+
 const StyledHomeNavigationButton = styled.div`
   height: 100px;
   cursor: pointer;
   display: flex;
   .button-container {
     flex-grow: 1;
-    padding: 10px;
     height: 100%;
-    font-size: ${props => props.theme.typography.sizeMedium};
-    font-family: 'Silkscreen';
-    color: ${props => props.theme.colors.text};
-    border: 2px solid
-      ${props =>
-        props.$active
-          ? props.theme.colors.highlight
-          : props.theme.colors.primary1};
-    &:hover {
-      border-color: ${props =>
-        props.$active
-          ? props.theme.colors.highlight
-          : props.theme.colors.secondary};
+    display: flex;
+    flex-direction: column;
+    &__button {
+      flex-grow: 1;
+      padding: 10px;
+      font-size: ${props => props.theme.typography.sizeMedium};
+      font-family: 'Silkscreen';
+      color: ${props => props.theme.colors.text};
+      border: 2px solid
+        ${props =>
+          props.$active
+            ? props.theme.colors.highlight
+            : props.theme.colors.primary1};
+      &:hover {
+        border-color: ${props =>
+          props.$active
+            ? props.theme.colors.highlight
+            : props.theme.colors.secondary};
+      }
+    }
+    &__spacer {
+      width: 100%;
+      height: ${bottomSpacerHeight};
+      background-color: ${props => props.theme.colors.primary};
     }
   }
   .button-highlight {
-    width: 10%;
-    height: 100%;
+    width: 25px;
+    height: calc(100% - ${bottomSpacerHeight});
     background-color: ${props =>
       props.$active
         ? props.theme.colors.highlight
         : props.theme.colors.primary};
-    &__arm {
-    }
   }
   .button-connector {
-    width: 10%;
+    width: 25px;
     height: 100%;
     display: flex;
-    visibility: ${props => (props.$active ? 'visible' : 'hidden')};
-    align-items: center;
+    align-items: flex-start;
+    background-color: ${props =>
+      props.$previous ? 'transparent' : props.theme.colors.primary};
     &__inner {
+      visibility: ${props => (props.$active ? 'visible' : 'hidden')};
       width: 100%;
-      height: 2px;
-      background-color: ${props => props.theme.colors.highlight};
+      height: calc(50% - (${bottomSpacerHeight} / 2));
+      border-bottom: 2px solid ${props => props.theme.colors.highlight};
+      border-right: 2px solid ${props => props.theme.colors.highlight};
     }
   }
 `
 
 const HomeNavigationButton = props => {
   return (
-    <StyledHomeNavigationButton $active={props.active}>
-      <div className="button-container">{props.label}</div>
-      <div className="button-highlight"></div>
+    <StyledHomeNavigationButton
+      $active={props.active}
+      $previous={props.previousButton}
+    >
+      <div className="button-container">
+        <div className="button-container__button">{props.label}</div>
+        <div className="button-container__spacer"></div>
+      </div>
+      {props.active && <div className="button-highlight"></div>}
       <div className="button-connector">
         <div className="button-connector__inner"></div>
       </div>
@@ -63,11 +82,13 @@ const HomeNavigationButton = props => {
 
 HomeNavigationButton.defaultProps = {
   active: false,
+  previousButton: false,
 }
 
 HomeNavigationButton.propTypes = {
   active: PropTypes.bool,
   label: PropTypes.string.isRequired,
+  previousButton: PropTypes.bool,
 }
 
 export default HomeNavigationButton

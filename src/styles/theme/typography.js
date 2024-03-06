@@ -4,4 +4,5 @@ export default {
   sizeMedium: '16px',
   sizeLarge: '18px',
   sizeLarger: '20px',
+  sizeLargest: '24px',
 }

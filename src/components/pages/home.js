@@ -6,6 +6,8 @@ import Layout from '../layout/layout'
 import Container from '../layout/container'
 import HomeNavigationButton from '../home/home_navigation_button'
 import HomeLoading from '../home/home_loading'
+import HomeActivities from '../home/home_activities'
+import HomeNews from '../home/home_news'
 
 const StyledHome = styled.div`
   display: flex;
@@ -108,6 +110,17 @@ const StyledHome = styled.div`
   }
 `
 
+export const StyledBlankState = styled.div`
+  height: inherit;
+  min-height: inherit;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: ${props => props.theme.colors.text1};
+  font-size: ${props => props.theme.typography.sizeLarge};
+`
+
 const enumHomeSectionNews = 'NEWS'
 const enumHomeSectionShows = 'SHOWS'
 const enumHomeSectionGames = 'GAMES'
@@ -169,7 +182,18 @@ const Home = () => {
     return null
   }
 
-  const renderContentBody = () => <HomeLoading />
+  const renderContentBody = () => {
+    if (activeSection === enumHomeSectionShows) {
+      return <HomeActivities shows={true} key="shows" />
+    }
+    if (activeSection === enumHomeSectionGames) {
+      return <HomeActivities key="games" />
+    }
+    if (activeSection === enumHomeSectionMusic) {
+      return <StyledBlankState>Coming soon</StyledBlankState>
+    }
+    return <HomeNews />
+  }
 
   return (
     <Layout>

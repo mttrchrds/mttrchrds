@@ -2,12 +2,17 @@ import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
+import { mqMin } from '../../helpers/media_queries'
+
 const bottomSpacerHeight = '10px'
 
 const StyledHomeNavigationButton = styled.div`
-  height: 100px;
+  height: auto;
   cursor: pointer;
   display: flex;
+  @media ${props => mqMin(props.theme.breakPoints.md)} {
+    height: 100px;
+  }
   .button-container {
     flex-grow: 1;
     height: 100%;
@@ -38,26 +43,33 @@ const StyledHomeNavigationButton = styled.div`
     }
   }
   .button-highlight {
-    width: 25px;
-    height: calc(100% - ${bottomSpacerHeight});
-    background-color: ${props =>
-      props.$active
-        ? props.theme.colors.highlight
-        : props.theme.colors.primary};
+    display: none;
+    @media ${props => mqMin(props.theme.breakPoints.md)} {
+      display: block;
+      width: 25px;
+      height: calc(100% - ${bottomSpacerHeight});
+      background-color: ${props =>
+        props.$active
+          ? props.theme.colors.highlight
+          : props.theme.colors.primary};
+    }
   }
   .button-connector {
-    width: 25px;
-    height: 100%;
-    display: flex;
-    align-items: flex-start;
-    background-color: ${props =>
-      props.$previous ? 'transparent' : props.theme.colors.primary};
-    &__inner {
-      visibility: ${props => (props.$active ? 'visible' : 'hidden')};
-      width: 100%;
-      height: calc(50% - (${bottomSpacerHeight} / 2));
-      border-bottom: 2px solid ${props => props.theme.colors.highlight};
-      border-right: 2px solid ${props => props.theme.colors.highlight};
+    display: none;
+    @media ${props => mqMin(props.theme.breakPoints.md)} {
+      width: 25px;
+      height: 100%;
+      display: flex;
+      align-items: flex-start;
+      background-color: ${props =>
+        props.$previous ? 'transparent' : props.theme.colors.primary};
+      &__inner {
+        visibility: ${props => (props.$active ? 'visible' : 'hidden')};
+        width: 100%;
+        height: calc(50% - (${bottomSpacerHeight} / 2));
+        border-bottom: 2px solid ${props => props.theme.colors.highlight};
+        border-right: 2px solid ${props => props.theme.colors.highlight};
+      }
     }
   }
 `

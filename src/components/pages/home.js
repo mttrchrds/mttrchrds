@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import _findIndex from 'lodash/findIndex'
 
+import { mqMin } from '../../helpers/media_queries'
+
 import Layout from '../layout/layout'
 import Container from '../layout/container'
 import HomeNavigationButton from '../home/home_navigation_button'
@@ -10,22 +12,39 @@ import HomeNews from '../home/home_news'
 
 const StyledHome = styled.div`
   display: flex;
-  padding-top: 20px;
+  flex-direction: column;
+  padding-right: 15px;
+  padding-left: 15px;
+  padding-bottom: 15px;
+  @media ${props => mqMin(props.theme.breakPoints.md)} {
+    flex-direction: row;
+    padding-top: 20px;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+  }
   .nav {
+    width: 100%;
     display: flex;
-    width: 300px;
     flex-shrink: 0;
+    @media ${props => mqMin(props.theme.breakPoints.md)} {
+      width: 300px;
+    }
     &__primary {
       flex-grow: 1;
       display: flex;
       flex-direction: column;
       &__title {
-        font-size: ${props => props.theme.typography.sizeLarger};
-        font-weight: 400;
-        color: ${props => props.theme.colors.primary1};
-        margin-bottom: 10px;
-        font-family: 'Silkscreen';
-        margin-top: 40px;
+        display: none;
+        @media ${props => mqMin(props.theme.breakPoints.md)} {
+          display: block;
+          font-size: ${props => props.theme.typography.sizeLarger};
+          font-weight: 400;
+          color: ${props => props.theme.colors.primary1};
+          margin-bottom: 10px;
+          font-family: 'Silkscreen';
+          margin-top: 40px;
+        }
       }
       &__item {
         position: relative;
@@ -56,39 +75,45 @@ const StyledHome = styled.div`
     left: -2px;
     z-index: 3;
     &__head {
-      display: flex;
-      &__connector {
-        width: 25px;
-        flex-shrink: 0;
+      display: none;
+      @media ${props => mqMin(props.theme.breakPoints.md)} {
         display: flex;
-        align-items: flex-end;
-        background-color: ${props => props.theme.colors.primary};
-        &__inner {
-          width: 100%;
-          height: 50%;
-          border-top: 2px solid ${props => props.theme.colors.highlight};
-          border-left: 2px solid ${props => props.theme.colors.highlight};
+        &__connector {
+          width: 25px;
+          flex-shrink: 0;
+          display: flex;
+          align-items: flex-end;
+          background-color: ${props => props.theme.colors.primary};
+          &__inner {
+            width: 100%;
+            height: 50%;
+            border-top: 2px solid ${props => props.theme.colors.highlight};
+            border-left: 2px solid ${props => props.theme.colors.highlight};
+          }
         }
-      }
-      &__title {
-        flex-grow: 1;
-        border: 2px solid ${props => props.theme.colors.highlight};
-        background-color: ${props => props.theme.colors.primary1};
-        padding: 10px;
-        &__text {
-          color: ${props => props.theme.colors.highlight};
-          font-size: ${props => props.theme.typography.sizeLarger};
-          font-family: 'Silkscreen';
-          line-height: 1;
-          position: relative;
-          top: -1px;
+        &__title {
+          flex-grow: 1;
+          border: 2px solid ${props => props.theme.colors.highlight};
+          background-color: ${props => props.theme.colors.primary1};
+          padding: 10px;
+          &__text {
+            color: ${props => props.theme.colors.highlight};
+            font-size: ${props => props.theme.typography.sizeLarger};
+            font-family: 'Silkscreen';
+            line-height: 1;
+            position: relative;
+            top: -1px;
+          }
         }
       }
     }
     &__body {
       &__box {
-        margin-top: 25px;
-        margin-left: 25px;
+        margin-top: 10px;
+        @media ${props => mqMin(props.theme.breakPoints.md)} {
+          margin-top: 25px;
+          margin-left: 25px;
+        }
         &__primary {
           background-color: ${props => props.theme.colors.secondary1};
           height: 30px;

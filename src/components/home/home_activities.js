@@ -5,12 +5,15 @@ import _get from 'lodash/get'
 import { DateTime } from 'luxon'
 import PropTypes from 'prop-types'
 
+import { mqMin } from '../../helpers/media_queries'
+
 import HomeLoading from './home_loading'
 import { StyledBlankState } from '../pages/home'
 
 const StyledHomeActivities = styled.div`
   .activity {
     display: flex;
+    flex-direction: column;
     margin-bottom: 20px;
     padding-bottom: 20px;
     border-bottom: 2px solid ${props => props.theme.colors.primary1};
@@ -19,8 +22,15 @@ const StyledHomeActivities = styled.div`
       padding-bottom: 0;
       border-bottom: 0;
     }
+    @media ${props => mqMin(props.theme.breakPoints.lg)} {
+      flex-direction: row;
+    }
     &__image {
       margin-right: 30px;
+      margin-bottom: 30px;
+      @media ${props => mqMin(props.theme.breakPoints.lg)} {
+        margin-bottom: 0;
+      }
       img {
         display: block;
         max-width: 150px;

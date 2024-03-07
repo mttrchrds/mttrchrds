@@ -3,6 +3,8 @@ import styled from 'styled-components'
 import { Link, useNavigate } from 'react-router-dom'
 // import PropTypes from 'prop-types'
 
+import { mqMin } from '../../helpers/media_queries'
+
 const StyledNavigation = styled.div`
   display: flex;
   align-items: center;
@@ -11,6 +13,12 @@ const StyledNavigation = styled.div`
   padding-bottom: 6px;
   padding-left: 10px;
   background-color: ${props => props.theme.colors.secondary1};
+  margin-right: 15px;
+  margin-left: 15px;
+  @media ${props => mqMin(props.theme.breakPoints.md)} {
+    margin-right: 0;
+    margin-left: 0;
+  }
   .brand {
     flex-grow: 1;
     line-height: 1;

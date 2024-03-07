@@ -5,7 +5,6 @@ import _findIndex from 'lodash/findIndex'
 import Layout from '../layout/layout'
 import Container from '../layout/container'
 import HomeNavigationButton from '../home/home_navigation_button'
-import HomeLoading from '../home/home_loading'
 import HomeActivities from '../home/home_activities'
 import HomeNews from '../home/home_news'
 

@@ -9,6 +9,9 @@ import theme from './styles/theme'
 
 import GlobalStyles from './components/global_styles'
 
+const loadingPlaceholder = document.getElementById('loading')
+loadingPlaceholder.style.display = 'none'
+
 const container = document.getElementById('app')
 const root = createRoot(container)
 
@@ -16,5 +19,5 @@ root.render(
   <ThemeProvider theme={theme}>
     <GlobalStyles />
     <RouterProvider router={router} />
-  </ThemeProvider>
+  </ThemeProvider>,
 )

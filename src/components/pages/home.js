@@ -5,6 +5,7 @@ import _findIndex from 'lodash/findIndex'
 import Layout from '../layout/layout'
 import Container from '../layout/container'
 import HomeNavigationButton from '../home/home_navigation_button'
+import HomeLoading from '../home/home_loading'
 
 const StyledHome = styled.div`
   display: flex;
@@ -168,7 +169,7 @@ const Home = () => {
     return null
   }
 
-  const renderContentBody = () => 'Coming soon'
+  const renderContentBody = () => <HomeLoading />
 
   return (
     <Layout>

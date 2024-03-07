@@ -6,7 +6,7 @@ import Container from './container'
 import Navigation from './navigation'
 
 const StyledLayout = styled.div`
-  min-height: calc(100vh - 80px);
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   .layout-header {
@@ -27,7 +27,9 @@ const Layout = props => {
   return (
     <StyledLayout>
       <div className="layout-header">
-        <Container><Navigation /></Container>
+        <Container>
+          <Navigation />
+        </Container>
       </div>
       <div className="layout-body">{props.children}</div>
     </StyledLayout>

@@ -15,6 +15,8 @@ const StyledHome = styled.div`
     flex-shrink: 0;
     &__primary {
       flex-grow: 1;
+      display: flex;
+      flex-direction: column;
       &__title {
         font-size: ${props => props.theme.typography.sizeLarger};
         font-weight: 400;
@@ -26,9 +28,12 @@ const StyledHome = styled.div`
       &__item {
         position: relative;
         z-index: 2;
-        &:last-child {
-          margin-bottom: 0;
-        }
+      }
+      &__filler {
+        position: relative;
+        z-index: 2;
+        flex-grow: 1;
+        background-color: ${props => props.theme.colors.primary};
       }
     }
     &__secondary {
@@ -80,7 +85,7 @@ const StyledHome = styled.div`
     }
     &__body {
       &__box {
-        margin-top: 40px;
+        margin-top: 25px;
         margin-left: 25px;
         &__primary {
           background-color: ${props => props.theme.colors.secondary1};
@@ -173,6 +178,7 @@ const Home = () => {
             <div className="nav__primary">
               <div className="nav__primary__title">MENU</div>
               {renderSideNavigation()}
+              <div className="nav__primary__filler"></div>
             </div>
             <div className="nav__secondary">
               <div className="nav__secondary__connector"></div>

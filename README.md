@@ -1,13 +1,5 @@
-# Website of mttrchrds
+# Personal website
 
-## Setup
-- Add a '.env' file at root. Enter the following: API_DOMAIN="http://127.0.0.1:8000"
-- Run ¢npm install
+React app which consumes external API (https://mttrchrdsapi.onrender.com) for dynamic content.
 
-## Scripts
-
-Dev environment
-$ npm run dev
-
-Production build
-$ npm run prod
+https://www.mttrchrds.com

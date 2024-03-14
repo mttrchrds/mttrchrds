@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import _findIndex from 'lodash/findIndex'
+import { useSelector, useDispatch } from 'react-redux'
+import { loadGames } from '../../redux/latest_games/latest_games_slice'
+import { loadShows } from '../../redux/latest_shows/latest_shows_slice'
 
 import { mqMin } from '../../helpers/media_queries'
 
@@ -153,9 +156,21 @@ const enumHomeSectionMusic = 'MUSIC'
 const Home = () => {
   const [activeSection, setActiveSection] = useState(enumHomeSectionNews)
 
+  const dispatch = useDispatch()
+  const latestGames = useSelector(state => state.latestGames.games)
+  const latestGamesLoading = useSelector(state => state.latestGames.loading)
+  const latestShows = useSelector(state => state.latestShows.shows)
+  const latestShowsLoading = useSelector(state => state.latestShows.loading)
+
   const handleClickSideNavItem = (e, section) => {
     e.preventDefault()
     setActiveSection(section)
+    if (section === enumHomeSectionShows && latestShows.length === 0) {
+      dispatch(loadShows())
+    }
+    if (section === enumHomeSectionGames && latestGames.length === 0) {
+      dispatch(loadGames())
+    }
   }
 
   const renderSideNavigation = () => {
@@ -208,10 +223,23 @@ const Home = () => {
 
   const renderContentBody = () => {
     if (activeSection === enumHomeSectionShows) {
-      return <HomeActivities shows={true} key="shows" />
+      return (
+        <HomeActivities
+          key="shows"
+          shows={true}
+          loading={latestShowsLoading}
+          activities={latestShows}
+        />
+      )
     }
     if (activeSection === enumHomeSectionGames) {
-      return <HomeActivities key="games" />
+      return (
+        <HomeActivities
+          key="games"
+          loading={latestGamesLoading}
+          activities={latestGames}
+        />
+      )
     }
     if (activeSection === enumHomeSectionMusic) {
       return <StyledBlankState>Coming soon</StyledBlankState>

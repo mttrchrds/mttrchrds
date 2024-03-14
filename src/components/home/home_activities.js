@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
-import axios from 'axios'
 import _get from 'lodash/get'
 import { DateTime } from 'luxon'
 import PropTypes from 'prop-types'
@@ -75,30 +74,7 @@ const StyledHomeActivities = styled.div`
 `
 
 const HomeActivities = props => {
-  const [displayLoading, setDisplayLoading] = useState(true)
-  const [activities, setActivities] = useState([])
-
-  useEffect(() => {
-    let endPoint = 'latest-games'
-    if (props.shows) {
-      endPoint = 'latest-shows'
-    }
-    axios
-      .get(
-        /* eslint-disable-next-line no-undef */
-        `${process.env.API_DOMAIN}/api/${endPoint}`,
-      )
-      .then(apiResponse => {
-        const payload = _get(apiResponse, 'data', [])
-        if (payload.length > 0) {
-          setActivities(payload)
-        }
-        setDisplayLoading(false)
-      })
-      .catch(error => {
-        console.log(error)
-      })
-  }, [])
+  const activities = _get(props, 'activities', [])
 
   const renderActivity = activity => {
     const activityPlatform = props.shows
@@ -171,7 +147,7 @@ const HomeActivities = props => {
     )
   }
 
-  if (displayLoading) {
+  if (props.loading) {
     return <HomeLoading />
   }
 
@@ -180,10 +156,14 @@ const HomeActivities = props => {
 
 HomeActivities.defaultProps = {
   shows: false,
+  loading: false,
+  activities: [],
 }
 
 HomeActivities.propTypes = {
   shows: PropTypes.bool,
+  loading: PropTypes.bool,
+  activities: PropTypes.array,
 }
 
 export default HomeActivities

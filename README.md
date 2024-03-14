@@ -1,5 +1,5 @@
-# Personal website
+# mttrchrds.com
 
-React app which consumes external API (https://mttrchrdsapi.onrender.com) for dynamic content.
+React/Redux personal web app which consumes external API (https://mttrchrdsapi.onrender.com).
 
 https://www.mttrchrds.com

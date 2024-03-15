@@ -8,8 +8,13 @@ import { getDaysInMonth, formatDateNumber } from '../../helpers/date_times'
 
 import TimelineActivity from './timeline_activity'
 
-const dayHeight = 50
-const channelWidth = 50
+let dayHeight = 40
+let channelWidth = 40
+
+if (window.screen.width >= 768) {
+  dayHeight = 50
+  channelWidth = 50
+}
 
 const StyledTimelineSection = styled.div`
   display: flex;
@@ -109,7 +114,11 @@ const TimelineSection = props => {
     } else {
       const totalDays = getDaysInMonth(Number(day.year), Number(day.month))
       if (totalDays === Number(day.day)) {
-        return `${DateTime.fromISO(day.date).toLocaleString({ month: 'long' })}, ${day.year}`
+        let monthLength = 'short'
+        if (window.screen.width >= 768) {
+          monthLength = 'long'
+        }
+        return `${DateTime.fromISO(day.date).toLocaleString({ month: monthLength })}, ${day.year}`
       }
       return null
     }

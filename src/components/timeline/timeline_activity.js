@@ -129,7 +129,9 @@ const Activity = props => {
   }
 
   const handleMouseEnterActivity = () => {
-    setActivityHover(true)
+    if (window.screen.width >= 768) {
+      setActivityHover(true)
+    }
   }
 
   const handleMouseLeaveActivity = () => {

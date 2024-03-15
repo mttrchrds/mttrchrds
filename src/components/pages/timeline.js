@@ -29,7 +29,6 @@ const StyledTimeline = styled.div`
   color: white;
   display: flex;
   flex-grow: 1;
-  padding-top: 20px;
   .primary {
     width: 100%;
     background-color: ${props => props.theme.colors.timeline.primary};
@@ -38,7 +37,7 @@ const StyledTimeline = styled.div`
     display: none;
   }
   .loading-container {
-    height: 100%;
+    height: calc(100vh - 80px);
     width: 100%;
     display: flex;
     align-items: center;
@@ -63,6 +62,12 @@ const StyledTimeline = styled.div`
       align-items: center;
       &__spinner {
       }
+    }
+  }
+  @media ${props => mqMin(props.theme.breakPoints.sm)} {
+    padding-top: 20px;
+    .loading-container {
+      height: 100%;
     }
   }
   @media ${props => mqMin(props.theme.breakPoints.md)} {

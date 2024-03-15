@@ -39,7 +39,7 @@ const StyledActivity = styled.div`
   }
   .game-show {
     &__image {
-      margin-bottom: 10px;
+      margin-bottom: 20px;
       img {
         display: block;
         max-width: 100%;
@@ -51,7 +51,7 @@ const StyledActivity = styled.div`
       color: ${props => props.theme.colors.text1};
       font-size: ${props => props.theme.typography.sizeMedium};
       font-weight: bold;
-      margin-bottom: 10px;
+      margin-bottom: 20px;
     }
     &__row {
       display: flex;
@@ -65,7 +65,7 @@ const StyledActivity = styled.div`
       }
     }
     &__link {
-      padding-top: 5px;
+      padding-top: 10px;
       a {
         &:link,
         &:visited,

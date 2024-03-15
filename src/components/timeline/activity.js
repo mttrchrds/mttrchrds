@@ -26,10 +26,12 @@ const StyledActivity = styled.div`
     &__primary {
       margin-bottom: 10px;
       padding: 0 10px;
-      color: ${props => props.theme.colors.timeline.text};
+      font-size: ${props => props.theme.typography.sizeLarge};
+      color: ${props => props.theme.colors.timeline.text1};
       text-align: center;
     }
     &__secondary {
+      margin-bottom: 10px;
       padding: 0 10px;
       color: ${props => props.theme.colors.timeline.text};
       text-align: center;
@@ -159,7 +161,8 @@ const Activity = () => {
 
     return (
       <div className="activity-container">
-        <div className="activity-container__primary">{`Scroll down the timeline to see what I've been watching and playing.`}</div>
+        <div className="activity-container__primary">{`Timeline`}</div>
+        <div className="activity-container__secondary">{`Scroll down the timeline to see what shows I've been watching and games I've been playing.`}</div>
         <div className="activity-container__secondary">{`Click on an activity for more details.`}</div>
       </div>
     )

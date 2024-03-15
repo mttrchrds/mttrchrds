@@ -298,7 +298,10 @@ const Timeline = () => {
   }
 
   return (
-    <Layout bodyColour={theme.colors.timeline.background}>
+    <Layout
+      bodyColour={theme.colors.timeline.background}
+      navigationTitle="Timeline"
+    >
       <StyledTimeline>
         <Container>
           <div className="timeline-container">

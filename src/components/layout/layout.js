@@ -31,7 +31,7 @@ const Layout = props => {
     <StyledLayout bodyColour={props.bodyColour}>
       <div className="layout-header">
         <Container>
-          <Navigation />
+          <Navigation title={props.navigationTitle} />
         </Container>
       </div>
       <div className="layout-body">{props.children}</div>
@@ -41,11 +41,13 @@ const Layout = props => {
 
 Layout.defaultProps = {
   bodyColour: theme.colors.primary,
+  navigationTitle: '',
 }
 
 Layout.propTypes = {
   children: PropTypes.node,
   bodyColour: PropTypes.string,
+  navigationTitle: PropTypes.string,
 }
 
 export default Layout

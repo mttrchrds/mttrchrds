@@ -26,12 +26,12 @@ const StyledActivity = styled.div`
     &__primary {
       margin-bottom: 10px;
       padding: 0 10px;
-      color: ${props => props.theme.colors.text};
+      color: ${props => props.theme.colors.timeline.text};
       text-align: center;
     }
     &__secondary {
       padding: 0 10px;
-      color: ${props => props.theme.colors.text};
+      color: ${props => props.theme.colors.timeline.text};
       text-align: center;
     }
   }
@@ -55,11 +55,11 @@ const StyledActivity = styled.div`
       display: flex;
       margin-bottom: 5px;
       &__label {
-        color: ${props => props.theme.colors.text};
+        color: ${props => props.theme.colors.timeline.text};
         margin-right: 5px;
       }
       &__value {
-        color: ${props => props.theme.colors.text1};
+        color: ${props => props.theme.colors.timeline.text1};
       }
     }
     &__link {
@@ -68,10 +68,10 @@ const StyledActivity = styled.div`
         &:link,
         &:visited,
         &:active {
-          color: ${props => props.theme.colors.text1};
+          color: ${props => props.theme.colors.timeline.text1};
         }
         &:hover {
-          color: ${props => props.theme.colors.text1};
+          color: ${props => props.theme.colors.timeline.text1};
           text-decoration: none;
         }
       }

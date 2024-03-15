@@ -9,6 +9,7 @@ export default {
   secondary1: '#0de688',
   highlight: '#ffffff',
   timeline: {
+    text0: '#1e2639',
     text: '#c7c7c7',
     text1: '#f5f5f5',
     primary: '#1E2639',

@@ -28,6 +28,7 @@ const StyledTimelineSection = styled.div`
     &__row {
       height: ${dayHeight}px;
       padding-left: 20px;
+      color: ${props => props.theme.colors.timeline.tex1};
       &--sticky {
         position: sticky;
         top: 20px;

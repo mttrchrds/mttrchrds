@@ -5,8 +5,6 @@ import { DateTime } from 'luxon'
 import _get from 'lodash/get'
 import axios from 'axios'
 
-// import { mqMin } from '../../helpers/media_queries'
-
 import { TimelineContext } from '../../providers/timeline_provider'
 import TimelineActivityTooltip from './timeline_activity_tooltip'
 import Activity from './activity'
@@ -19,7 +17,7 @@ const StyledTimelineActivity = styled.div`
   align-items: flex-end;
   justify-content: center;
   cursor: pointer;
-  user-select: none;
+  -webkit-tap-highlight-color: transparent;
   .activity-head {
     position: absolute;
     z-index: 3;
@@ -99,11 +97,43 @@ const StyledTimelineActivity = styled.div`
       }
     }
     &__container {
-      width: 70%;
+      width: 80%;
       background-color: ${props => props.theme.colors.timeline.secondary};
       padding: 10px 20px 20px 20px;
       border-radius: 6px;
     }
+  }
+`
+
+const StyledActivityModal = styled.div`
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .activity-modal-header {
+    margin-bottom: 5px;
+    position: relative;
+    height: 24px;
+    &__icon {
+      position: absolute;
+      right: -10px;
+      top: 0;
+      svg {
+        fill: ${props => props.theme.colors.timeline.text1};
+      }
+    }
+  }
+  .activity-modal-container {
+    width: 80%;
+    background-color: ${props => props.theme.colors.timeline.secondary};
+    padding: 10px 20px 20px 20px;
+    border-radius: 6px;
   }
 `
 
@@ -143,6 +173,9 @@ const TimelineActivity = props => {
 
   const handleClickActivity = e => {
     e.preventDefault()
+    if (window.screen.width < 768) {
+      setDisplayActivityModal(true)
+    }
     if (props.id !== _get(activeActivity, 'id')) {
       setActiveActivityLoading(true)
       axios
@@ -153,9 +186,6 @@ const TimelineActivity = props => {
           if (payload) {
             setActiveActivity(payload)
             setActiveActivityLoading(false)
-            if (window.screen.width < 768) {
-              setDisplayActivityModal(true)
-            }
           }
         })
         .catch(error => {
@@ -184,7 +214,7 @@ const TimelineActivity = props => {
   }
 
   const handleClickActivityModal = e => {
-    if (e.target.className === 'activity-modal') {
+    if ([...e.target.classList].includes('activity-modal')) {
       setDisplayActivityModal(false)
     }
   }
@@ -244,63 +274,68 @@ const TimelineActivity = props => {
   }
 
   return (
-    <StyledTimelineActivity
-      $dayHeight={props.dayHeight}
-      $channelWidth={props.channelWidth}
-      $activityHeight={daysTotal * props.dayHeight}
-      $activityColour={props.activityColour}
-      $thumbnail={_get(activityDetail, ['thumbnail_url'])}
-      $activityHover={activityHover}
-      onClick={handleClickActivity}
-      onMouseEnter={handleMouseEnterActivity}
-      onMouseLeave={handleMouseLeaveActivity}
-      onMouseMove={handleMouseMove}
-      ref={timelineActivityRef}
-    >
-      <div className="activity-head">
-        <div className="activity-head__inner"></div>
-      </div>
-      <div className="activity-spine"></div>
-      <div className="activity-tail">{renderTail()}</div>
-      {activityHover && (
-        <TimelineActivityTooltip
-          positionX={tooltipX}
-          positionY={tooltipY}
-          activityColour={props.activityColour}
-          tooltipWidth={tooltipWidth}
-          startAt={_get(props, 'start_at')}
-          endAt={_get(props, 'end_at')}
-          title={
-            _get(props, ['game_activity', 'name'])
-              ? _get(props, ['game_activity', 'name'])
-              : _get(props, ['show_activity', 'name'])
-          }
-          platform={
-            _get(props, ['game_platform', 'name'])
-              ? _get(props, ['game_platform', 'name'])
-              : _get(props, ['show_platform', 'name'])
-          }
-          alignment={calculateTooltipAlignment()}
-        />
-      )}
+    <>
+      <StyledTimelineActivity
+        $dayHeight={props.dayHeight}
+        $channelWidth={props.channelWidth}
+        $activityHeight={daysTotal * props.dayHeight}
+        $activityColour={props.activityColour}
+        $thumbnail={_get(activityDetail, ['thumbnail_url'])}
+        $activityHover={activityHover}
+        onClick={handleClickActivity}
+        onMouseEnter={handleMouseEnterActivity}
+        onMouseLeave={handleMouseLeaveActivity}
+        onMouseMove={handleMouseMove}
+        ref={timelineActivityRef}
+      >
+        <div className="activity-head">
+          <div className="activity-head__inner"></div>
+        </div>
+        <div className="activity-spine"></div>
+        <div className="activity-tail">{renderTail()}</div>
+        {activityHover && (
+          <TimelineActivityTooltip
+            positionX={tooltipX}
+            positionY={tooltipY}
+            activityColour={props.activityColour}
+            tooltipWidth={tooltipWidth}
+            startAt={_get(props, 'start_at')}
+            endAt={_get(props, 'end_at')}
+            title={
+              _get(props, ['game_activity', 'name'])
+                ? _get(props, ['game_activity', 'name'])
+                : _get(props, ['show_activity', 'name'])
+            }
+            platform={
+              _get(props, ['game_platform', 'name'])
+                ? _get(props, ['game_platform', 'name'])
+                : _get(props, ['show_platform', 'name'])
+            }
+            alignment={calculateTooltipAlignment()}
+          />
+        )}
+      </StyledTimelineActivity>
       {displayActivityModal && (
-        <div className="activity-modal" onClick={handleClickActivityModal}>
-          <div className="activity-modal__container">
-            <div className="activity-modal__header">
+        <StyledActivityModal
+          className="activity-modal"
+          onClick={handleClickActivityModal}
+        >
+          <div className="activity-modal-container">
+            <div className="activity-modal-header">
               <div
-                className="activity-modal__header__icon"
+                className="activity-modal-header__icon"
                 onClick={handleClickCloseIcon}
               >
                 {renderCloseIcon()}
               </div>
             </div>
-            <div className="activity-modal__body">
+            <div className="activity-modal-body">
               <Activity />
             </div>
           </div>
-        </div>
+        </StyledActivityModal>
       )}
-    </StyledTimelineActivity>
+    </>
   )
 }
 

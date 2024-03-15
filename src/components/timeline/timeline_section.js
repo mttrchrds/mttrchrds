@@ -11,9 +11,13 @@ import TimelineActivity from './timeline_activity'
 const dayHeight = 50
 const channelWidth = 50
 
-const StyledTimeline = styled.div`
+const StyledTimelineSection = styled.div`
   display: flex;
-  background: linear-gradient(90deg, ${props => props.theme.colors.primary} 1.46%, ${props => props.theme.colors.primary1} 100%);
+  background: linear-gradient(
+    90deg,
+    ${props => props.theme.colors.primary} 1.46%,
+    ${props => props.theme.colors.primary1} 100%
+  );
   .top-spacer {
     width: 100%;
     height: 20px;
@@ -27,13 +31,17 @@ const StyledTimeline = styled.div`
       &--sticky {
         position: sticky;
         top: 20px;
-        background-color: ${props => props.theme.colors.primary}
+        background-color: ${props => props.theme.colors.primary};
       }
     }
   }
   .day-channels {
     width: 80%;
-    background: linear-gradient(90deg, ${props => props.theme.colors.primary} 1.46%, ${props => props.theme.colors.primary1} 100%);
+    background: linear-gradient(
+      90deg,
+      ${props => props.theme.colors.primary} 1.46%,
+      ${props => props.theme.colors.primary1} 100%
+    );
     &__row {
       display: flex;
       width: 100%;
@@ -61,8 +69,8 @@ const StyledTimeline = styled.div`
   }
 `
 
-const Timeline = props => {
-  const date = new Date();
+const TimelineSection = props => {
+  const date = new Date()
   const currentMonth = formatDateNumber(date.getMonth() + 1)
   const currentYear = String(date.getFullYear())
 
@@ -71,7 +79,10 @@ const Timeline = props => {
     if (channelActivityId) {
       const channelActivity = _get(day, ['channels', channelIndex])
       return (
-        <div className="day-channels__channel day-channels__channel--active" data-channel={channelIndex}>
+        <div
+          className="day-channels__channel day-channels__channel--active"
+          data-channel={channelIndex}
+        >
           <div className="day-channels__channel__activity">
             <TimelineActivity
               {...channelActivity}
@@ -83,9 +94,7 @@ const Timeline = props => {
         </div>
       )
     } else {
-      return (
-        <div className="day-channels__channel">&nbsp;</div>
-      )
+      return <div className="day-channels__channel">&nbsp;</div>
     }
   }
 
@@ -108,7 +117,15 @@ const Timeline = props => {
     return props.timelineDays.map((d, i) => {
       const dayLabel = calculateDayLabel(d, i)
       return (
-        <div className={dayLabel ? 'day-labels__row day-labels__row--sticky' : 'day-labels__row'} key={`label-${d.date}`} data-date={`${d.year}-${d.month}-${d.day}`}>
+        <div
+          className={
+            dayLabel
+              ? 'day-labels__row day-labels__row--sticky'
+              : 'day-labels__row'
+          }
+          key={`label-${d.date}`}
+          data-date={`${d.year}-${d.month}-${d.day}`}
+        >
           {dayLabel === null ? ' ' : dayLabel}
         </div>
       )
@@ -123,9 +140,15 @@ const Timeline = props => {
         highlight = true
       }
       dayCounter++
-      const rowClass = highlight ? `day-channels__row day-channels__row--highlight` : `day-channels__row`
+      const rowClass = highlight
+        ? `day-channels__row day-channels__row--highlight`
+        : `day-channels__row`
       return (
-        <div className={rowClass} key={`channels-${d.date}`} data-date={`${d.year}-${d.month}-${d.day}`}>
+        <div
+          className={rowClass}
+          key={`channels-${d.date}`}
+          data-date={`${d.year}-${d.month}-${d.day}`}
+        >
           {renderChannel(5, d)}
           {renderChannel(3, d)}
           {renderChannel(1, d)}
@@ -139,7 +162,7 @@ const Timeline = props => {
   }
 
   return (
-    <StyledTimeline>
+    <StyledTimelineSection>
       <div className="day-labels">
         <div className="top-spacer" />
         {renderLabels()}
@@ -148,16 +171,16 @@ const Timeline = props => {
         <div className="top-spacer" />
         {renderChannels()}
       </div>
-    </StyledTimeline>
+    </StyledTimelineSection>
   )
 }
 
-Timeline.defaultProps = {
+TimelineSection.defaultProps = {
   timelineDays: [],
 }
 
-Timeline.propTypes = {
+TimelineSection.propTypes = {
   timelineDays: PropTypes.array,
 }
 
-export default Timeline
+export default TimelineSection

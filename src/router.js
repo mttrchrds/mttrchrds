@@ -1,10 +1,10 @@
 import React from 'react'
 import { createBrowserRouter } from 'react-router-dom'
 
-import ScreenTimeProvider from './providers/screen_time_provider'
+import TimelineProvider from './providers/timeline_provider'
 import Home from './components/pages/home'
 import Error from './components/pages/error'
-import ScreenTime from './components/pages/screen_time'
+import Timeline from './components/pages/timeline'
 
 export default createBrowserRouter([
   {
@@ -13,11 +13,11 @@ export default createBrowserRouter([
     errorElement: <Error />,
   },
   {
-    path: '/screentime',
+    path: '/timeline',
     element: (
-      <ScreenTimeProvider>
-        <ScreenTime />
-      </ScreenTimeProvider>
+      <TimelineProvider>
+        <Timeline />
+      </TimelineProvider>
     ),
     errorElement: <Error />,
   },

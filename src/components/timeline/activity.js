@@ -6,7 +6,7 @@ import { DateTime } from 'luxon'
 
 // import { mqMin } from '../../helpers/media_queries'
 
-import { ScreenTimeContext } from '../../providers/screen_time_provider'
+import { TimelineContext } from '../../providers/timeline_provider'
 
 import Spinner from '../spinner'
 
@@ -80,11 +80,15 @@ const StyledActivity = styled.div`
 `
 
 const Activity = () => {
-  const { activeActivity, activeActivityLoading } = useContext(ScreenTimeContext)
+  const { activeActivity, activeActivityLoading } = useContext(TimelineContext)
 
-  console.log({activeActivity})
-  const activityPlatform = _get(activeActivity, ['show_platform']) ? _get(activeActivity, ['show_platform']) : _get(activeActivity, ['game_platform'])
-  const activityItem = _get(activeActivity, ['show_activity']) ? _get(activeActivity, ['show_activity']) : _get(activeActivity, ['game_activity'])
+  console.log({ activeActivity })
+  const activityPlatform = _get(activeActivity, ['show_platform'])
+    ? _get(activeActivity, ['show_platform'])
+    : _get(activeActivity, ['game_platform'])
+  const activityItem = _get(activeActivity, ['show_activity'])
+    ? _get(activeActivity, ['show_activity'])
+    : _get(activeActivity, ['game_activity'])
   const isShow = _get(activeActivity, ['show_activity']) ? true : false
 
   const renderEndAt = () => {
@@ -92,7 +96,11 @@ const Activity = () => {
       return (
         <div className="game-show__row">
           <div className="game-show__row__label">Ended:</div>
-          <div className="game-show__row__value">{DateTime.fromISO(_get(activeActivity, ['end_at'])).toLocaleString(DateTime.DATE_FULL)}</div>
+          <div className="game-show__row__value">
+            {DateTime.fromISO(_get(activeActivity, ['end_at'])).toLocaleString(
+              DateTime.DATE_FULL,
+            )}
+          </div>
         </div>
       )
     }
@@ -102,19 +110,35 @@ const Activity = () => {
   const renderActiveGameShow = () => {
     return (
       <div className="game-show">
-        <div className="game-show__image"><img src={_get(activityItem, ['image_url'])} /></div>
+        <div className="game-show__image">
+          <img src={_get(activityItem, ['image_url'])} />
+        </div>
         <div className="game-show__name">{`${_get(activityItem, ['name'])} (${_get(activityPlatform, ['name'])})`}</div>
         <div className="game-show__row">
           <div className="game-show__row__label">Started:</div>
-          <div className="game-show__row__value">{DateTime.fromISO(_get(activeActivity, ['start_at'])).toLocaleString(DateTime.DATE_FULL)}</div>
+          <div className="game-show__row__value">
+            {DateTime.fromISO(
+              _get(activeActivity, ['start_at']),
+            ).toLocaleString(DateTime.DATE_FULL)}
+          </div>
         </div>
         {renderEndAt()}
         <div className="game-show__row">
-          <div className="game-show__row__label">{isShow ? 'Series completed' : 'Game completed'}:</div>
-          <div className="game-show__row__value">{_get(activeActivity, 'completed') ? 'Yes' : 'No'}</div>
+          <div className="game-show__row__label">
+            {isShow ? 'Series completed' : 'Game completed'}:
+          </div>
+          <div className="game-show__row__value">
+            {_get(activeActivity, 'completed') ? 'Yes' : 'No'}
+          </div>
         </div>
         <div className="game-show__link">
-          <a href={`https://www.imdb.com/title/${_get(activityItem, ['imdb_id'])}`} target="_blank" rel="noreferrer">View on IMDB</a>
+          <a
+            href={`https://www.imdb.com/title/${_get(activityItem, ['imdb_id'])}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            View on IMDB
+          </a>
         </div>
       </div>
     )
@@ -128,7 +152,7 @@ const Activity = () => {
         </div>
       )
     }
-    
+
     if (activeActivity) {
       return renderActiveGameShow()
     }
@@ -141,11 +165,7 @@ const Activity = () => {
     )
   }
 
-  return (
-    <StyledActivity>
-      {renderContent()}
-    </StyledActivity>
-  )
+  return <StyledActivity>{renderContent()}</StyledActivity>
 }
 
 Activity.defaultProps = {}

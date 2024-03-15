@@ -15,6 +15,8 @@ import TimelineSection from '../timeline/timeline_section'
 import Activity from '../timeline/activity'
 import Spinner from '../spinner'
 
+import theme from '../../styles/theme'
+
 const TimelineSectionMemoized = memo(function TimelineMemo(props) {
   return <TimelineSection timelineDays={props.timelineDays} />
 })
@@ -27,9 +29,10 @@ const StyledTimeline = styled.div`
   color: white;
   display: flex;
   flex-grow: 1;
+  padding-top: 20px;
   .primary {
     width: 100%;
-    background-color: ${props => props.theme.colors.primary};
+    background-color: ${props => props.theme.colors.timeline.primary};
   }
   .secondary {
     display: none;
@@ -46,14 +49,14 @@ const StyledTimeline = styled.div`
     display: flex;
     &__labels {
       width: 20%;
-      background-color: ${props => props.theme.colors.primary};
+      background-color: ${props => props.theme.colors.timeline.primary};
     }
     &__channels {
       width: 80%;
       background: linear-gradient(
         90deg,
-        ${props => props.theme.colors.primary} 1.46%,
-        ${props => props.theme.colors.primary1} 100%
+        ${props => props.theme.colors.timeline.primary} 1.46%,
+        ${props => props.theme.colors.timeline.primary1} 100%
       );
       display: flex;
       justify-content: center;
@@ -75,7 +78,7 @@ const StyledTimeline = styled.div`
     }
     .secondary {
       display: block;
-      background-color: ${props => props.theme.colors.secondary};
+      background-color: ${props => props.theme.colors.timeline.secondary};
       padding: 20px;
       flex-grow: 1;
       border-top-right-radius: 4px;
@@ -295,7 +298,7 @@ const Timeline = () => {
   }
 
   return (
-    <Layout>
+    <Layout bodyColour={theme.colors.timeline.background}>
       <StyledTimeline>
         <Container>
           <div className="timeline-container">

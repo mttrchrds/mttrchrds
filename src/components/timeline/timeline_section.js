@@ -15,8 +15,8 @@ const StyledTimelineSection = styled.div`
   display: flex;
   background: linear-gradient(
     90deg,
-    ${props => props.theme.colors.primary} 1.46%,
-    ${props => props.theme.colors.primary1} 100%
+    ${props => props.theme.colors.timeline.primary} 1.46%,
+    ${props => props.theme.colors.timeline.primary1} 100%
   );
   .top-spacer {
     width: 100%;
@@ -24,14 +24,14 @@ const StyledTimelineSection = styled.div`
   }
   .day-labels {
     width: 20%;
-    background-color: ${props => props.theme.colors.primary};
+    background-color: ${props => props.theme.colors.timeline.primary};
     &__row {
       height: ${dayHeight}px;
       padding-left: 20px;
       &--sticky {
         position: sticky;
         top: 20px;
-        background-color: ${props => props.theme.colors.primary};
+        background-color: ${props => props.theme.colors.timeline.primary};
       }
     }
   }
@@ -39,8 +39,8 @@ const StyledTimelineSection = styled.div`
     width: 80%;
     background: linear-gradient(
       90deg,
-      ${props => props.theme.colors.primary} 1.46%,
-      ${props => props.theme.colors.primary1} 100%
+      ${props => props.theme.colors.timeline.primary} 1.46%,
+      ${props => props.theme.colors.timeline.primary1} 100%
     );
     &__row {
       display: flex;

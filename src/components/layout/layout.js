@@ -5,6 +5,8 @@ import PropTypes from 'prop-types'
 import Container from './container'
 import Navigation from './navigation'
 
+import theme from '../../styles/theme'
+
 const StyledLayout = styled.div`
   min-height: 100vh;
   display: flex;
@@ -20,12 +22,13 @@ const StyledLayout = styled.div`
     flex-grow: 1;
     display: flex;
     flex-direction: column;
+    background-color: ${props => props.bodyColour};
   }
 `
 
 const Layout = props => {
   return (
-    <StyledLayout>
+    <StyledLayout bodyColour={props.bodyColour}>
       <div className="layout-header">
         <Container>
           <Navigation />
@@ -36,8 +39,13 @@ const Layout = props => {
   )
 }
 
+Layout.defaultProps = {
+  bodyColour: theme.colors.primary,
+}
+
 Layout.propTypes = {
   children: PropTypes.node,
+  bodyColour: PropTypes.string,
 }
 
 export default Layout

@@ -20,7 +20,7 @@ const StyledActivity = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    border: 1px solid ${props => props.theme.colors.secondary1};
+    border: 1px solid ${props => props.theme.colors.timeline.secondary1};
     border-radius: 4px;
     height: 400px;
     &__primary {

@@ -35,11 +35,18 @@ const StyledTimeline = styled.div`
     display: none;
   }
   .loading-container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .loading-more-container {
     height: 50px;
     display: flex;
     &__labels {
       width: 20%;
-      background-color: #1e2639;
+      background-color: ${props => props.theme.colors.primary};
     }
     &__channels {
       width: 80%;
@@ -96,7 +103,8 @@ const Timeline = () => {
 
   // Array of arrays. Each top level array is array of parsed timelineDays for each memoized <Timeline /> component
   const [timelineDays, setTimelineDays] = useState([])
-  const [displayLoading, setDisplayLoading] = useState(false)
+  const [displayLoading, setDisplayLoading] = useState(true)
+  const [displayLoadingMore, setDisplayLoadingMore] = useState(true)
   // Returns true if the component at the bottom of the timeline (i.e. intersection) is visible. Used for infinite loading
   const [intersection, setIntersection] = useState(false)
 
@@ -119,6 +127,8 @@ const Timeline = () => {
     setCurrentDay(formatDateNumber(cDay))
     setCurrentMonth(formatDateNumber(cMonth))
     setCurrentYear(String(cYear))
+
+    setDisplayLoading(true)
 
     let newMonth = cMonth - pagingLengthInMonths
     let newYear = cYear
@@ -145,6 +155,7 @@ const Timeline = () => {
           pagingYear.current = newYear
           initialLoadCompleted.current = true
         }
+        setDisplayLoading(false)
       })
       .catch(error => {
         console.log(error)
@@ -225,7 +236,7 @@ const Timeline = () => {
   }
 
   const handleLoadMore = () => {
-    setDisplayLoading(true)
+    setDisplayLoadingMore(true)
 
     let startMonth = pagingMonth.current - pagingLengthInMonths
     let startYear = pagingYear.current
@@ -275,10 +286,10 @@ const Timeline = () => {
           pagingMonth.current = startMonth
           pagingYear.current = startYear
         }
-        setDisplayLoading(false)
+        setDisplayLoadingMore(false)
       })
       .catch(error => {
-        setDisplayLoading(false)
+        setDisplayLoadingMore(false)
         console.log(error)
       })
   }
@@ -289,6 +300,11 @@ const Timeline = () => {
         <Container>
           <div className="timeline-container">
             <div className="primary">
+              {displayLoading && (
+                <div className="loading-container">
+                  <Spinner />
+                </div>
+              )}
               <div className="timelines">
                 {timelineDays.map(td => (
                   <TimelineSectionMemoized
@@ -298,14 +314,16 @@ const Timeline = () => {
                 ))}
               </div>
               <div ref={observerTarget}></div>
-              <div className="loading-container">
-                <div className="loading-container__labels"></div>
-                <div className="loading-container__channels">
-                  <div className="loading-container__channels__spinner">
-                    {displayLoading && <Spinner />}
+              {!displayLoading && (
+                <div className="loading-more-container">
+                  <div className="loading-more-container__labels"></div>
+                  <div className="loading-more-container__channels">
+                    <div className="loading-more-container__channels__spinner">
+                      {displayLoadingMore && <Spinner />}
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
             <div className="secondary">
               <Activity />

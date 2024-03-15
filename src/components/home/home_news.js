@@ -2,6 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 
+import { mqMin } from '../../helpers/media_queries'
+
 const StyledHomeNews = styled.div`
   .news-item {
     font-family: 'Silkscreen';
@@ -15,15 +17,27 @@ const StyledHomeNews = styled.div`
     }
     &__primary {
       display: flex;
+      flex-direction: column;
       justify-content: space-between;
       margin-bottom: 20px;
+      @media ${props => mqMin(props.theme.breakPoints.sm)} {
+        flex-direction: row;
+      }
       &__title {
         font-size: ${props => props.theme.typography.sizeLarge};
         color: ${props => props.theme.colors.text1};
+        margin-bottom: 10px;
+        @media ${props => mqMin(props.theme.breakPoints.sm)} {
+          margin-bottom: 0;
+        }
       }
       &__date {
-        font-size: ${props => props.theme.typography.sizeLarge};
-        color: ${props => props.theme.colors.text};
+        font-size: ${props => props.theme.typography.sizeMedium};
+        color: ${props => props.theme.colors.text1};
+        @media ${props => mqMin(props.theme.breakPoints.sm)} {
+          color: ${props => props.theme.colors.text};
+          font-size: ${props => props.theme.typography.sizeLarge};
+        }
       }
     }
     &__secondary {

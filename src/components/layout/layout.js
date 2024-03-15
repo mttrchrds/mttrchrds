@@ -22,13 +22,13 @@ const StyledLayout = styled.div`
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    background-color: ${props => props.bodyColour};
+    background-color: ${props => props.$bodyColour};
   }
 `
 
 const Layout = props => {
   return (
-    <StyledLayout bodyColour={props.bodyColour}>
+    <StyledLayout $bodyColour={props.bodyColour}>
       <div className="layout-header">
         <Container>
           <Navigation title={props.navigationTitle} />

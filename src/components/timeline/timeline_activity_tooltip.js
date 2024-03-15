@@ -58,7 +58,6 @@ const TimelineActivityTooltip = props => {
       $activityColour={props.activityColour}
       $tooltipWidth={props.tooltipWidth}
     >
-      <div className="tooltip-title">{props.alignment}</div>
       <div className="tooltip-title">{`${props.title} (${props.platform})`}</div>
       <div className="tooltip-timestamp">{renderTooltipTimestamp()}</div>
     </StyledActivityTooltip>

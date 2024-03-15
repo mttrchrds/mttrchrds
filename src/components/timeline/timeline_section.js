@@ -90,6 +90,7 @@ const TimelineSection = props => {
               dayHeight={dayHeight}
               channelWidth={channelWidth}
               activityColour={_get(day, ['channelColours', channelIndex])}
+              channelIndex={channelIndex}
             />
           </div>
         </div>

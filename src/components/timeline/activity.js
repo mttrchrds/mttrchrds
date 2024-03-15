@@ -84,7 +84,6 @@ const StyledActivity = styled.div`
 const Activity = () => {
   const { activeActivity, activeActivityLoading } = useContext(TimelineContext)
 
-  console.log({ activeActivity })
   const activityPlatform = _get(activeActivity, ['show_platform'])
     ? _get(activeActivity, ['show_platform'])
     : _get(activeActivity, ['game_platform'])

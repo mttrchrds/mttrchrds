@@ -13,7 +13,10 @@ const StyledActivityTooltip = styled.div`
   background-color: ${props => props.$activityColour};
   color: ${props => props.theme.colors.timeline.text0};
   border-radius: 6px;
-  border-top-right-radius: 0;
+  border-top-right-radius: ${props =>
+    props.$alignment === 'left' ? '0' : '6px'};
+  border-top-left-radius: ${props =>
+    props.$alignment === 'right' ? '0' : '6px'};
   .tooltip-title {
     font-size: 14px;
     margin-bottom: 10px;
@@ -24,6 +27,17 @@ const StyledActivityTooltip = styled.div`
 `
 
 const TimelineActivityTooltip = props => {
+  const calculateLeft = () => {
+    if (props.alignment === 'left') {
+      return props.positionX - 5 - props.tooltipWidth
+    }
+    return props.positionX + 5
+  }
+
+  const calculateTop = () => {
+    return props.positionY - 5
+  }
+
   const renderTooltipTimestamp = () => {
     const start_at_formatted = DateTime.fromISO(
       _get(props, ['startAt']),
@@ -36,13 +50,15 @@ const TimelineActivityTooltip = props => {
 
   return (
     <StyledActivityTooltip
+      $alignment={props.alignment}
       style={{
-        top: props.positionY,
-        left: props.positionX,
+        top: calculateTop(),
+        left: calculateLeft(),
       }}
       $activityColour={props.activityColour}
       $tooltipWidth={props.tooltipWidth}
     >
+      <div className="tooltip-title">{props.alignment}</div>
       <div className="tooltip-title">{`${props.title} (${props.platform})`}</div>
       <div className="tooltip-timestamp">{renderTooltipTimestamp()}</div>
     </StyledActivityTooltip>
@@ -60,6 +76,7 @@ TimelineActivityTooltip.propTypes = {
   endAt: PropTypes.string,
   title: PropTypes.string,
   platform: PropTypes.string,
+  alignment: PropTypes.oneOf(['left', 'right']).isRequired,
 }
 
 export default TimelineActivityTooltip

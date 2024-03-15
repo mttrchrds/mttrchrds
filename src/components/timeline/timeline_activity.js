@@ -138,10 +138,21 @@ const Activity = props => {
 
   const handleMouseMove = e => {
     const bounding = timelineActivityRef.current.getBoundingClientRect()
-    const x = e.clientX - bounding.left - 5 - tooltipWidth
-    const y = e.clientY - bounding.top - 5
+    const x = e.clientX - bounding.left
+    const y = e.clientY - bounding.top
     setTooltipX(x)
     setTooltipY(y)
+  }
+
+  const calculateTooltipAlignment = () => {
+    if (
+      props.channelIndex === 1 ||
+      props.channelIndex === 3 ||
+      props.channelIndex === 5
+    ) {
+      return 'right'
+    }
+    return 'left'
   }
 
   const renderTail = () => {
@@ -206,6 +217,7 @@ const Activity = props => {
               ? _get(props, ['game_platform', 'name'])
               : _get(props, ['show_platform', 'name'])
           }
+          alignment={calculateTooltipAlignment()}
         />
       )}
     </StyledTimelineActivity>
@@ -226,6 +238,7 @@ Activity.propTypes = {
   game_activity: PropTypes.object,
   game_platform: PropTypes.object,
   completed: PropTypes.bool.isRequired,
+  channelIndex: PropTypes.number.isRequired,
 }
 
 export default Activity

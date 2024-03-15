@@ -65,8 +65,6 @@ const StyledNavigation = styled.div`
 const Navigation = props => {
   const navigate = useNavigate()
 
-  console.log({ props })
-
   const handleClickActionsButton = e => {
     e.preventDefault()
     navigate('/')

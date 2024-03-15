@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { Link } from 'react-router-dom'
 
 const StyledHomeNews = styled.div`
   .news-item {
@@ -28,6 +29,18 @@ const StyledHomeNews = styled.div`
     &__secondary {
       font-size: ${props => props.theme.typography.sizeMedium};
       color: ${props => props.theme.colors.text};
+      a {
+        &:link,
+        &:visited,
+        &:active {
+          color: ${props => props.theme.colors.text1};
+          text-decoration: underline;
+        }
+        &:hover {
+          color: ${props => props.theme.colors.secondary1};
+          text-decoration: none;
+        }
+      }
     }
   }
 `
@@ -35,6 +48,17 @@ const StyledHomeNews = styled.div`
 const HomeNews = () => {
   return (
     <StyledHomeNews>
+      <div className="news-item">
+        <div className="news-item__primary">
+          <div className="news-item__primary__title">Timeline added</div>
+          <div className="news-item__primary__date">15 March 2024</div>
+        </div>
+        <div className="news-item__secondary">
+          Latest project is now live. View an interactive{' '}
+          <Link to="/timeline">timeline</Link> of all the shows I&apos;ve
+          watched and games I&apos;ve played
+        </div>
+      </div>
       <div className="news-item">
         <div className="news-item__primary">
           <div className="news-item__primary__title">Content arrives</div>

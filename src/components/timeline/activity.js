@@ -1,12 +1,11 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 // import PropTypes from 'prop-types'
 import _get from 'lodash/get'
 import { DateTime } from 'luxon'
+import { useSelector } from 'react-redux'
 
 // import { mqMin } from '../../helpers/media_queries'
-
-import { TimelineContext } from '../../providers/timeline_provider'
 
 import Spinner from '../spinner'
 
@@ -82,7 +81,10 @@ const StyledActivity = styled.div`
 `
 
 const Activity = () => {
-  const { activeActivity, activeActivityLoading } = useContext(TimelineContext)
+  const activeActivity = useSelector(state => state.timeline.activity)
+  const activeActivityLoading = useSelector(
+    state => state.timeline.activityLoading,
+  )
 
   const activityPlatform = _get(activeActivity, ['show_platform'])
     ? _get(activeActivity, ['show_platform'])

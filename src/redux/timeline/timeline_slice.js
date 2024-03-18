@@ -5,6 +5,9 @@ import _get from 'lodash/get'
 import { getDaysInMonth, formatDateNumber } from '../../helpers/date_times'
 
 const initialState = {
+  currentDay: '',
+  currentMonth: '',
+  currentYear: '',
   pagingStart: '',
   pagingEnd: '',
   pagingChannels: [],
@@ -14,6 +17,8 @@ const initialState = {
   loading: false,
   // A record of activity ids, used to ensure parsed payload doesn't have duplicate entries
   renderedActivityIds: [],
+  activity: null,
+  activityLoading: false,
 }
 
 const activityColours = [
@@ -30,20 +35,38 @@ const activityColours = [
 
 export const pagingLengthInMonths = 3
 
-export const loadTimeline = createAsyncThunk('timeline/load', async payload => {
-  const start = _get(payload, 'start')
-  const end = _get(payload, 'end')
-  const channels = _get(payload, 'channels', [])
-  const response = await axios
-    .get(
-      /* eslint-disable-next-line no-undef */
-      `${process.env.API_DOMAIN}/api/timeline/?start=${start}&end=${end}&channels=${channels}`,
-    )
-    .then(apiResponse => {
-      return apiResponse
-    })
-  return response.data
-})
+export const loadTimeline = createAsyncThunk(
+  'timeline/loadTimline',
+  async payload => {
+    const start = _get(payload, 'start')
+    const end = _get(payload, 'end')
+    const channels = _get(payload, 'channels', [])
+    const response = await axios
+      .get(
+        /* eslint-disable-next-line no-undef */
+        `${process.env.API_DOMAIN}/api/timeline/?start=${start}&end=${end}&channels=${channels}`,
+      )
+      .then(apiResponse => {
+        return apiResponse
+      })
+    return response.data
+  },
+)
+
+export const loadActivity = createAsyncThunk(
+  'timeline/loadActivity',
+  async payload => {
+    const response = await axios
+      .get(
+        /* eslint-disable-next-line no-undef */
+        `${process.env.API_DOMAIN}/api/activities/${payload}`,
+      )
+      .then(apiResponse => {
+        return apiResponse
+      })
+    return response.data
+  },
+)
 
 const buildNextStartEndValues = currentStart => {
   // builds data query params for next load
@@ -140,6 +163,17 @@ const parseApiPayload = (payload, state) => {
 export const timelineSlice = createSlice({
   name: 'timline',
   initialState,
+  reducers: {
+    updateCurrentDay: (state, action) => {
+      state.currentDay = action.payload
+    },
+    updateCurrentMonth: (state, action) => {
+      state.currentMonth = action.payload
+    },
+    updateCurrentYear: (state, action) => {
+      state.currentYear = action.payload
+    },
+  },
   extraReducers: builder => {
     builder
       .addCase(loadTimeline.pending, state => {
@@ -165,10 +199,23 @@ export const timelineSlice = createSlice({
           state.renderedActivityIds = renderedActivityIds
           state.sections = [...state.sections, parsedPayload]
         }
-      })
+      }),
+      builder
+        .addCase(loadActivity.pending, state => {
+          state.activityLoading = true
+        })
+        .addCase(loadActivity.rejected, (state, error) => {
+          console.log('error loading activity', error)
+        })
+        .addCase(loadActivity.fulfilled, (state, action) => {
+          state.activityLoading = false
+          const payload = _get(action, 'payload', {})
+          state.activity = payload
+        })
   },
 })
 
-export const { updateShows } = timelineSlice.actions
+export const { updateCurrentDay, updateCurrentMonth, updateCurrentYear } =
+  timelineSlice.actions
 
 export default timelineSlice.reducer

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, memo, useContext } from 'react'
+import React, { useEffect, useState, useRef, memo } from 'react'
 import styled from 'styled-components'
 import _get from 'lodash/get'
 import PropTypes from 'prop-types'
@@ -6,12 +6,13 @@ import { useSelector, useDispatch } from 'react-redux'
 import {
   loadTimeline,
   pagingLengthInMonths,
+  updateCurrentDay,
+  updateCurrentMonth,
+  updateCurrentYear,
 } from '../../redux/timeline/timeline_slice'
 
 import { mqMin } from '../../helpers/media_queries'
 import { formatDateNumber } from '../../helpers/date_times'
-
-import { TimelineContext } from '../../providers/timeline_provider'
 
 import Layout from '../layout/layout'
 import Container from '../layout/container'
@@ -96,9 +97,6 @@ const StyledTimeline = styled.div`
 `
 
 const Timeline = () => {
-  const { setCurrentDay, setCurrentMonth, setCurrentYear } =
-    useContext(TimelineContext)
-
   // Returns true if the component at the bottom of the timeline (i.e. intersection) is visible. Used for infinite loading
   const [intersection, setIntersection] = useState(false)
 
@@ -111,21 +109,15 @@ const Timeline = () => {
   const timelineLoading = useSelector(state => state.timeline.loading)
   const timelineSections1 = useSelector(state => state.timeline.sections)
 
-  console.log({ pagingStart })
-  console.log({ pagingEnd })
-  console.log({ pagingChannels })
-
-  console.log('redux sections', timelineSections1)
-
   useEffect(() => {
     const date = new Date()
     const cYear = date.getFullYear()
     const cMonth = date.getMonth() + 1
     const cDay = date.getDate()
 
-    setCurrentDay(formatDateNumber(cDay))
-    setCurrentMonth(formatDateNumber(cMonth))
-    setCurrentYear(String(cYear))
+    dispatch(updateCurrentDay(formatDateNumber(cDay)))
+    dispatch(updateCurrentMonth(formatDateNumber(cMonth)))
+    dispatch(updateCurrentYear(String(cYear)))
 
     let newMonth = cMonth - pagingLengthInMonths
     let newYear = cYear

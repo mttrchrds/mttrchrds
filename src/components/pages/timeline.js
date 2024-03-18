@@ -107,7 +107,7 @@ const Timeline = () => {
   const pagingEnd = useSelector(state => state.timeline.pagingEnd)
   const pagingChannels = useSelector(state => state.timeline.pagingChannels)
   const timelineLoading = useSelector(state => state.timeline.loading)
-  const timelineSections1 = useSelector(state => state.timeline.sections)
+  const timelineSections = useSelector(state => state.timeline.sections)
 
   useEffect(() => {
     const date = new Date()
@@ -119,18 +119,20 @@ const Timeline = () => {
     dispatch(updateCurrentMonth(formatDateNumber(cMonth)))
     dispatch(updateCurrentYear(String(cYear)))
 
-    let newMonth = cMonth - pagingLengthInMonths
-    let newYear = cYear
+    if (timelineSections.length === 0) {
+      let newMonth = cMonth - pagingLengthInMonths
+      let newYear = cYear
 
-    if (newMonth < 1) {
-      newMonth = 12 + newMonth
-      newYear = newYear - 1
+      if (newMonth < 1) {
+        newMonth = 12 + newMonth
+        newYear = newYear - 1
+      }
+
+      const queryStart = `${newYear}-${formatDateNumber(newMonth)}-01`
+      const queryEnd = `${cYear}-${formatDateNumber(cMonth)}-${formatDateNumber(cDay)}`
+
+      dispatch(loadTimeline({ start: queryStart, end: queryEnd, channels: [] }))
     }
-
-    const queryStart = `${newYear}-${formatDateNumber(newMonth)}-01`
-    const queryEnd = `${cYear}-${formatDateNumber(cMonth)}-${formatDateNumber(cDay)}`
-
-    dispatch(loadTimeline({ start: queryStart, end: queryEnd, channels: [] }))
   }, [])
 
   useEffect(() => {
@@ -155,13 +157,13 @@ const Timeline = () => {
   }, [observerTarget])
 
   useEffect(() => {
-    if (intersection && timelineSections1.length > 0) {
+    if (intersection && timelineSections.length > 0) {
       handleLoadMore()
     }
   }, [intersection])
 
   const displayInitialLoading =
-    timelineSections1.length === 0 && timelineLoading ? true : false
+    timelineSections.length === 0 && timelineLoading ? true : false
 
   const handleLoadMore = () => {
     dispatch(
@@ -188,7 +190,7 @@ const Timeline = () => {
                 </div>
               )}
               <div className="timelines">
-                {timelineSections1.map(td => (
+                {timelineSections.map(td => (
                   <TimelineSectionMemoized
                     key={_get(td, ['0', 'date'])}
                     timelineDays={td}

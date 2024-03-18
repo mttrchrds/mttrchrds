@@ -1,4 +1,4 @@
-import React, { useEffect, memo } from 'react'
+import React, { useEffect, useState, useRef, memo } from 'react'
 import styled from 'styled-components'
 import _get from 'lodash/get'
 import PropTypes from 'prop-types'
@@ -97,6 +97,11 @@ const StyledTimeline = styled.div`
 `
 
 const Timeline = () => {
+  // Returns true if the component at the bottom of the timeline (i.e. intersection) is visible. Used for infinite loading
+  const [intersection, setIntersection] = useState(false)
+
+  const observerTarget = useRef(null)
+
   const dispatch = useDispatch()
   const pagingStart = useSelector(state => state.timeline.pagingStart)
   const pagingEnd = useSelector(state => state.timeline.pagingEnd)
@@ -128,30 +133,47 @@ const Timeline = () => {
 
       dispatch(loadTimeline({ start: queryStart, end: queryEnd, channels: [] }))
     }
+  }, [])
 
-    const handleScroll = () => {
-      if (
-        document.documentElement.scrollTop + window.innerHeight >=
-        document.body.offsetHeight - 20
-      ) {
-        dispatch(
-          loadTimeline({
-            start: pagingStart,
-            end: pagingEnd,
-            channels: pagingChannels,
-          }),
-        )
+  useEffect(() => {
+    // Detecting when bottom of timeline scrolls into view
+    const observer = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting) {
+        setIntersection(true)
+      } else {
+        setIntersection(false)
+      }
+    })
+
+    if (observerTarget.current) {
+      observer.observe(observerTarget.current)
+    }
+
+    return () => {
+      if (observerTarget.current) {
+        observer.unobserve(observerTarget.current)
       }
     }
+  }, [observerTarget])
 
-    window.addEventListener('scroll', handleScroll)
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
+  useEffect(() => {
+    if (intersection && timelineSections.length > 0) {
+      handleLoadMore()
     }
-  }, [])
+  }, [intersection])
 
   const displayInitialLoading =
     timelineSections.length === 0 && timelineLoading ? true : false
+
+  const handleLoadMore = () => {
+    dispatch(
+      loadTimeline({
+        start: pagingStart,
+        end: pagingEnd,
+        channels: pagingChannels,
+      }),
+    )
+  }
 
   return (
     <Layout
@@ -175,6 +197,7 @@ const Timeline = () => {
                   />
                 ))}
               </div>
+              <div ref={observerTarget}></div>
               {!displayInitialLoading && (
                 <div className="loading-more-container">
                   <div className="loading-more-container__labels"></div>

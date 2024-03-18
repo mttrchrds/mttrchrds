@@ -1,11 +1,11 @@
-import React, { useContext, useState, useRef } from 'react'
+import React, { useState, useRef } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { DateTime } from 'luxon'
 import _get from 'lodash/get'
-import axios from 'axios'
+import { useSelector, useDispatch } from 'react-redux'
+import { loadActivity } from '../../redux/timeline/timeline_slice'
 
-import { TimelineContext } from '../../providers/timeline_provider'
 import TimelineActivityTooltip from './timeline_activity_tooltip'
 import Activity from './activity'
 
@@ -140,14 +140,11 @@ const StyledActivityModal = styled.div`
 const tooltipWidth = 250
 
 const TimelineActivity = props => {
-  const {
-    setActiveActivity,
-    activeActivity,
-    setActiveActivityLoading,
-    currentDay,
-    currentMonth,
-    currentYear,
-  } = useContext(TimelineContext)
+  const currentDay = useSelector(state => state.timeline.currentDay)
+  const currentMonth = useSelector(state => state.timeline.currentMonth)
+  const currentYear = useSelector(state => state.timeline.currentYear)
+  const activeActivity = useSelector(state => state.timeline.activity)
+  const dispatch = useDispatch()
 
   const [activityHover, setActivityHover] = useState(false)
   const [tooltipX, setTooltipX] = useState(0)
@@ -177,21 +174,7 @@ const TimelineActivity = props => {
       setDisplayActivityModal(true)
     }
     if (props.id !== _get(activeActivity, 'id')) {
-      setActiveActivityLoading(true)
-      axios
-        /* eslint-disable-next-line no-undef */
-        .get(`${process.env.API_DOMAIN}/api/activities/${props.id}`)
-        .then(apiResponse => {
-          const payload = _get(apiResponse, 'data', [])
-          if (payload) {
-            setActiveActivity(payload)
-            setActiveActivityLoading(false)
-          }
-        })
-        .catch(error => {
-          console.log(error)
-          setActiveActivityLoading(false)
-        })
+      dispatch(loadActivity(props.id))
     }
   }
 

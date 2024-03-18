@@ -50,7 +50,7 @@ const StyledTimeline = styled.div`
   }
   .loading-more-container {
     height: 50px;
-    display: flex;
+    display: ${props => (props.$loadMoreVisible ? 'flex' : 'none')};
     &__labels {
       width: 20%;
       background-color: ${props => props.theme.colors.timeline.primary};
@@ -180,7 +180,7 @@ const Timeline = () => {
       bodyColour={theme.colors.timeline.background}
       navigationTitle="Timeline"
     >
-      <StyledTimeline>
+      <StyledTimeline $loadMoreVisible={displayInitialLoading ? false : true}>
         <Container>
           <div className="timeline-container">
             <div className="primary">
@@ -197,17 +197,14 @@ const Timeline = () => {
                   />
                 ))}
               </div>
-              <div ref={observerTarget}></div>
-              {!displayInitialLoading && (
-                <div className="loading-more-container">
-                  <div className="loading-more-container__labels"></div>
-                  <div className="loading-more-container__channels">
-                    <div className="loading-more-container__channels__spinner">
-                      {timelineLoading && <Spinner />}
-                    </div>
+              <div className="loading-more-container" ref={observerTarget}>
+                <div className="loading-more-container__labels"></div>
+                <div className="loading-more-container__channels">
+                  <div className="loading-more-container__channels__spinner">
+                    {timelineLoading && <Spinner />}
                   </div>
                 </div>
-              )}
+              </div>
             </div>
             <div className="secondary">
               <Activity />

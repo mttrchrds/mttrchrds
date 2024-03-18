@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { DateTime } from 'luxon'
@@ -152,6 +152,17 @@ const TimelineActivity = props => {
   const [displayActivityModal, setDisplayActivityModal] = useState(false)
 
   const timelineActivityRef = useRef(null)
+
+  useEffect(() => {
+    if (displayActivityModal) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'scroll'
+    }
+    return () => {
+      document.body.style.overflow = 'scroll'
+    }
+  }, [displayActivityModal])
 
   const activityDetail =
     _get(props, ['show_activity']) === null

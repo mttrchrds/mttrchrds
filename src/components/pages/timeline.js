@@ -197,6 +197,8 @@ const Timeline = () => {
     }
   }, [intersection])
 
+  console.log('Intersection in render', intersection)
+
   const generateActiveColourIndex = () => {
     const totalColours = activityColours.length
     if (activeColourIndex.current === totalColours - 1) {
@@ -209,6 +211,7 @@ const Timeline = () => {
   const parsePayload = payload => {
     // Payload is parsed so logic is outside Memoized <TimelineSection /> component
     // Removes duplicate activities from payload and sets activity colour
+    console.log('inside parsePayload', payload)
     let tmpPayload = []
     payload.map(p => {
       let tmpChannelColours = []
@@ -245,6 +248,8 @@ const Timeline = () => {
 
   const handleLoadMore = () => {
     setDisplayLoadingMore(true)
+
+    console.log('inside handleLoadMore')
 
     let startMonth = pagingMonth.current - pagingLengthInMonths
     let startYear = pagingYear.current
@@ -285,6 +290,7 @@ const Timeline = () => {
       )
       .then(apiResponse => {
         const payload = _get(apiResponse, 'data', [])
+        console.log('payload from handleLoadMore', payload)
         if (payload.length > 0) {
           setTimelineDays([...timelineDays, parsePayload(payload)])
           timelineDaysUnparsed.current = [

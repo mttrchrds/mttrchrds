@@ -1,17 +1,23 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import _findIndex from 'lodash/findIndex'
 import { useSelector, useDispatch } from 'react-redux'
 import { loadGames } from '../../redux/latest_games/latest_games_slice'
 import { loadShows } from '../../redux/latest_shows/latest_shows_slice'
 
 import { mqMin } from '../../helpers/media_queries'
+import {
+  enumHomeSectionMusic,
+  enumHomeSectionNews,
+  enumHomeSectionGames,
+  enumHomeSectionShows,
+} from '../../helpers/enums'
 
 import Layout from '../layout/layout'
 import Container from '../layout/container'
-import HomeNavigationButton from '../home/home_navigation_button'
 import HomeActivities from '../home/home_activities'
 import HomeNews from '../home/home_news'
+import HomeNavigation from '../home/home_navigation'
+import HomeTitle from '../home/home_title'
 
 const StyledHome = styled.div`
   display: flex;
@@ -26,50 +32,10 @@ const StyledHome = styled.div`
     padding-bottom: 0;
     padding-left: 0;
   }
-  .nav {
-    width: 100%;
-    display: flex;
+  .navigation {
     flex-shrink: 0;
     @media ${props => mqMin(props.theme.breakPoints.md)} {
       width: 300px;
-    }
-    &__primary {
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      &__title {
-        display: none;
-        @media ${props => mqMin(props.theme.breakPoints.md)} {
-          display: block;
-          font-size: ${props => props.theme.typography.sizeLarger};
-          font-weight: 400;
-          color: ${props => props.theme.colors.primary1};
-          margin-bottom: 10px;
-          font-family: 'Silkscreen';
-          margin-top: 40px;
-        }
-      }
-      &__item {
-        position: relative;
-        z-index: 2;
-      }
-      &__filler {
-        position: relative;
-        z-index: 2;
-        flex-grow: 1;
-        background-color: ${props => props.theme.colors.primary};
-      }
-    }
-    &__secondary {
-      position: relative;
-      z-index: 1;
-      &__connector {
-        position: absolute;
-        left: -2px;
-        width: 2px;
-        height: 100%;
-        background-color: ${props => props.theme.colors.highlight};
-      }
     }
   }
   .content {
@@ -96,17 +62,6 @@ const StyledHome = styled.div`
         }
         &__title {
           flex-grow: 1;
-          border: 2px solid ${props => props.theme.colors.highlight};
-          background-color: ${props => props.theme.colors.primary1};
-          padding: 10px;
-          &__text {
-            color: ${props => props.theme.colors.highlight};
-            font-size: ${props => props.theme.typography.sizeLarger};
-            font-family: 'Silkscreen';
-            line-height: 1;
-            position: relative;
-            top: -1px;
-          }
         }
       }
     }
@@ -137,24 +92,22 @@ const StyledHome = styled.div`
   }
 `
 
-export const StyledBlankState = styled.div`
+export const StyledBlankState = styled.article`
   height: inherit;
   min-height: inherit;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: ${props => props.theme.colors.text1};
-  font-size: ${props => props.theme.typography.sizeLarge};
+  p {
+    color: ${props => props.theme.colors.text1};
+    font-size: ${props => props.theme.typography.sizeLarge};
+  }
 `
-
-const enumHomeSectionNews = 'NEWS'
-const enumHomeSectionShows = 'SHOWS'
-const enumHomeSectionGames = 'GAMES'
-const enumHomeSectionMusic = 'MUSIC'
 
 const Home = () => {
   const [activeSection, setActiveSection] = useState(enumHomeSectionNews)
+  const [activeTitle, setActiveTitle] = useState('LATEST NEWS')
 
   const dispatch = useDispatch()
   const latestGames = useSelector(state => state.latestGames.games)
@@ -162,64 +115,26 @@ const Home = () => {
   const latestShows = useSelector(state => state.latestShows.shows)
   const latestShowsLoading = useSelector(state => state.latestShows.loading)
 
-  const handleClickSideNavItem = (e, section) => {
-    e.preventDefault()
-    setActiveSection(section)
-    if (section === enumHomeSectionShows && latestShows.length === 0) {
-      dispatch(loadShows())
-    }
-    if (section === enumHomeSectionGames && latestGames.length === 0) {
-      dispatch(loadGames())
-    }
-  }
-
-  const renderSideNavigation = () => {
-    const homeSections = [
-      enumHomeSectionNews,
-      enumHomeSectionShows,
-      enumHomeSectionGames,
-      enumHomeSectionMusic,
-    ]
-    const activeSectionIndex = _findIndex(
-      homeSections,
-      hs => hs === activeSection,
-    )
-    return homeSections.map((hs, idx) => {
-      let previousItem = false
-      if (idx < activeSectionIndex) {
-        previousItem = true
-      }
-      return (
-        <div
-          key={hs}
-          className="nav__primary__item"
-          onClick={e => handleClickSideNavItem(e, hs)}
-        >
-          <HomeNavigationButton
-            active={activeSection === hs ? true : false}
-            label={hs}
-            previousButton={previousItem}
-          />
-        </div>
-      )
-    })
-  }
-
-  const renderContentHeader = () => {
+  useEffect(() => {
     if (activeSection === enumHomeSectionNews) {
-      return 'LATEST NEWS'
+      setActiveTitle('LATEST NEWS')
     }
     if (activeSection === enumHomeSectionShows) {
-      return 'LATEST SHOWS WATCHED'
+      setActiveTitle('LATEST SHOWS WATCHED')
+      if (latestShows.length === 0) {
+        dispatch(loadShows())
+      }
     }
     if (activeSection === enumHomeSectionGames) {
-      return 'LATEST GAMES PLAYED'
+      setActiveTitle('LATEST GAMES PLAYED')
+      if (latestGames.length === 0) {
+        dispatch(loadGames())
+      }
     }
     if (activeSection === enumHomeSectionMusic) {
-      return 'LATEST MUSIC PLAYED'
+      setActiveTitle('LATEST MUSIC PLAYED')
     }
-    return null
-  }
+  }, [activeSection])
 
   const renderContentBody = () => {
     if (activeSection === enumHomeSectionShows) {
@@ -242,7 +157,11 @@ const Home = () => {
       )
     }
     if (activeSection === enumHomeSectionMusic) {
-      return <StyledBlankState>Coming soon</StyledBlankState>
+      return (
+        <StyledBlankState>
+          <p>Coming soon</p>
+        </StyledBlankState>
+      )
     }
     return <HomeNews />
   }
@@ -251,25 +170,19 @@ const Home = () => {
     <Layout>
       <Container>
         <StyledHome>
-          <div className="nav">
-            <div className="nav__primary">
-              <div className="nav__primary__title">MENU</div>
-              {renderSideNavigation()}
-              <div className="nav__primary__filler"></div>
-            </div>
-            <div className="nav__secondary">
-              <div className="nav__secondary__connector"></div>
-            </div>
-          </div>
-          <div className="content">
+          <section className="navigation">
+            <HomeNavigation
+              activeSection={activeSection}
+              selectHandler={setActiveSection}
+            />
+          </section>
+          <section className="content">
             <div className="content__head">
               <div className="content__head__connector">
                 <div className="content__head__connector__inner"></div>
               </div>
               <div className="content__head__title">
-                <div className="content__head__title__text">
-                  {renderContentHeader()}
-                </div>
+                <HomeTitle title={activeTitle} />
               </div>
             </div>
             <div className="content__body">
@@ -280,7 +193,7 @@ const Home = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </section>
         </StyledHome>
       </Container>
     </Layout>

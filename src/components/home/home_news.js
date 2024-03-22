@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 import { mqMin } from '../../helpers/media_queries'
 
-const StyledHomeNews = styled.div`
+const StyledHomeNews = styled.article`
   .news-item {
     font-family: 'Silkscreen';
     margin-bottom: 20px;
@@ -26,6 +26,7 @@ const StyledHomeNews = styled.div`
       &__title {
         font-size: ${props => props.theme.typography.sizeLarge};
         color: ${props => props.theme.colors.text1};
+        margin-top: 0;
         margin-bottom: 10px;
         @media ${props => mqMin(props.theme.breakPoints.sm)} {
           margin-bottom: 0;
@@ -34,6 +35,7 @@ const StyledHomeNews = styled.div`
       &__date {
         font-size: ${props => props.theme.typography.sizeMedium};
         color: ${props => props.theme.colors.text1};
+        margin: 0;
         @media ${props => mqMin(props.theme.breakPoints.sm)} {
           color: ${props => props.theme.colors.text};
           font-size: ${props => props.theme.typography.sizeLarge};
@@ -41,8 +43,11 @@ const StyledHomeNews = styled.div`
       }
     }
     &__secondary {
-      font-size: ${props => props.theme.typography.sizeMedium};
-      color: ${props => props.theme.colors.text};
+      p {
+        font-size: ${props => props.theme.typography.sizeMedium};
+        color: ${props => props.theme.colors.text};
+        margin: 0;
+      }
       a {
         &:link,
         &:visited,
@@ -60,39 +65,44 @@ const StyledHomeNews = styled.div`
 `
 
 const HomeNews = () => {
-  return (
-    <StyledHomeNews>
+  const renderItem = (title, date, description) => {
+    return (
       <div className="news-item">
         <div className="news-item__primary">
-          <div className="news-item__primary__title">Timeline added</div>
-          <div className="news-item__primary__date">15 March 2024</div>
+          <h4 className="news-item__primary__title">{title}</h4>
+          <p className="news-item__primary__date">{date}</p>
         </div>
-        <div className="news-item__secondary">
+        <div className="news-item__secondary">{description}</div>
+      </div>
+    )
+  }
+  return (
+    <StyledHomeNews>
+      {renderItem(
+        'Timeline added',
+        '15 March 2024',
+        <p>
           Latest project is now live. View an interactive{' '}
           <Link to="/timeline">timeline</Link> of all the shows I&apos;ve
           watched and games I&apos;ve played
-        </div>
-      </div>
-      <div className="news-item">
-        <div className="news-item__primary">
-          <div className="news-item__primary__title">Content arrives</div>
-          <div className="news-item__primary__date">8 March 2024</div>
-        </div>
-        <div className="news-item__secondary">
+        </p>,
+      )}
+      {renderItem(
+        'Content arrives',
+        '8 March 2024',
+        <p>
           Shows and Games sections are now hooked up to the API to pull in the
           latest activities
-        </div>
-      </div>
-      <div className="news-item">
-        <div className="news-item__primary">
-          <div className="news-item__primary__title">Website complete</div>
-          <div className="news-item__primary__date">6 March 2024</div>
-        </div>
-        <div className="news-item__secondary">
+        </p>,
+      )}
+      {renderItem(
+        'Website complete',
+        '6 March 2024',
+        <p>
           Website is now live, in the style of the Sevastolink terminal from
           Alien:Isolation 🤓. Next, hooking it up to the API for some content...
-        </div>
-      </div>
+        </p>,
+      )}
     </StyledHomeNews>
   )
 }

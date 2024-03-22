@@ -8,7 +8,7 @@ const bottomSpacerHeight = '10px'
 
 const StyledHomeNavigationButton = styled.div`
   height: auto;
-  cursor: pointer;
+  cursor: ${props => (props.$active ? 'default' : 'pointer')};
   display: flex;
   @media ${props => mqMin(props.theme.breakPoints.md)} {
     height: 100px;
@@ -18,12 +18,13 @@ const StyledHomeNavigationButton = styled.div`
     height: 100%;
     display: flex;
     flex-direction: column;
-    &__button {
+    &__label {
       flex-grow: 1;
       padding: 10px;
       font-size: ${props => props.theme.typography.sizeMedium};
       font-family: 'Silkscreen';
       color: ${props => props.theme.colors.text};
+      margin: 0;
       border: 2px solid
         ${props =>
           props.$active
@@ -81,7 +82,7 @@ const HomeNavigationButton = props => {
       $previous={props.previousButton}
     >
       <div className="button-container">
-        <div className="button-container__button">{props.label}</div>
+        <p className="button-container__label">{props.label}</p>
         <div className="button-container__spacer"></div>
       </div>
       {props.active && <div className="button-highlight"></div>}

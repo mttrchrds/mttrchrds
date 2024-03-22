@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
 import Container from './container'
-import Navigation from './navigation'
+import Header from './header'
 
 import theme from '../../styles/theme'
 
@@ -31,7 +31,7 @@ const Layout = props => {
     <StyledLayout $bodyColour={props.bodyColour}>
       <div className="layout-header">
         <Container>
-          <Navigation title={props.navigationTitle} />
+          <Header title={props.navigationTitle} />
         </Container>
       </div>
       <div className="layout-body">{props.children}</div>

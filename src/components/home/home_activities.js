@@ -9,7 +9,7 @@ import { mqMin } from '../../helpers/media_queries'
 import HomeLoading from './home_loading'
 import { StyledBlankState } from '../pages/home'
 
-const StyledHomeActivities = styled.div`
+const StyledHomeActivities = styled.article`
   .activity {
     display: flex;
     flex-direction: column;

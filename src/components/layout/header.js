@@ -1,11 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Link, useNavigate } from 'react-router-dom'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 
 import { mqMin } from '../../helpers/media_queries'
 
-const StyledNavigation = styled.div`
+const StyledHeader = styled.header`
   display: flex;
   align-items: center;
   padding-top: 6px;
@@ -48,49 +48,48 @@ const StyledNavigation = styled.div`
       font-size: ${props => props.theme.typography.sizeMedium};
       font-family: 'Silkscreen';
       line-height: 1;
+      margin: 0;
     }
     &__button {
       height: 100%;
       width: 16px;
       margin-left: 10px;
-      cursor: pointer;
-      background-color: ${props => props.theme.colors.secondary};
+      &:link,
+      &:visited,
+      &:active {
+        background-color: ${props => props.theme.colors.secondary};
+        text-decoration: none;
+      }
       &:hover {
         background-color: ${props => props.theme.colors.highlight};
+        text-decoration: none;
       }
     }
   }
 `
 
-const Navigation = props => {
-  const navigate = useNavigate()
-
-  const handleClickActionsButton = e => {
-    e.preventDefault()
-    navigate('/')
-  }
-
+const Header = props => {
   return (
-    <StyledNavigation>
+    <StyledHeader>
       <div className="brand">
         <Link to="/">MTTRCHRDS</Link>
       </div>
       <div className="actions">
-        {props.title && <div className="actions__title">{props.title}</div>}
-        <div className="actions__button" onClick={handleClickActionsButton}>
+        {props.title && <h1 className="actions__title">{props.title}</h1>}
+        <Link className="actions__button" to={'/'}>
           &nbsp;
-        </div>
+        </Link>
       </div>
-    </StyledNavigation>
+    </StyledHeader>
   )
 }
 
-Navigation.defaultProps = {
+Header.defaultProps = {
   title: '',
 }
 
-Navigation.propTypes = {
+Header.propTypes = {
   title: PropTypes.string,
 }
 
-export default Navigation
+export default Header

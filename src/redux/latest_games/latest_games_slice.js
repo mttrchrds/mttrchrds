@@ -10,7 +10,7 @@ export const loadGames = createAsyncThunk('latestGames/load', async () => {
   const response = await axios
     .get(
       /* eslint-disable-next-line no-undef */
-      `${process.env.API_DOMAIN}/api/latest-games`,
+      `${import.meta.env.VITE_API_DOMAIN}/api/latest-games`,
     )
     .then(apiResponse => {
       return apiResponse

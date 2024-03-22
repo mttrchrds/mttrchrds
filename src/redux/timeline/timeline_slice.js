@@ -44,7 +44,7 @@ export const loadTimeline = createAsyncThunk(
     const response = await axios
       .get(
         /* eslint-disable-next-line no-undef */
-        `${process.env.API_DOMAIN}/api/timeline/?start=${start}&end=${end}&channels=${channels}`,
+        `${import.meta.env.VITE_API_DOMAIN}/api/timeline/?start=${start}&end=${end}&channels=${channels}`,
       )
       .then(apiResponse => {
         return apiResponse
@@ -59,7 +59,7 @@ export const loadActivity = createAsyncThunk(
     const response = await axios
       .get(
         /* eslint-disable-next-line no-undef */
-        `${process.env.API_DOMAIN}/api/activities/${payload}`,
+        `${import.meta.env.VITE_API_DOMAIN}/api/activities/${payload}`,
       )
       .then(apiResponse => {
         return apiResponse

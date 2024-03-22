@@ -1,11 +1,13 @@
 {
     "env": {
         "browser": true,
-        "es2021": true
+        "es2021": true,
+        "jest/globals": true
     },
     "extends": [
         "eslint:recommended",
         "plugin:react/recommended",
+        "plugin:jest/recommended",
         "prettier"
     ],
     "overrides": [],
@@ -14,7 +16,7 @@
         "sourceType": "module"
     },
     "plugins": [
-        "react"
+        "react", "jest"
     ],
     "rules": {
         "arrow-parens": [2, "as-needed"]

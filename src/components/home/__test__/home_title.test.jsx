@@ -8,6 +8,6 @@ describe('HomeTitle', () => {
     const titleProp = 'Hello World'
     render(<HomeTitle title={titleProp} />)
     const renderedTitle = screen.getByRole('heading')
-    expect(renderedTitle).toHaveTextContent(titleProp)
+    expect((renderedTitle).textContent).toBe(titleProp)
   })
 })

@@ -2,12 +2,11 @@
     "env": {
         "browser": true,
         "es2021": true,
-        "jest/globals": true
+        "jest": true
     },
     "extends": [
         "eslint:recommended",
         "plugin:react/recommended",
-        "plugin:jest/recommended",
         "prettier"
     ],
     "overrides": [],
@@ -16,9 +15,22 @@
         "sourceType": "module"
     },
     "plugins": [
-        "react", "jest"
+        "react"
     ],
     "rules": {
-        "arrow-parens": [2, "as-needed"]
+        "arrow-parens": [1, "as-needed"],
+        "no-unused-vars": [
+            2,
+            {
+                "argsIgnorePattern": "res|next|^err"
+            }
+        ],
+        "arrow-body-style": [1, "as-needed"],
+        "no-unused-expressions": [
+            2,
+            {
+                "allowTaggedTemplates": true
+            }
+        ]
     }
 }

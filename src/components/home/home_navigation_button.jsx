@@ -49,10 +49,7 @@ const StyledHomeNavigationButton = styled.div`
       display: block;
       width: 25px;
       height: calc(100% - ${bottomSpacerHeight});
-      background-color: ${props =>
-        props.$active
-          ? props.theme.colors.highlight
-          : props.theme.colors.primary};
+      background-color: ${props => props.theme.colors.highlight};
     }
   }
   .button-connector {
@@ -75,23 +72,25 @@ const StyledHomeNavigationButton = styled.div`
   }
 `
 
-const HomeNavigationButton = props => {
-  return (
-    <StyledHomeNavigationButton
-      $active={props.active}
-      $previous={props.previousButton}
-    >
-      <div className="button-container">
-        <p className="button-container__label">{props.label}</p>
-        <div className="button-container__spacer"></div>
-      </div>
-      {props.active && <div className="button-highlight"></div>}
-      <div className="button-connector">
-        <div className="button-connector__inner"></div>
-      </div>
-    </StyledHomeNavigationButton>
-  )
-}
+const HomeNavigationButton = props => (
+  <StyledHomeNavigationButton
+    $active={props.active}
+    $previous={props.previousButton}
+  >
+    <div className="button-container" data-testid="container">
+      <p className="button-container__label" data-testid="label">
+        {props.label}
+      </p>
+      <div className="button-container__spacer"></div>
+    </div>
+    {props.active && (
+      <div className="button-highlight" data-testid="highlight"></div>
+    )}
+    <div className="button-connector">
+      <div className="button-connector__inner"></div>
+    </div>
+  </StyledHomeNavigationButton>
+)
 
 HomeNavigationButton.defaultProps = {
   active: false,

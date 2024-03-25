@@ -4,12 +4,8 @@ import { ThemeProvider } from 'styled-components'
 import theme from '../styles/theme'
 
 // Creating custom React Testing Library 'render' function so we don't have to import ThemeProvider on each test
-const render = child => {
-  return {
-    ...testingLibraryRender(
-      <ThemeProvider theme={theme}>{child}</ThemeProvider>,
-    ),
-  }
-}
+const render = child => ({
+  ...testingLibraryRender(<ThemeProvider theme={theme}>{child}</ThemeProvider>),
+})
 
 export default render

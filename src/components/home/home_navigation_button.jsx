@@ -30,7 +30,13 @@ const StyledHomeNavigationButton = styled.div`
           props.$active
             ? props.theme.colors.highlight
             : props.theme.colors.primary1};
+      &:link,
+      &:visited,
+      &:active {
+        text-decoration: none;
+      }
       &:hover {
+        text-decoration: none;
         border-color: ${props =>
           props.$active
             ? props.theme.colors.highlight
@@ -77,10 +83,14 @@ const HomeNavigationButton = props => (
     $active={props.active}
     $previous={props.previousButton}
   >
-    <div className="button-container" data-testid="container">
-      <p className="button-container__label" data-testid="label">
+    <div className="button-container" data-testid="home-navigation-button">
+      <a
+        href="#"
+        className="button-container__label"
+        onClick={e => props.clickHandler(e, props.label, props.active)}
+      >
         {props.label}
-      </p>
+      </a>
       <div className="button-container__spacer"></div>
     </div>
     {props.active && (
@@ -101,6 +111,7 @@ HomeNavigationButton.propTypes = {
   active: PropTypes.bool,
   label: PropTypes.string.isRequired,
   previousButton: PropTypes.bool,
+  clickHandler: PropTypes.func.isRequired,
 }
 
 export default HomeNavigationButton

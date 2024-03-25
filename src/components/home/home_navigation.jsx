@@ -82,15 +82,12 @@ const HomeNavigation = props => {
       }
       const active = props.activeSection === hs ? true : false
       return (
-        <div
-          key={hs}
-          className="nav-primary__item"
-          onClick={e => handleClickButton(e, hs, active)}
-        >
+        <div key={hs} className="nav-primary__item">
           <HomeNavigationButton
             active={active}
             label={hs}
             previousButton={previousItem}
+            clickHandler={handleClickButton}
           />
         </div>
       )

@@ -17,5 +17,13 @@ export default {
     secondary: '#2A3550',
     secondary1: '#374568',
     background: '#0e1421',
+    ratings: '#6a6a6a',
+  },
+  ratings: {
+    gold: '#c89836',
+    silver: '#c4cdc9',
+    silverText: '#4c4b4b',
+    bronze: '#84611a',
+    other: '#077444',
   },
 }

@@ -74,8 +74,41 @@ const StyledHomeActivities = styled.article`
   }
 `
 
+const renderRatingBackgroundColour = (colors, rating) => {
+  console.log({ rating })
+  if (rating === 10) {
+    return colors.ratings.gold
+  }
+  if (rating === 9) {
+    return colors.ratings.silver
+  }
+  if (rating === 8) {
+    return colors.ratings.bronze
+  }
+  return colors.ratings.other
+}
+
+const StyledRating = styled.span`
+  color: ${props =>
+    props.$rating === 9
+      ? props.theme.colors.ratings.silverText
+      : props.theme.colors.text1};
+  background-color: ${props =>
+    renderRatingBackgroundColour(props.theme.colors, props.$rating)};
+  line-height: 1;
+  padding-right: 3px;
+  padding-left: 3px;
+`
+
 const HomeActivities = props => {
   const activities = _get(props, 'activities', [])
+
+  const renderRating = (rating, skip) => {
+    if (!skip) {
+      return <StyledRating $rating={rating}>{`${rating}/10`}</StyledRating>
+    }
+    return null
+  }
 
   const renderActivity = activity => {
     const activityPlatform = props.shows
@@ -85,6 +118,8 @@ const HomeActivities = props => {
       ? _get(activity, ['show_activity'])
       : _get(activity, ['game_activity'])
     const endAt = _get(activity, ['end_at'])
+      ? _get(activity, ['end_at'])
+      : false
     return (
       <div className="activity" key={_get(activityItem, 'id')}>
         <div className="activity__image">
@@ -92,7 +127,10 @@ const HomeActivities = props => {
         </div>
         <div className="activity__details">
           <div className="activity__details">
-            <h5 className="activity__details__name">{`${_get(activityItem, ['name'])} (${_get(activityPlatform, ['name'])})`}</h5>
+            <h5 className="activity__details__name">
+              {`${_get(activityItem, ['name'])} (${_get(activityPlatform, ['name'])})`}{' '}
+              {renderRating(_get(activityItem, 'rating'), !endAt)}
+            </h5>
             <div className="activity__details__row">
               <div className="activity__details__row__label">Started:</div>
               <div className="activity__details__row__value">

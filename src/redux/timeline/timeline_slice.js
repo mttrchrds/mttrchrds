@@ -46,9 +46,7 @@ export const loadTimeline = createAsyncThunk(
         /* eslint-disable-next-line no-undef */
         `${import.meta.env.VITE_API_DOMAIN}/api/timeline/?start=${start}&end=${end}&channels=${channels}`,
       )
-      .then(apiResponse => {
-        return apiResponse
-      })
+      .then(apiResponse => apiResponse)
     return response.data
   },
 )
@@ -61,9 +59,7 @@ export const loadActivity = createAsyncThunk(
         /* eslint-disable-next-line no-undef */
         `${import.meta.env.VITE_API_DOMAIN}/api/activities/${payload}`,
       )
-      .then(apiResponse => {
-        return apiResponse
-      })
+      .then(apiResponse => apiResponse)
     return response.data
   },
 )

@@ -12,9 +12,7 @@ export const loadShows = createAsyncThunk('latestShows/load', async () => {
       /* eslint-disable-next-line no-undef */
       `${import.meta.env.VITE_API_DOMAIN}/api/latest-shows`,
     )
-    .then(apiResponse => {
-      return apiResponse
-    })
+    .then(apiResponse => apiResponse)
   return response.data
 })
 

@@ -17,13 +17,11 @@ const StyledHomeTitle = styled.div`
   }
 `
 
-const HomeTitle = props => {
-  return (
-    <StyledHomeTitle>
-      <h2>{props.title}</h2>
-    </StyledHomeTitle>
-  )
-}
+const HomeTitle = props => (
+  <StyledHomeTitle>
+    <h2>{props.title}</h2>
+  </StyledHomeTitle>
+)
 
 HomeTitle.defaultProps = {}
 

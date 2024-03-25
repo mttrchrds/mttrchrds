@@ -7,7 +7,7 @@ import PropTypes from 'prop-types'
 import { mqMin } from '../../helpers/media_queries'
 
 import HomeLoading from './home_loading'
-import { StyledBlankState } from '../pages/home'
+import BlankState from '../../styles/components/blank_state'
 
 const StyledHomeActivities = styled.article`
   .activity {
@@ -42,6 +42,7 @@ const StyledHomeActivities = styled.article`
         font-size: ${props => props.theme.typography.sizeLarger};
         font-weight: bold;
         margin-bottom: 20px;
+        margin-top: 0;
       }
       &__row {
         display: flex;
@@ -91,7 +92,7 @@ const HomeActivities = props => {
         </div>
         <div className="activity__details">
           <div className="activity__details">
-            <div className="activity__details__name">{`${_get(activityItem, ['name'])} (${_get(activityPlatform, ['name'])})`}</div>
+            <h5 className="activity__details__name">{`${_get(activityItem, ['name'])} (${_get(activityPlatform, ['name'])})`}</h5>
             <div className="activity__details__row">
               <div className="activity__details__row__label">Started:</div>
               <div className="activity__details__row__value">
@@ -135,9 +136,9 @@ const HomeActivities = props => {
   const renderActivities = () => {
     if (activities.length === 0) {
       return (
-        <StyledBlankState>
-          {props.shows ? 'No shows found' : 'No games found'}
-        </StyledBlankState>
+        <BlankState>
+          {props.shows ? <p>No shows found</p> : <p>No games found</p>}
+        </BlankState>
       )
     }
     return (

@@ -65,17 +65,16 @@ const StyledHomeNews = styled.article`
 `
 
 const HomeNews = () => {
-  const renderItem = (title, date, description) => {
-    return (
-      <div className="news-item">
-        <div className="news-item__primary">
-          <h4 className="news-item__primary__title">{title}</h4>
-          <p className="news-item__primary__date">{date}</p>
-        </div>
-        <div className="news-item__secondary">{description}</div>
+  const renderItem = (title, date, description) => (
+    <div className="news-item">
+      <div className="news-item__primary">
+        <h4 className="news-item__primary__title">{title}</h4>
+        <p className="news-item__primary__date">{date}</p>
       </div>
-    )
-  }
+      <div className="news-item__secondary">{description}</div>
+    </div>
+  )
+
   return (
     <StyledHomeNews>
       {renderItem(

@@ -18,6 +18,7 @@ import HomeActivities from '../home/home_activities'
 import HomeNews from '../home/home_news'
 import HomeNavigation from '../home/home_navigation'
 import HomeTitle from '../home/home_title'
+import BlankState from '../../styles/components/blank_state'
 
 const StyledHome = styled.div`
   display: flex;
@@ -92,22 +93,9 @@ const StyledHome = styled.div`
   }
 `
 
-export const StyledBlankState = styled.article`
-  height: inherit;
-  min-height: inherit;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  p {
-    color: ${props => props.theme.colors.text1};
-    font-size: ${props => props.theme.typography.sizeLarge};
-  }
-`
-
 const Home = () => {
   const [activeSection, setActiveSection] = useState(enumHomeSectionNews)
-  const [activeTitle, setActiveTitle] = useState('LATEST NEWS')
+  const [activeTitle, setActiveTitle] = useState('Latest news')
 
   const dispatch = useDispatch()
   const latestGames = useSelector(state => state.latestGames.games)
@@ -117,22 +105,22 @@ const Home = () => {
 
   useEffect(() => {
     if (activeSection === enumHomeSectionNews) {
-      setActiveTitle('LATEST NEWS')
+      setActiveTitle('Latest news')
     }
     if (activeSection === enumHomeSectionShows) {
-      setActiveTitle('LATEST SHOWS WATCHED')
+      setActiveTitle('Latest shows watched')
       if (latestShows.length === 0) {
         dispatch(loadShows())
       }
     }
     if (activeSection === enumHomeSectionGames) {
-      setActiveTitle('LATEST GAMES PLAYED')
+      setActiveTitle('Latest games played')
       if (latestGames.length === 0) {
         dispatch(loadGames())
       }
     }
     if (activeSection === enumHomeSectionMusic) {
-      setActiveTitle('LATEST MUSIC PLAYED')
+      setActiveTitle('Latest music played')
     }
   }, [activeSection])
 
@@ -158,9 +146,9 @@ const Home = () => {
     }
     if (activeSection === enumHomeSectionMusic) {
       return (
-        <StyledBlankState>
+        <BlankState>
           <p>Coming soon</p>
-        </StyledBlankState>
+        </BlankState>
       )
     }
     return <HomeNews />
@@ -170,7 +158,7 @@ const Home = () => {
     <Layout>
       <Container>
         <StyledHome>
-          <section className="navigation">
+          <section className="navigation" data-testid="homeNavigation">
             <HomeNavigation
               activeSection={activeSection}
               selectHandler={setActiveSection}
@@ -181,14 +169,17 @@ const Home = () => {
               <div className="content__head__connector">
                 <div className="content__head__connector__inner"></div>
               </div>
-              <div className="content__head__title">
+              <div className="content__head__title" data-testid="homeTitle">
                 <HomeTitle title={activeTitle} />
               </div>
             </div>
             <div className="content__body">
               <div className="content__body__box">
                 <div className="content__body__box__primary"></div>
-                <div className="content__body__box__secondary">
+                <div
+                  className="content__body__box__secondary"
+                  data-testid="homeContent"
+                >
                   {renderContentBody()}
                 </div>
               </div>

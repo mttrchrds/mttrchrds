@@ -12,9 +12,7 @@ export const loadGames = createAsyncThunk('latestGames/load', async () => {
       /* eslint-disable-next-line no-undef */
       `${import.meta.env.VITE_API_DOMAIN}/api/latest-games`,
     )
-    .then(apiResponse => {
-      return apiResponse
-    })
+    .then(apiResponse => apiResponse)
   return response.data
 })
 

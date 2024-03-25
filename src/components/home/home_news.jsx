@@ -78,6 +78,11 @@ const HomeNews = () => {
   return (
     <StyledHomeNews>
       {renderItem(
+        'Rated',
+        '25 March 2024',
+        <p>Games and shows now have a rating out of 10</p>,
+      )}
+      {renderItem(
         'Timeline added',
         '15 March 2024',
         <p>

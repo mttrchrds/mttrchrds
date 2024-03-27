@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import _get from 'lodash/get'
 import { DateTime } from 'luxon'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 
 import { mqMin } from '../../helpers/media_queries'
 
@@ -69,6 +70,22 @@ const StyledHomeActivities = styled.article`
             text-decoration: underline;
           }
         }
+      }
+    }
+  }
+  .activities-footer {
+    display: flex;
+    justify-content: flex-end;
+    a {
+      &:link,
+      &:visited,
+      &:active {
+        color: ${props => props.theme.colors.text1};
+        text-decoration: none;
+      }
+      &:hover {
+        color: ${props => props.theme.colors.secondary1};
+        text-decoration: underline;
       }
     }
   }
@@ -182,6 +199,11 @@ const HomeActivities = props => {
     return (
       <StyledHomeActivities>
         {activities.map(a => renderActivity(a))}
+        <div className="activities-footer">
+          <Link to="/timeline">
+            {props.shows ? 'View shows on Timeline' : 'View games on Timeline'}
+          </Link>
+        </div>
       </StyledHomeActivities>
     )
   }

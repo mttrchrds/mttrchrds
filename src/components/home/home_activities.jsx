@@ -201,7 +201,9 @@ const HomeActivities = props => {
         {activities.map(a => renderActivity(a))}
         <div className="activities-footer">
           <Link to="/timeline">
-            {props.shows ? 'View shows on Timeline' : 'View games on Timeline'}
+            {props.shows
+              ? 'View all shows on Timeline'
+              : 'View all games on Timeline'}
           </Link>
         </div>
       </StyledHomeActivities>

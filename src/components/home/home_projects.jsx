@@ -4,10 +4,11 @@ import { Link } from 'react-router-dom'
 
 import { mqMin } from '../../helpers/media_queries'
 
-const StyledHomeNews = styled.article`
-  .news-item {
+const StyledHomeProjects = styled.article`
+  .project-item {
     font-family: 'Silkscreen';
     margin-bottom: 20px;
+    padding-bottom: 20px;
     border-bottom: 2px solid ${props => props.theme.colors.primary1};
     &:last-child {
       margin-bottom: 0;
@@ -62,55 +63,56 @@ const StyledHomeNews = styled.article`
   }
 `
 
-const HomeNews = () => {
+const HomeProjects = () => {
   const renderItem = (title, date, description) => (
-    <div className="news-item">
-      <div className="news-item__primary">
-        <h4 className="news-item__primary__title">{title}</h4>
-        <p className="news-item__primary__date">{date}</p>
+    <div className="project-item">
+      <div className="project-item__primary">
+        <h4 className="project-item__primary__title">{title}</h4>
+        <p className="project-item__primary__date">{date}</p>
       </div>
-      <div className="news-item__secondary">{description}</div>
+      <div className="project-item__secondary">{description}</div>
     </div>
   )
 
   return (
-    <StyledHomeNews>
+    <StyledHomeProjects>
       {renderItem(
-        'Rated',
-        '25 March 2024',
-        <p>Games and shows now have a rating out of 10</p>,
-      )}
-      {renderItem(
-        'Timeline added',
+        'Timeline',
         '15 March 2024',
-        <p>
-          Latest project is now live. View an interactive{' '}
-          <Link to="/timeline">timeline</Link> of all the shows I&apos;ve
-          watched and games I&apos;ve played
-        </p>,
+        <>
+          <p>
+            {`Frustrated with the limitations of developer APIs from the likes of
+            Twitter, Spotify and Strava I decided to create my own data set. In
+            2021 I started to make a log of the TV shows and video games I was
+            watching/playing. These activities are timestamped, categorised and rated. My
+            thinking being at some point I could store these in a relational DB,
+            expose them via an API and consume the data on projects.`}
+          </p>
+          <p>
+            {`It's 2024 and the data is now in a Postgres DB with Django application on top. Django REST Framework is used to expose the data in a consumable format and presented with Swagger.`}
+          </p>
+          <p>
+            {`Timeline is the first use of this data. It's a React based chronological
+            visulisation of these activites. The UI/design was largely inspired by
+            commit history trees in Git clients such as Gitkraken (my client of
+            choice).`}
+          </p>
+          <p>
+            <a target="blank" href="https://mttrchrdsapi.onrender.com">
+              View API
+            </a>
+          </p>
+          <p>
+            <Link to="/timeline">View Timeline</Link>
+          </p>
+        </>,
       )}
-      {renderItem(
-        'Content arrives',
-        '8 March 2024',
-        <p>
-          Shows and Games sections are now hooked up to the API to pull in the
-          latest activities
-        </p>,
-      )}
-      {renderItem(
-        'Website complete',
-        '6 March 2024',
-        <p>
-          Website is now live, in the style of the Sevastolink terminal from
-          Alien:Isolation 🤓. Next, hooking it up to the API for some content...
-        </p>,
-      )}
-    </StyledHomeNews>
+    </StyledHomeProjects>
   )
 }
 
-HomeNews.defaultProps = {}
+HomeProjects.defaultProps = {}
 
-HomeNews.propTypes = {}
+HomeProjects.propTypes = {}
 
-export default HomeNews
+export default HomeProjects

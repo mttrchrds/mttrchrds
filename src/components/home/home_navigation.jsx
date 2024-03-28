@@ -9,6 +9,7 @@ import {
   enumHomeSectionMusic,
   enumHomeSectionShows,
   enumHomeSectionGames,
+  enumHomeSectionProjects,
 } from '../../helpers/enums'
 
 import HomeNavigationButton from './home_navigation_button'
@@ -70,6 +71,7 @@ const HomeNavigation = props => {
       enumHomeSectionShows,
       enumHomeSectionGames,
       enumHomeSectionMusic,
+      enumHomeSectionProjects,
     ]
     const activeSectionIndex = _findIndex(
       homeSections,

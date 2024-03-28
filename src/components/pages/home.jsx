@@ -10,6 +10,7 @@ import {
   enumHomeSectionNews,
   enumHomeSectionGames,
   enumHomeSectionShows,
+  enumHomeSectionProjects,
 } from '../../helpers/enums'
 
 import Layout from '../layout/layout'
@@ -19,6 +20,7 @@ import HomeNews from '../home/home_news'
 import HomeNavigation from '../home/home_navigation'
 import HomeTitle from '../home/home_title'
 import BlankState from '../../styles/components/blank_state'
+import HomeProjects from '../home/home_projects'
 
 const StyledHome = styled.div`
   display: flex;
@@ -150,6 +152,9 @@ const Home = () => {
           <p>Coming soon</p>
         </BlankState>
       )
+    }
+    if (activeSection === enumHomeSectionProjects) {
+      return <HomeProjects />
     }
     return <HomeNews />
   }

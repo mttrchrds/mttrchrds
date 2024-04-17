@@ -3,10 +3,16 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
 import { mqMin } from '../../helpers/media_queries'
+import { HomeSection } from '../../helpers/enums'
 
 const bottomSpacerHeight = '10px'
 
-const StyledHomeNavigationButton = styled.div`
+interface StyledHomeNavigationButtonProps {
+  $active: boolean
+  $previous: boolean
+}
+
+const StyledHomeNavigationButton = styled.div<StyledHomeNavigationButtonProps>`
   height: auto;
   cursor: ${props => (props.$active ? 'default' : 'pointer')};
   display: flex;
@@ -78,40 +84,39 @@ const StyledHomeNavigationButton = styled.div`
   }
 `
 
-const HomeNavigationButton = props => (
-  <StyledHomeNavigationButton
-    $active={props.active}
-    $previous={props.previousButton}
-  >
+interface HomeNavigationButtonProps {
+  active?: boolean
+  section: HomeSection
+  previousButton?: boolean
+  clickHandler: (
+    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+    section: HomeSection,
+    active: boolean,
+  ) => void
+}
+
+const HomeNavigationButton: React.FC<HomeNavigationButtonProps> = ({
+  active = false,
+  section,
+  previousButton = false,
+  clickHandler,
+}) => (
+  <StyledHomeNavigationButton $active={active} $previous={previousButton}>
     <div className="button-container" data-testid="home-navigation-button">
       <a
         href="#"
         className="button-container__label"
-        onClick={e => props.clickHandler(e, props.label, props.active)}
+        onClick={e => clickHandler(e, section, active)}
       >
-        {props.label}
+        {section}
       </a>
       <div className="button-container__spacer"></div>
     </div>
-    {props.active && (
-      <div className="button-highlight" data-testid="highlight"></div>
-    )}
+    {active && <div className="button-highlight" data-testid="highlight"></div>}
     <div className="button-connector">
       <div className="button-connector__inner"></div>
     </div>
   </StyledHomeNavigationButton>
 )
-
-HomeNavigationButton.defaultProps = {
-  active: false,
-  previousButton: false,
-}
-
-HomeNavigationButton.propTypes = {
-  active: PropTypes.bool,
-  label: PropTypes.string.isRequired,
-  previousButton: PropTypes.bool,
-  clickHandler: PropTypes.func.isRequired,
-}
 
 export default HomeNavigationButton

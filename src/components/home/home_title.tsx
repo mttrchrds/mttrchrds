@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import PropTypes from 'prop-types'
 
 const StyledHomeTitle = styled.div`
   border: 2px solid ${props => props.theme.colors.highlight};
@@ -17,16 +16,14 @@ const StyledHomeTitle = styled.div`
   }
 `
 
-const HomeTitle = props => (
+interface HomeTitleProps {
+  title: string
+}
+
+const HomeTitle: React.FC<HomeTitleProps> = ({ title }) => (
   <StyledHomeTitle>
-    <h2>{props.title}</h2>
+    <h2>{title}</h2>
   </StyledHomeTitle>
 )
-
-HomeTitle.defaultProps = {}
-
-HomeTitle.propTypes = {
-  title: PropTypes.string.isRequired,
-}
 
 export default HomeTitle

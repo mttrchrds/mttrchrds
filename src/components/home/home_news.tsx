@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 
@@ -63,7 +62,11 @@ const StyledHomeNews = styled.article`
 `
 
 const HomeNews = () => {
-  const renderItem = (title, date, description) => (
+  const renderItem = (
+    title: string,
+    date: string,
+    description: JSX.Element,
+  ) => (
     <div className="news-item">
       <div className="news-item__primary">
         <h4 className="news-item__primary__title">{title}</h4>
@@ -108,9 +111,5 @@ const HomeNews = () => {
     </StyledHomeNews>
   )
 }
-
-HomeNews.defaultProps = {}
-
-HomeNews.propTypes = {}
 
 export default HomeNews

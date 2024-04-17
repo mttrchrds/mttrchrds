@@ -1,13 +1,16 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import styled from 'styled-components'
-import PropTypes from 'prop-types'
 
 import Container from './container'
 import Header from './header'
 
 import theme from '../../styles/theme'
 
-const StyledLayout = styled.div`
+interface StyledLayoutProps {
+  $bodyColour: string
+}
+
+const StyledLayout = styled.div<StyledLayoutProps>`
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -26,28 +29,27 @@ const StyledLayout = styled.div`
   }
 `
 
-const Layout = props => {
+interface LayoutProps {
+  bodyColour?: string
+  navigationTitle?: string
+  children: ReactNode
+}
+
+const Layout: React.FC<LayoutProps> = ({
+  bodyColour = theme.colors.primary,
+  navigationTitle,
+  children,
+}) => {
   return (
-    <StyledLayout $bodyColour={props.bodyColour}>
+    <StyledLayout $bodyColour={bodyColour}>
       <div className="layout-header">
         <Container>
-          <Header title={props.navigationTitle} />
+          <Header title={navigationTitle} />
         </Container>
       </div>
-      <div className="layout-body">{props.children}</div>
+      <div className="layout-body">{children}</div>
     </StyledLayout>
   )
-}
-
-Layout.defaultProps = {
-  bodyColour: theme.colors.primary,
-  navigationTitle: '',
-}
-
-Layout.propTypes = {
-  children: PropTypes.node,
-  bodyColour: PropTypes.string,
-  navigationTitle: PropTypes.string,
 }
 
 export default Layout

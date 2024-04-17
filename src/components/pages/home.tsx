@@ -1,17 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import { useSelector, useDispatch } from 'react-redux'
 import { loadGames } from '../../redux/latest_games/latest_games_slice'
 import { loadShows } from '../../redux/latest_shows/latest_shows_slice'
 
 import { mqMin } from '../../helpers/media_queries'
-import {
-  enumHomeSectionMusic,
-  enumHomeSectionNews,
-  enumHomeSectionGames,
-  enumHomeSectionShows,
-  enumHomeSectionProjects,
-} from '../../helpers/enums'
+import { HomeSection } from '../../helpers/enums'
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks'
 
 import Layout from '../layout/layout'
 import Container from '../layout/container'
@@ -96,38 +90,38 @@ const StyledHome = styled.div`
 `
 
 const Home = () => {
-  const [activeSection, setActiveSection] = useState(enumHomeSectionNews)
+  const [activeSection, setActiveSection] = useState(HomeSection.NEWS)
   const [activeTitle, setActiveTitle] = useState('Latest news')
 
-  const dispatch = useDispatch()
-  const latestGames = useSelector(state => state.latestGames.games)
-  const latestGamesLoading = useSelector(state => state.latestGames.loading)
-  const latestShows = useSelector(state => state.latestShows.shows)
-  const latestShowsLoading = useSelector(state => state.latestShows.loading)
+  const dispatch = useAppDispatch()
+  const latestGames = useAppSelector(state => state.latestGames.games)
+  const latestGamesLoading = useAppSelector(state => state.latestGames.loading)
+  const latestShows = useAppSelector(state => state.latestShows.shows)
+  const latestShowsLoading = useAppSelector(state => state.latestShows.loading)
 
   useEffect(() => {
-    if (activeSection === enumHomeSectionNews) {
+    if (activeSection === HomeSection.NEWS) {
       setActiveTitle('Latest news')
     }
-    if (activeSection === enumHomeSectionShows) {
+    if (activeSection === HomeSection.SHOWS) {
       setActiveTitle('Latest shows watched')
       if (latestShows.length === 0) {
         dispatch(loadShows())
       }
     }
-    if (activeSection === enumHomeSectionGames) {
+    if (activeSection === HomeSection.GAMES) {
       setActiveTitle('Latest games played')
       if (latestGames.length === 0) {
         dispatch(loadGames())
       }
     }
-    if (activeSection === enumHomeSectionMusic) {
+    if (activeSection === HomeSection.MUSIC) {
       setActiveTitle('Latest music played')
     }
   }, [activeSection])
 
   const renderContentBody = () => {
-    if (activeSection === enumHomeSectionShows) {
+    if (activeSection === HomeSection.SHOWS) {
       return (
         <HomeActivities
           key="shows"
@@ -137,7 +131,7 @@ const Home = () => {
         />
       )
     }
-    if (activeSection === enumHomeSectionGames) {
+    if (activeSection === HomeSection.GAMES) {
       return (
         <HomeActivities
           key="games"
@@ -146,14 +140,14 @@ const Home = () => {
         />
       )
     }
-    if (activeSection === enumHomeSectionMusic) {
+    if (activeSection === HomeSection.MUSIC) {
       return (
         <BlankState>
           <p>Coming soon</p>
         </BlankState>
       )
     }
-    if (activeSection === enumHomeSectionProjects) {
+    if (activeSection === HomeSection.PROJECTS) {
       return <HomeProjects />
     }
     return <HomeNews />

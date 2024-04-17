@@ -7,6 +7,8 @@ import { Link } from 'react-router-dom'
 
 import { mqMin } from '../../helpers/media_queries'
 
+import { Activity } from '../../types/timeline'
+
 import HomeLoading from './home_loading'
 import BlankState from '../../styles/components/blank_state'
 
@@ -91,52 +93,68 @@ const StyledHomeActivities = styled.article`
   }
 `
 
-const renderRatingBackgroundColour = (colors, rating) => {
-  console.log({ rating })
+const renderRatingBackgroundColour = (
+  colors: {
+    gold: string
+    silver: string
+    silverText: string
+    bronze: string
+    other: string
+  },
+  rating: number,
+) => {
   if (rating === 10) {
-    return colors.ratings.gold
+    return colors.gold
   }
   if (rating === 9) {
-    return colors.ratings.silver
+    return colors.silver
   }
   if (rating === 8) {
-    return colors.ratings.bronze
+    return colors.bronze
   }
-  return colors.ratings.other
+  return colors.other
 }
 
-const StyledRating = styled.span`
+interface StyledRatingProps {
+  $rating: number
+}
+
+const StyledRating = styled.span<StyledRatingProps>`
   color: ${props =>
     props.$rating === 9
       ? props.theme.colors.ratings.silverText
       : props.theme.colors.text1};
   background-color: ${props =>
-    renderRatingBackgroundColour(props.theme.colors, props.$rating)};
+    renderRatingBackgroundColour(props.theme.colors.ratings, props.$rating)};
   line-height: 1;
   padding-right: 3px;
   padding-left: 3px;
 `
 
-const HomeActivities = props => {
-  const activities = _get(props, 'activities', [])
+interface HomeActivitiesProps {
+  shows?: boolean
+  loading?: boolean
+  activities?: Activity[]
+}
 
-  const renderRating = (rating, skip) => {
+const HomeActivities: React.FC<HomeActivitiesProps> = ({
+  shows = false,
+  loading = false,
+  activities = [],
+}) => {
+  const renderRating = (rating: number, skip: boolean) => {
     if (!skip) {
       return <StyledRating $rating={rating}>{`${rating}/10`}</StyledRating>
     }
     return null
   }
 
-  const renderActivity = activity => {
-    const activityPlatform = props.shows
-      ? _get(activity, ['show_platform'])
-      : _get(activity, ['game_platform'])
-    const activityItem = props.shows
-      ? _get(activity, ['show_activity'])
-      : _get(activity, ['game_activity'])
-    const endAt = _get(activity, ['end_at'])
-      ? _get(activity, ['end_at'])
-      : false
+  const renderActivity = (activity: Activity) => {
+    const activityPlatform = shows
+      ? activity.show_platform
+      : activity.game_platform
+    const activityItem = shows ? activity.show_activity : activity.game_activity
+    const endAt = activity.end_at ? activity.end_at : false
     return (
       <div className="activity" key={_get(activityItem, 'id')}>
         <div className="activity__image">
@@ -146,7 +164,7 @@ const HomeActivities = props => {
           <div className="activity__details">
             <h5 className="activity__details__name">
               {`${_get(activityItem, ['name'])} (${_get(activityPlatform, ['name'])})`}{' '}
-              {renderRating(_get(activityItem, 'rating'), !endAt)}
+              {renderRating(activityItem ? activityItem.rating : 1, !endAt)}
             </h5>
             <div className="activity__details__row">
               <div className="activity__details__row__label">Started:</div>
@@ -166,7 +184,7 @@ const HomeActivities = props => {
             {endAt && (
               <div className="activity__details__row">
                 <div className="activity__details__row__label">
-                  {props.shows ? 'Series completed' : 'Game completed'}:
+                  {shows ? 'Series completed' : 'Game completed'}:
                 </div>
                 <div className="activity__details__row__value">
                   {_get(activity, 'completed') ? 'Yes' : 'No'}
@@ -192,7 +210,7 @@ const HomeActivities = props => {
     if (activities.length === 0) {
       return (
         <BlankState>
-          {props.shows ? <p>No shows found</p> : <p>No games found</p>}
+          {shows ? <p>No shows found</p> : <p>No games found</p>}
         </BlankState>
       )
     }
@@ -201,7 +219,7 @@ const HomeActivities = props => {
         {activities.map(a => renderActivity(a))}
         <div className="activities-footer">
           <Link to="/timeline">
-            {props.shows
+            {shows
               ? 'View all shows on Timeline'
               : 'View all games on Timeline'}
           </Link>
@@ -210,23 +228,11 @@ const HomeActivities = props => {
     )
   }
 
-  if (props.loading) {
+  if (loading) {
     return <HomeLoading />
   }
 
   return renderActivities()
-}
-
-HomeActivities.defaultProps = {
-  shows: false,
-  loading: false,
-  activities: [],
-}
-
-HomeActivities.propTypes = {
-  shows: PropTypes.bool,
-  loading: PropTypes.bool,
-  activities: PropTypes.array,
 }
 
 export default HomeActivities

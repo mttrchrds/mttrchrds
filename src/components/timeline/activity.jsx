@@ -238,7 +238,7 @@ const Activity = () => {
     if (activeActivityLoading) {
       return (
         <div className="activity-container">
-          <Spinner spinnerColor={theme.colors.text} />
+          <Spinner spinnerColour={theme.colors.text} />
         </div>
       )
     }

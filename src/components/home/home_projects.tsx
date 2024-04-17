@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 
@@ -64,7 +63,11 @@ const StyledHomeProjects = styled.article`
 `
 
 const HomeProjects = () => {
-  const renderItem = (title, date, description) => (
+  const renderItem = (
+    title: string,
+    date: string,
+    description: JSX.Element,
+  ) => (
     <div className="project-item">
       <div className="project-item__primary">
         <h4 className="project-item__primary__title">{title}</h4>
@@ -110,9 +113,5 @@ const HomeProjects = () => {
     </StyledHomeProjects>
   )
 }
-
-HomeProjects.defaultProps = {}
-
-HomeProjects.propTypes = {}
 
 export default HomeProjects

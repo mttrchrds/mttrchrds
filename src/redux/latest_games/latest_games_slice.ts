@@ -1,7 +1,13 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
+import { Activity } from '../../types/timeline'
 
-const initialState = {
+interface LatestGames {
+  games: Activity[]
+  loading: boolean
+}
+
+const initialState: LatestGames = {
   games: [],
   loading: false,
 }
@@ -19,6 +25,7 @@ export const loadGames = createAsyncThunk('latestGames/load', async () => {
 export const latestGamesSlice = createSlice({
   name: 'latestGames',
   initialState,
+  reducers: {},
   extraReducers: builder => {
     builder
       .addCase(loadGames.pending, state => {
@@ -33,7 +40,5 @@ export const latestGamesSlice = createSlice({
       })
   },
 })
-
-export const { updateGames } = latestGamesSlice.actions
 
 export default latestGamesSlice.reducer

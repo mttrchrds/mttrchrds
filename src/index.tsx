@@ -2,7 +2,7 @@ import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { RouterProvider } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components'
-import { store } from './redux/store'
+import { setupStore } from './redux/store'
 import { Provider } from 'react-redux'
 
 import router from './router'
@@ -18,7 +18,7 @@ const container = document.getElementById('app') as HTMLElement
 const root = createRoot(container)
 
 root.render(
-  <Provider store={store}>
+  <Provider store={setupStore()}>
     <ThemeProvider theme={theme}>
       <GlobalStyles />
       <RouterProvider router={router} />

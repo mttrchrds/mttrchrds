@@ -4,7 +4,36 @@ import _get from 'lodash/get'
 
 import { getDaysInMonth, formatDateNumber } from '../../helpers/date_times'
 
-const initialState = {
+import { Activity } from '../../types/timeline'
+
+interface TimelinePayload {
+  date: string
+  day: string
+  month: string
+  year: string
+  channels: (Activity | null)[]
+}
+
+interface TimelinePayloadParsed extends TimelinePayload {
+  channelColours: (string | null)[]
+}
+
+interface Timeline {
+  currentDay: string
+  currentMonth: string
+  currentYear: string
+  pagingStart: string
+  pagingEnd: string
+  pagingChannels: (number | null)[]
+  activeColourIndex: number | null
+  sections: TimelinePayloadParsed[][]
+  loading: boolean
+  renderedActivityIds: number[]
+  activity: Activity | null
+  activityLoading: boolean
+}
+
+const initialState: Timeline = {
   currentDay: '',
   currentMonth: '',
   currentYear: '',
@@ -64,7 +93,7 @@ export const loadActivity = createAsyncThunk(
   },
 )
 
-const buildNextStartEndValues = currentStart => {
+const buildNextStartEndValues = (currentStart: string) => {
   // builds data query params for next load
   const currentStartPaths = currentStart.split('-')
   const currentYear = Number(currentStartPaths[0])
@@ -92,10 +121,10 @@ const buildNextStartEndValues = currentStart => {
   }
 }
 
-const buildNextChannelsList = payload => {
+const buildNextChannelsList = (payload: TimelinePayload[]) => {
   // builds channels query param for next load
   const finalDay = payload.length > 0 ? payload[payload.length - 1] : {}
-  return _get(finalDay, 'channels', []).map(fc => {
+  return _get(finalDay, 'channels', []).map((fc: Activity | null) => {
     if (fc) {
       return fc.id
     }
@@ -103,7 +132,7 @@ const buildNextChannelsList = payload => {
   })
 }
 
-const generateActiveColourIndex = currentIndex => {
+const generateActiveColourIndex = (currentIndex: number) => {
   const totalColours = activityColours.length
   if (currentIndex === totalColours - 1) {
     return 0
@@ -112,20 +141,27 @@ const generateActiveColourIndex = currentIndex => {
   }
 }
 
-const parseApiPayload = (payload, state) => {
+const parseApiPayload = (
+  payload: TimelinePayload[],
+  state: Timeline,
+): {
+  parsedPayload: TimelinePayloadParsed[]
+  renderedActivityIds: number[]
+  activeColourIndex: number | null
+} => {
   // Payload is parsed so logic is outside Memoized <TimelineSection /> component
   // Removes duplicate activities from payload and sets activity colour
   let renderedActivityIds = [...state.renderedActivityIds]
-  let parsedPayload = []
+  let parsedPayload: TimelinePayloadParsed[] = []
   let activeColourIndex = state.activeColourIndex
   payload.map(p => {
-    let tmpChannelColours = []
+    let tmpChannelColours: (string | null)[] = []
     const tmpChannels = _get(p, 'channels', []).map(c => {
       if (c === null) {
         tmpChannelColours.push(null)
         return c
       } else {
-        if (renderedActivityIds.includes(_get(c, 'id'))) {
+        if (renderedActivityIds.includes(c.id)) {
           tmpChannelColours.push(null)
           return null
         } else {
@@ -187,6 +223,7 @@ export const timelineSlice = createSlice({
           state.pagingEnd = end
         }
         const payload = _get(action, 'payload', [])
+        console.log({ payload })
         if (payload.length > 0) {
           state.pagingChannels = buildNextChannelsList(payload)
           const { parsedPayload, renderedActivityIds, activeColourIndex } =

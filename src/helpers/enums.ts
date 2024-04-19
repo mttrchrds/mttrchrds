@@ -5,3 +5,8 @@ export enum HomeSection {
   MUSIC = 'music',
   PROJECTS = 'projects',
 }
+
+export enum ActivityType {
+  GAME = 'GAME',
+  SHOW = 'SHOW',
+}

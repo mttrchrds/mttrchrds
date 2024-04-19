@@ -1,41 +1,14 @@
 import React from 'react'
 import styled from 'styled-components'
-// import PropTypes from 'prop-types'
 import _get from 'lodash/get'
 import { DateTime } from 'luxon'
-import { useSelector } from 'react-redux'
 
-// import { mqMin } from '../../helpers/media_queries'
-
-import Spinner from '../spinner'
-
-import theme from '../../styles/theme'
+import { ActivityType } from '../../helpers/enums'
+import { GameShow, Platform } from '../../types/timeline'
 
 const StyledActivity = styled.div`
   position: sticky;
   top: 20px;
-  .activity-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid ${props => props.theme.colors.timeline.secondary1};
-    border-radius: 4px;
-    height: 400px;
-    &__primary {
-      margin-bottom: 10px;
-      padding: 0 10px;
-      font-size: ${props => props.theme.typography.sizeLarge};
-      color: ${props => props.theme.colors.timeline.text1};
-      text-align: center;
-    }
-    &__secondary {
-      margin-bottom: 10px;
-      padding: 0 10px;
-      color: ${props => props.theme.colors.timeline.text};
-      text-align: center;
-    }
-  }
   .game-show {
     &__image {
       margin-bottom: 20px;
@@ -83,20 +56,32 @@ const StyledActivity = styled.div`
   }
 `
 
-const calculateRatingColour = (colors, rating) => {
+const calculateRatingColour = (
+  colors: {
+    gold: string
+    silver: string
+    bronze: string
+    other2: string
+  },
+  rating: number,
+) => {
   if (rating === 10) {
-    return colors.ratings.gold
+    return colors.gold
   }
   if (rating === 9) {
-    return colors.ratings.silver
+    return colors.silver
   }
   if (rating === 8) {
-    return colors.ratings.bronze
+    return colors.bronze
   }
-  return colors.timeline.ratings
+  return colors.other2
 }
 
-const StyledRating = styled.div`
+interface StyledRatingProps {
+  $rating: number
+}
+
+const StyledRating = styled.div<StyledRatingProps>`
   display: flex;
   position: relative;
   top: -3px;
@@ -104,34 +89,35 @@ const StyledRating = styled.div`
     display: flex;
     svg {
       fill: ${props =>
-        calculateRatingColour(props.theme.colors, props.$rating)};
+        calculateRatingColour(props.theme.colors.ratings, props.$rating)};
     }
   }
 `
 
-const Activity = () => {
-  const activeActivity = useSelector(state => state.timeline.activity)
-  const activeActivityLoading = useSelector(
-    state => state.timeline.activityLoading,
-  )
+interface ActivityProps {
+  startAt: string
+  endAt: string | null
+  completed: boolean
+  gameShow: GameShow
+  activityType: ActivityType
+  platform: Platform
+}
 
-  const activityPlatform = _get(activeActivity, ['show_platform'])
-    ? _get(activeActivity, ['show_platform'])
-    : _get(activeActivity, ['game_platform'])
-  const activityItem = _get(activeActivity, ['show_activity'])
-    ? _get(activeActivity, ['show_activity'])
-    : _get(activeActivity, ['game_activity'])
-  const isShow = _get(activeActivity, ['show_activity']) ? true : false
-
+const Activity: React.FC<ActivityProps> = ({
+  startAt,
+  endAt,
+  completed,
+  gameShow,
+  activityType,
+  platform,
+}) => {
   const renderEndAt = () => {
-    if (_get(activeActivity, ['end_at'])) {
+    if (endAt) {
       return (
         <div className="game-show__row">
           <div className="game-show__row__label">Ended:</div>
           <div className="game-show__row__value">
-            {DateTime.fromISO(_get(activeActivity, ['end_at'])).toLocaleString(
-              DateTime.DATE_FULL,
-            )}
+            {DateTime.fromISO(endAt).toLocaleString(DateTime.DATE_FULL)}
           </div>
         </div>
       )
@@ -163,7 +149,7 @@ const Activity = () => {
 
   const renderRating = () => {
     let ratingArray = []
-    const rating = _get(activityItem, ['rating'])
+    const rating = gameShow.rating
 
     for (let i = 0; i < 10; i++) {
       if (i + 1 <= rating) {
@@ -196,10 +182,10 @@ const Activity = () => {
   const renderActiveGameShow = () => (
     <div className="game-show">
       <div className="game-show__image">
-        <img src={_get(activityItem, ['image_url'])} />
+        <img src={gameShow.image_url} />
       </div>
-      <div className="game-show__name">{`${_get(activityItem, ['name'])} (${_get(activityPlatform, ['name'])})`}</div>
-      {_get(activeActivity, ['end_at']) && (
+      <div className="game-show__name">{`${gameShow.name} (${platform.name})`}</div>
+      {endAt && (
         <div className="game-show__row game-show__row--primary">
           <div className="game-show__row__label">Rating:</div>
           <div className="game-show__row__value">{renderRating()}</div>
@@ -208,23 +194,22 @@ const Activity = () => {
       <div className="game-show__row">
         <div className="game-show__row__label">Started:</div>
         <div className="game-show__row__value">
-          {DateTime.fromISO(_get(activeActivity, ['start_at'])).toLocaleString(
-            DateTime.DATE_FULL,
-          )}
+          {DateTime.fromISO(startAt).toLocaleString(DateTime.DATE_FULL)}
         </div>
       </div>
       {renderEndAt()}
       <div className="game-show__row">
         <div className="game-show__row__label">
-          {isShow ? 'Series completed' : 'Game completed'}:
+          {activityType === ActivityType.SHOW
+            ? 'Series completed'
+            : 'Game completed'}
+          :
         </div>
-        <div className="game-show__row__value">
-          {_get(activeActivity, 'completed') ? 'Yes' : 'No'}
-        </div>
+        <div className="game-show__row__value">{completed ? 'Yes' : 'No'}</div>
       </div>
       <div className="game-show__link">
         <a
-          href={`https://www.imdb.com/title/${_get(activityItem, ['imdb_id'])}`}
+          href={`https://www.imdb.com/title/${gameShow.imdb_id}`}
           target="_blank"
           rel="noreferrer"
         >
@@ -235,32 +220,10 @@ const Activity = () => {
   )
 
   const renderContent = () => {
-    if (activeActivityLoading) {
-      return (
-        <div className="activity-container">
-          <Spinner spinnerColour={theme.colors.text} />
-        </div>
-      )
-    }
-
-    if (activeActivity) {
-      return renderActiveGameShow()
-    }
-
-    return (
-      <div className="activity-container">
-        <div className="activity-container__primary">{`Timeline`}</div>
-        <div className="activity-container__secondary">{`Scroll down the timeline to see what shows I've been watching and games I've been playing.`}</div>
-        <div className="activity-container__secondary">{`Click on an activity for more details.`}</div>
-      </div>
-    )
+    return renderActiveGameShow()
   }
 
   return <StyledActivity>{renderContent()}</StyledActivity>
 }
-
-Activity.defaultProps = {}
-
-Activity.propTypes = {}
 
 export default Activity

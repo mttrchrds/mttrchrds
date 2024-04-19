@@ -1,3 +1,5 @@
+import { ActivityType } from '../helpers/enums'
+
 export interface Creator {
   id: number
   name: string
@@ -10,7 +12,7 @@ export interface Category {
 }
 
 export interface GameShow {
-  id: string
+  id: number
   name: string
   imdb_id: string
   image_url: string
@@ -28,6 +30,16 @@ export interface Platform {
 
 export interface Activity {
   id: number
+  startAt: string
+  endAt: string | null
+  completed: boolean
+  gameShow: GameShow
+  platform: Platform
+  activityType: ActivityType
+}
+
+export interface ActivityRaw {
+  id: number
   start_at: string
   end_at: string | null
   completed: boolean
@@ -35,4 +47,5 @@ export interface Activity {
   show_platform: Platform | null
   game_activity: GameShow | null
   game_platform: Platform | null
+  activity_type: ActivityType
 }

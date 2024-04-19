@@ -1,6 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
+
 import { Activity } from '../../types/timeline'
+
+import { parseRawActivity } from '../../helpers/redux'
 
 interface LatestShows {
   shows: Activity[]
@@ -36,7 +39,7 @@ export const latestShowsSlice = createSlice({
       })
       .addCase(loadShows.fulfilled, (state, action) => {
         state.loading = false
-        state.shows = action.payload
+        state.shows = action.payload.map((p: any) => parseRawActivity(p))
       })
   },
 })

@@ -1,6 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
+
 import { Activity } from '../../types/timeline'
+
+import { parseRawActivity } from '../../helpers/redux'
 
 interface LatestGames {
   games: Activity[]
@@ -36,7 +39,7 @@ export const latestGamesSlice = createSlice({
       })
       .addCase(loadGames.fulfilled, (state, action) => {
         state.loading = false
-        state.games = action.payload
+        state.games = action.payload.map((p: any) => parseRawActivity(p))
       })
   },
 })

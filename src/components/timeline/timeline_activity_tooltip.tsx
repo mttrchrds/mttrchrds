@@ -1,10 +1,15 @@
 import React from 'react'
 import styled from 'styled-components'
-import PropTypes from 'prop-types'
 import _get from 'lodash/get'
 import { DateTime } from 'luxon'
 
-const StyledActivityTooltip = styled.div`
+interface StyledTimelineActivityTooltipProps {
+  $tooltipWidth: number
+  $activityColour: string
+  $alignment: 'left' | 'right'
+}
+
+const StyledTimelineActivityTooltip = styled.div<StyledTimelineActivityTooltipProps>`
   box-sizing: border-box;
   position: absolute;
   z-index: 10;
@@ -26,56 +31,64 @@ const StyledActivityTooltip = styled.div`
   }
 `
 
-const TimelineActivityTooltip = props => {
+interface TimelineActivityTooltipProps {
+  positionX: number
+  positionY: number
+  tooltipWidth: number
+  activityColour: string
+  startAt: string
+  endAt: string | null
+  title: string
+  platform: string
+  alignment: 'left' | 'right'
+}
+
+const TimelineActivityTooltip: React.FC<TimelineActivityTooltipProps> = ({
+  positionX,
+  positionY,
+  tooltipWidth,
+  activityColour,
+  startAt,
+  endAt,
+  title,
+  platform,
+  alignment,
+}) => {
   const calculateLeft = () => {
-    if (props.alignment === 'left') {
-      return props.positionX - 5 - props.tooltipWidth
+    if (alignment === 'left') {
+      return positionX - 5 - tooltipWidth
     }
-    return props.positionX + 5
+    return positionX + 5
   }
 
   const calculateTop = () => {
-    return props.positionY - 5
+    return positionY - 5
   }
 
   const renderTooltipTimestamp = () => {
-    const start_at_formatted = DateTime.fromISO(
-      _get(props, ['startAt']),
-    ).toLocaleString(DateTime.DATE_FULL)
-    if (_get(props, ['endAt'])) {
-      return `${start_at_formatted} to ${DateTime.fromISO(_get(props, ['endAt'])).toLocaleString(DateTime.DATE_FULL)}`
+    const start_at_formatted = DateTime.fromISO(startAt).toLocaleString(
+      DateTime.DATE_FULL,
+    )
+    if (endAt) {
+      return `${start_at_formatted} to ${DateTime.fromISO(endAt).toLocaleString(DateTime.DATE_FULL)}`
     }
     return `Started ${start_at_formatted}`
   }
 
   return (
-    <StyledActivityTooltip
-      $alignment={props.alignment}
+    <StyledTimelineActivityTooltip
+      $alignment={alignment}
       style={{
         top: calculateTop(),
         left: calculateLeft(),
       }}
-      $activityColour={props.activityColour}
-      $tooltipWidth={props.tooltipWidth}
+      $activityColour={activityColour}
+      $tooltipWidth={tooltipWidth}
     >
-      <div className="tooltip-title">{`${props.title} (${props.platform})`}</div>
+      <div className="tooltip-title">{`${title} (${platform})`}</div>
       <div className="tooltip-timestamp">{renderTooltipTimestamp()}</div>
-    </StyledActivityTooltip>
+    </StyledTimelineActivityTooltip>
   )
-}
-
-TimelineActivityTooltip.defaultProps = {}
-
-TimelineActivityTooltip.propTypes = {
-  positionX: PropTypes.number,
-  positionY: PropTypes.number,
-  tooltipWidth: PropTypes.number,
-  activityColour: PropTypes.string,
-  startAt: PropTypes.string,
-  endAt: PropTypes.string,
-  title: PropTypes.string,
-  platform: PropTypes.string,
-  alignment: PropTypes.oneOf(['left', 'right']).isRequired,
 }
 
 export default TimelineActivityTooltip

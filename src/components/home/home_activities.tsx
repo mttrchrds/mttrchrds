@@ -2,7 +2,6 @@ import React from 'react'
 import styled from 'styled-components'
 import _get from 'lodash/get'
 import { DateTime } from 'luxon'
-import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
 import { mqMin } from '../../helpers/media_queries'
@@ -150,26 +149,22 @@ const HomeActivities: React.FC<HomeActivitiesProps> = ({
   }
 
   const renderActivity = (activity: Activity) => {
-    const activityPlatform = shows
-      ? activity.show_platform
-      : activity.game_platform
-    const activityItem = shows ? activity.show_activity : activity.game_activity
-    const endAt = activity.end_at ? activity.end_at : false
+    const endAt = activity.endAt ? activity.endAt : false
     return (
-      <div className="activity" key={_get(activityItem, 'id')}>
+      <div className="activity" key={activity.id}>
         <div className="activity__image">
-          <img src={_get(activityItem, ['thumbnail_url'])} />
+          <img src={activity.gameShow.thumbnail_url} />
         </div>
         <div className="activity__details">
           <div className="activity__details">
             <h5 className="activity__details__name">
-              {`${_get(activityItem, ['name'])} (${_get(activityPlatform, ['name'])})`}{' '}
-              {renderRating(activityItem ? activityItem.rating : 1, !endAt)}
+              {`${activity.gameShow.name} (${activity.platform.name})`}{' '}
+              {renderRating(activity ? activity.gameShow.rating : 1, !endAt)}
             </h5>
             <div className="activity__details__row">
               <div className="activity__details__row__label">Started:</div>
               <div className="activity__details__row__value">
-                {DateTime.fromISO(_get(activity, ['start_at'])).toLocaleString(
+                {DateTime.fromISO(activity.startAt).toLocaleString(
                   DateTime.DATE_FULL,
                 )}
               </div>
@@ -193,7 +188,7 @@ const HomeActivities: React.FC<HomeActivitiesProps> = ({
             )}
             <div className="activity__details__link">
               <a
-                href={`https://www.imdb.com/title/${_get(activityItem, ['imdb_id'])}`}
+                href={`https://www.imdb.com/title/${activity.gameShow.imdb_id}`}
                 target="_blank"
                 rel="noreferrer"
               >

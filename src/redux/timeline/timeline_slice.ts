@@ -3,6 +3,7 @@ import axios from 'axios'
 import _get from 'lodash/get'
 
 import { getDaysInMonth, formatDateNumber } from '../../helpers/date_times'
+import { parseRawActivity } from '../../helpers/redux'
 
 import { Activity } from '../../types/timeline'
 
@@ -172,7 +173,7 @@ const parseApiPayload = (
           }
           tmpChannelColours.push(activityColours[activeColourIndex])
           renderedActivityIds.push(_get(c, 'id'))
-          return c
+          return parseRawActivity(c)
         }
       }
     })
@@ -223,7 +224,6 @@ export const timelineSlice = createSlice({
           state.pagingEnd = end
         }
         const payload = _get(action, 'payload', [])
-        console.log({ payload })
         if (payload.length > 0) {
           state.pagingChannels = buildNextChannelsList(payload)
           const { parsedPayload, renderedActivityIds, activeColourIndex } =
@@ -243,7 +243,7 @@ export const timelineSlice = createSlice({
         .addCase(loadActivity.fulfilled, (state, action) => {
           state.activityLoading = false
           const payload = _get(action, 'payload', {})
-          state.activity = payload
+          state.activity = parseRawActivity(payload)
         })
   },
 })

@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
 import { mqMin } from '../../helpers/media_queries'
@@ -36,7 +35,7 @@ const StyledHeader = styled.header`
         font-family: 'Silkscreen';
       }
       &:hover {
-        color: ${props => props.theme.colors.background};
+        color: ${props => props.theme.colors.highlight};
         text-decoration: none;
       }
     }
@@ -68,28 +67,24 @@ const StyledHeader = styled.header`
   }
 `
 
-const Header = props => {
+interface HeaderProps {
+  title?: string
+}
+
+const Header: React.FC<HeaderProps> = ({ title }) => {
   return (
     <StyledHeader>
       <div className="brand">
         <Link to="/">MTTRCHRDS</Link>
       </div>
       <div className="actions">
-        {props.title && <h1 className="actions__title">{props.title}</h1>}
+        {title && <h1 className="actions__title">{title}</h1>}
         <Link className="actions__button" to={'/'}>
           &nbsp;
         </Link>
       </div>
     </StyledHeader>
   )
-}
-
-Header.defaultProps = {
-  title: '',
-}
-
-Header.propTypes = {
-  title: PropTypes.string,
 }
 
 export default Header

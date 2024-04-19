@@ -1,6 +1,4 @@
-import React from 'react'
 import styled from 'styled-components'
-// import PropTypes from 'prop-types'
 
 const StyledHomeLoading = styled.div`
   height: inherit;
@@ -43,9 +41,5 @@ const HomeLoading = () => (
     <h5>Loading</h5>
   </StyledHomeLoading>
 )
-
-HomeLoading.defaultProps = {}
-
-HomeLoading.propTypes = {}
 
 export default HomeLoading

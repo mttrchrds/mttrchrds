@@ -1,16 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
-import PropTypes from 'prop-types'
 import _findIndex from 'lodash/findIndex'
 
 import { mqMin } from '../../helpers/media_queries'
-import {
-  enumHomeSectionNews,
-  enumHomeSectionMusic,
-  enumHomeSectionShows,
-  enumHomeSectionGames,
-  enumHomeSectionProjects,
-} from '../../helpers/enums'
+import { HomeSection } from '../../helpers/enums'
 
 import HomeNavigationButton from './home_navigation_button'
 
@@ -57,37 +50,49 @@ const StyledHomeNavigation = styled.nav`
   }
 `
 
-const HomeNavigation = props => {
-  const handleClickButton = (e, section, active) => {
+interface HomeNavigationProps {
+  activeSection: HomeSection
+  selectHandler: (section: HomeSection) => void
+}
+
+const HomeNavigation: React.FC<HomeNavigationProps> = ({
+  activeSection,
+  selectHandler,
+}) => {
+  const handleClickButton = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    section: HomeSection,
+    active: boolean,
+  ) => {
     e.preventDefault()
     if (!active) {
-      props.selectHandler(section)
+      selectHandler(section)
     }
   }
 
   const renderSideNavigation = () => {
     const homeSections = [
-      enumHomeSectionNews,
-      enumHomeSectionShows,
-      enumHomeSectionGames,
-      enumHomeSectionMusic,
-      enumHomeSectionProjects,
+      HomeSection.NEWS,
+      HomeSection.SHOWS,
+      HomeSection.GAMES,
+      HomeSection.MUSIC,
+      HomeSection.PROJECTS,
     ]
     const activeSectionIndex = _findIndex(
       homeSections,
-      hs => hs === props.activeSection,
+      hs => hs === activeSection,
     )
     return homeSections.map((hs, idx) => {
       let previousItem = false
       if (idx < activeSectionIndex) {
         previousItem = true
       }
-      const active = props.activeSection === hs ? true : false
+      const active = activeSection === hs ? true : false
       return (
         <div key={hs} className="nav-primary__item">
           <HomeNavigationButton
             active={active}
-            label={hs}
+            section={hs}
             previousButton={previousItem}
             clickHandler={handleClickButton}
           />
@@ -108,18 +113,6 @@ const HomeNavigation = props => {
       </div>
     </StyledHomeNavigation>
   )
-}
-
-HomeNavigation.defaultProps = {}
-
-HomeNavigation.propTypes = {
-  activeSection: PropTypes.oneOf([
-    enumHomeSectionNews,
-    enumHomeSectionMusic,
-    enumHomeSectionShows,
-    enumHomeSectionGames,
-  ]).isRequired,
-  selectHandler: PropTypes.func.isRequired,
 }
 
 export default HomeNavigation

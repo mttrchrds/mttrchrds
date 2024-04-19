@@ -1,7 +1,16 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
 
-const initialState = {
+import { Activity } from '../../types/timeline'
+
+import { parseRawActivity } from '../../helpers/redux'
+
+interface LatestShows {
+  shows: Activity[]
+  loading: boolean
+}
+
+const initialState: LatestShows = {
   shows: [],
   loading: false,
 }
@@ -18,6 +27,7 @@ export const loadShows = createAsyncThunk('latestShows/load', async () => {
 
 export const latestShowsSlice = createSlice({
   name: 'latestShows',
+  reducers: {},
   initialState,
   extraReducers: builder => {
     builder
@@ -29,11 +39,9 @@ export const latestShowsSlice = createSlice({
       })
       .addCase(loadShows.fulfilled, (state, action) => {
         state.loading = false
-        state.shows = action.payload
+        state.shows = action.payload.map((p: any) => parseRawActivity(p))
       })
   },
 })
-
-export const { updateShows } = latestShowsSlice.actions
 
 export default latestShowsSlice.reducer

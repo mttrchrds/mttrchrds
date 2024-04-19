@@ -3,8 +3,38 @@ import axios from 'axios'
 import _get from 'lodash/get'
 
 import { getDaysInMonth, formatDateNumber } from '../../helpers/date_times'
+import { parseRawActivity } from '../../helpers/redux'
 
-const initialState = {
+import { Activity } from '../../types/timeline'
+
+interface TimelinePayload {
+  date: string
+  day: string
+  month: string
+  year: string
+  channels: (Activity | null)[]
+}
+
+export interface TimelinePayloadParsed extends TimelinePayload {
+  channelColours: (string | null)[]
+}
+
+interface Timeline {
+  currentDay: string
+  currentMonth: string
+  currentYear: string
+  pagingStart: string
+  pagingEnd: string
+  pagingChannels: (number | null)[]
+  activeColourIndex: number | null
+  sections: TimelinePayloadParsed[][]
+  loading: boolean
+  renderedActivityIds: number[]
+  activity: Activity | null
+  activityLoading: boolean
+}
+
+const initialState: Timeline = {
   currentDay: '',
   currentMonth: '',
   currentYear: '',
@@ -37,10 +67,14 @@ export const pagingLengthInMonths = 3
 
 export const loadTimeline = createAsyncThunk(
   'timeline/loadTimline',
-  async payload => {
-    const start = _get(payload, 'start')
-    const end = _get(payload, 'end')
-    const channels = _get(payload, 'channels', [])
+  async (payload: {
+    start: string
+    end: string
+    channels: (number | null)[]
+  }) => {
+    const start = payload.start
+    const end = payload.end
+    const channels = payload.channels
     const response = await axios
       .get(
         /* eslint-disable-next-line no-undef */
@@ -53,18 +87,18 @@ export const loadTimeline = createAsyncThunk(
 
 export const loadActivity = createAsyncThunk(
   'timeline/loadActivity',
-  async payload => {
+  async (activityId: number) => {
     const response = await axios
       .get(
         /* eslint-disable-next-line no-undef */
-        `${import.meta.env.VITE_API_DOMAIN}/api/activities/${payload}`,
+        `${import.meta.env.VITE_API_DOMAIN}/api/activities/${activityId}`,
       )
       .then(apiResponse => apiResponse)
     return response.data
   },
 )
 
-const buildNextStartEndValues = currentStart => {
+const buildNextStartEndValues = (currentStart: string) => {
   // builds data query params for next load
   const currentStartPaths = currentStart.split('-')
   const currentYear = Number(currentStartPaths[0])
@@ -92,10 +126,10 @@ const buildNextStartEndValues = currentStart => {
   }
 }
 
-const buildNextChannelsList = payload => {
+const buildNextChannelsList = (payload: TimelinePayload[]) => {
   // builds channels query param for next load
   const finalDay = payload.length > 0 ? payload[payload.length - 1] : {}
-  return _get(finalDay, 'channels', []).map(fc => {
+  return _get(finalDay, 'channels', []).map((fc: Activity | null) => {
     if (fc) {
       return fc.id
     }
@@ -103,7 +137,7 @@ const buildNextChannelsList = payload => {
   })
 }
 
-const generateActiveColourIndex = currentIndex => {
+const generateActiveColourIndex = (currentIndex: number) => {
   const totalColours = activityColours.length
   if (currentIndex === totalColours - 1) {
     return 0
@@ -112,20 +146,27 @@ const generateActiveColourIndex = currentIndex => {
   }
 }
 
-const parseApiPayload = (payload, state) => {
+const parseApiPayload = (
+  payload: TimelinePayload[],
+  state: Timeline,
+): {
+  parsedPayload: TimelinePayloadParsed[]
+  renderedActivityIds: number[]
+  activeColourIndex: number | null
+} => {
   // Payload is parsed so logic is outside Memoized <TimelineSection /> component
   // Removes duplicate activities from payload and sets activity colour
   let renderedActivityIds = [...state.renderedActivityIds]
-  let parsedPayload = []
+  let parsedPayload: TimelinePayloadParsed[] = []
   let activeColourIndex = state.activeColourIndex
   payload.map(p => {
-    let tmpChannelColours = []
+    let tmpChannelColours: (string | null)[] = []
     const tmpChannels = _get(p, 'channels', []).map(c => {
       if (c === null) {
         tmpChannelColours.push(null)
         return c
       } else {
-        if (renderedActivityIds.includes(_get(c, 'id'))) {
+        if (renderedActivityIds.includes(c.id)) {
           tmpChannelColours.push(null)
           return null
         } else {
@@ -136,7 +177,7 @@ const parseApiPayload = (payload, state) => {
           }
           tmpChannelColours.push(activityColours[activeColourIndex])
           renderedActivityIds.push(_get(c, 'id'))
-          return c
+          return parseRawActivity(c)
         }
       }
     })
@@ -206,7 +247,7 @@ export const timelineSlice = createSlice({
         .addCase(loadActivity.fulfilled, (state, action) => {
           state.activityLoading = false
           const payload = _get(action, 'payload', {})
-          state.activity = payload
+          state.activity = parseRawActivity(payload)
         })
   },
 })

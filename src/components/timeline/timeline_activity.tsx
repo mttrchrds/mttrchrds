@@ -1,15 +1,28 @@
 import React, { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
-import PropTypes from 'prop-types'
 import { DateTime } from 'luxon'
 import _get from 'lodash/get'
-import { useSelector, useDispatch } from 'react-redux'
 import { loadActivity } from '../../redux/timeline/timeline_slice'
+
+import { GameShow, Platform } from '../../types/timeline'
+import { useAppSelector, useAppDispatch } from '../../hooks/hooks'
+import { ActivityType } from '../../helpers/enums'
 
 import TimelineActivityTooltip from './timeline_activity_tooltip'
 import Activity from './activity'
+import Spinner from '../spinner'
 
-const StyledTimelineActivity = styled.div`
+import theme from '../../styles/theme'
+
+interface StyledTimelineActivityProps {
+  $channelWidth: number
+  $activityHeight: number
+  $activityHover: boolean
+  $activityColour: string
+  $thumbnail: string
+}
+
+const StyledTimelineActivity = styled.div<StyledTimelineActivityProps>`
   position: relative;
   width: ${props => props.$channelWidth}px;
   min-height: ${props => props.$activityHeight}px;
@@ -135,23 +148,70 @@ const StyledActivityModal = styled.div`
     padding: 10px 20px 20px 20px;
     border-radius: 6px;
   }
+  .activity-modal-body {
+    &__loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 400px;
+    }
+  }
 `
 
 const tooltipWidth = 250
 
-const TimelineActivity = props => {
-  const currentDay = useSelector(state => state.timeline.currentDay)
-  const currentMonth = useSelector(state => state.timeline.currentMonth)
-  const currentYear = useSelector(state => state.timeline.currentYear)
-  const activeActivity = useSelector(state => state.timeline.activity)
-  const dispatch = useDispatch()
+interface TimelineActivityGameShow {
+  id: number
+  name: string
+  thumbnail_url: string
+}
+
+interface TimelineActivityPlatform {
+  id: number
+  name: string
+}
+
+interface TimelineActivityProps {
+  id: number
+  startAt: string
+  endAt: string | null
+  platform: TimelineActivityPlatform
+  gameShow: TimelineActivityGameShow
+  activityType: ActivityType
+  dayHeight: number
+  channelWidth: number
+  activityColour: string
+  channelIndex: number
+}
+
+const TimelineActivity: React.FC<TimelineActivityProps> = ({
+  id,
+  startAt,
+  endAt,
+  platform,
+  gameShow,
+  activityType,
+  dayHeight,
+  channelWidth,
+  activityColour,
+  channelIndex,
+}) => {
+  const currentDay = useAppSelector(state => state.timeline.currentDay)
+  const currentMonth = useAppSelector(state => state.timeline.currentMonth)
+  const currentYear = useAppSelector(state => state.timeline.currentYear)
+  const activeActivity = useAppSelector(state => state.timeline.activity)
+  const activeActivityLoading = useAppSelector(
+    state => state.timeline.activityLoading,
+  )
+  const dispatch = useAppDispatch()
 
   const [activityHover, setActivityHover] = useState(false)
   const [tooltipX, setTooltipX] = useState(0)
   const [tooltipY, setTooltipY] = useState(0)
   const [displayActivityModal, setDisplayActivityModal] = useState(false)
 
-  const timelineActivityRef = useRef(null)
+  const timelineActivityRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
     if (displayActivityModal) {
@@ -164,28 +224,20 @@ const TimelineActivity = props => {
     }
   }, [displayActivityModal])
 
-  const activityDetail =
-    _get(props, ['show_activity']) === null
-      ? _get(props, ['game_activity'])
-      : _get(props, ['show_activity'])
-  const isShow = _get(props, ['show_activity']) === null ? false : true
-  const new_end_at =
-    _get(props, ['end_at']) === null
-      ? `${currentYear}-${currentMonth}-${currentDay}`
-      : _get(props, ['end_at'])
-  const daysTotal = Math.ceil(
-    DateTime.fromISO(new_end_at)
-      .diff(DateTime.fromISO(_get(props, ['start_at'])), 'days')
-      .toObject().days,
-  )
+  const newEndAt =
+    endAt === null ? `${currentYear}-${currentMonth}-${currentDay}` : endAt
+  const daysTotal = DateTime.fromISO(newEndAt)
+    .diff(DateTime.fromISO(startAt), 'days')
+    .toObject().days
+  const daysTotalRounded = daysTotal ? Math.ceil(daysTotal) : 0
 
-  const handleClickActivity = e => {
+  const handleClickActivity = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault()
     if (window.screen.width < 768) {
       setDisplayActivityModal(true)
     }
-    if (props.id !== _get(activeActivity, 'id')) {
-      dispatch(loadActivity(props.id))
+    if (id !== _get(activeActivity, 'id')) {
+      dispatch(loadActivity(id))
     }
   }
 
@@ -199,7 +251,10 @@ const TimelineActivity = props => {
     setActivityHover(false)
   }
 
-  const handleMouseMove = e => {
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!timelineActivityRef.current) {
+      return null
+    }
     const bounding = timelineActivityRef.current.getBoundingClientRect()
     const x = e.clientX - bounding.left
     const y = e.clientY - bounding.top
@@ -207,30 +262,28 @@ const TimelineActivity = props => {
     setTooltipY(y)
   }
 
-  const handleClickActivityModal = e => {
-    if ([...e.target.classList].includes('activity-modal')) {
-      setDisplayActivityModal(false)
+  const handleClickActivityModal = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target instanceof HTMLElement) {
+      if ([...e.target.classList].includes('activity-modal')) {
+        setDisplayActivityModal(false)
+      }
     }
   }
 
-  const handleClickCloseIcon = e => {
+  const handleClickCloseIcon = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault()
     setDisplayActivityModal(false)
   }
 
   const calculateTooltipAlignment = () => {
-    if (
-      props.channelIndex === 1 ||
-      props.channelIndex === 3 ||
-      props.channelIndex === 5
-    ) {
+    if (channelIndex === 1 || channelIndex === 3 || channelIndex === 5) {
       return 'right'
     }
     return 'left'
   }
 
   const renderTail = () => {
-    if (isShow) {
+    if (activityType === ActivityType.SHOW) {
       return (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -267,14 +320,36 @@ const TimelineActivity = props => {
     )
   }
 
+  const renderActivityModalActivity = () => {
+    if (activeActivityLoading) {
+      return (
+        <div className="activity-modal-body__loading">
+          <Spinner spinnerColour={theme.colors.text} />
+        </div>
+      )
+    }
+    if (activeActivity) {
+      return (
+        <Activity
+          startAt={activeActivity.startAt}
+          endAt={activeActivity.endAt}
+          activityType={activeActivity.activityType}
+          gameShow={activeActivity.gameShow}
+          platform={activeActivity.platform}
+          completed={activeActivity.completed}
+        />
+      )
+    }
+    return null
+  }
+
   return (
     <>
       <StyledTimelineActivity
-        $dayHeight={props.dayHeight}
-        $channelWidth={props.channelWidth}
-        $activityHeight={daysTotal * props.dayHeight}
-        $activityColour={props.activityColour}
-        $thumbnail={_get(activityDetail, ['thumbnail_url'])}
+        $channelWidth={channelWidth}
+        $activityHeight={daysTotalRounded * dayHeight}
+        $activityColour={activityColour}
+        $thumbnail={gameShow.thumbnail_url}
         $activityHover={activityHover}
         onClick={handleClickActivity}
         onMouseEnter={handleMouseEnterActivity}
@@ -291,20 +366,12 @@ const TimelineActivity = props => {
           <TimelineActivityTooltip
             positionX={tooltipX}
             positionY={tooltipY}
-            activityColour={props.activityColour}
+            activityColour={activityColour}
             tooltipWidth={tooltipWidth}
-            startAt={_get(props, 'start_at')}
-            endAt={_get(props, 'end_at')}
-            title={
-              _get(props, ['game_activity', 'name'])
-                ? _get(props, ['game_activity', 'name'])
-                : _get(props, ['show_activity', 'name'])
-            }
-            platform={
-              _get(props, ['game_platform', 'name'])
-                ? _get(props, ['game_platform', 'name'])
-                : _get(props, ['show_platform', 'name'])
-            }
+            startAt={startAt}
+            endAt={endAt}
+            title={gameShow.name}
+            platform={platform.name}
             alignment={calculateTooltipAlignment()}
           />
         )}
@@ -324,30 +391,13 @@ const TimelineActivity = props => {
               </div>
             </div>
             <div className="activity-modal-body">
-              <Activity />
+              {renderActivityModalActivity()}
             </div>
           </div>
         </StyledActivityModal>
       )}
     </>
   )
-}
-
-TimelineActivity.defaultProps = {}
-
-TimelineActivity.propTypes = {
-  activityColour: PropTypes.string.isRequired,
-  dayHeight: PropTypes.number.isRequired,
-  channelWidth: PropTypes.number.isRequired,
-  id: PropTypes.number.isRequired,
-  start_at: PropTypes.string.isRequired,
-  end_at: PropTypes.string,
-  show_activity: PropTypes.object,
-  show_platform: PropTypes.object,
-  game_activity: PropTypes.object,
-  game_platform: PropTypes.object,
-  completed: PropTypes.bool.isRequired,
-  channelIndex: PropTypes.number.isRequired,
 }
 
 export default TimelineActivity

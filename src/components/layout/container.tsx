@@ -1,6 +1,5 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import styled from 'styled-components'
-import PropTypes from 'prop-types'
 
 import { mqMin } from '../../helpers/media_queries'
 
@@ -24,12 +23,12 @@ const StyledContainer = styled.div`
   }
 `
 
-const Container = props => {
-  return <StyledContainer>{props.children}</StyledContainer>
+interface ContainerProps {
+  children: ReactNode
 }
 
-Container.propTypes = {
-  children: PropTypes.node,
+const Container: React.FC<ContainerProps> = ({ children }) => {
+  return <StyledContainer>{children}</StyledContainer>
 }
 
 export default Container

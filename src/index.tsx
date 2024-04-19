@@ -9,12 +9,12 @@ import router from './router'
 
 import theme from './styles/theme'
 
-import GlobalStyles from './components/global_styles'
+import GlobalStyles from './styles/global_styles'
 
-const loadingPlaceholder = document.getElementById('loading')
+const loadingPlaceholder = document.getElementById('loading') as HTMLElement
 loadingPlaceholder.style.display = 'none'
 
-const container = document.getElementById('app')
+const container = document.getElementById('app') as HTMLElement
 const root = createRoot(container)
 
 root.render(

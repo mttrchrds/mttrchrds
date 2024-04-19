@@ -1,15 +1,15 @@
-import React, { useEffect, useState, useRef, memo } from 'react'
+import { useEffect, useState, useRef, memo } from 'react'
 import styled from 'styled-components'
 import _get from 'lodash/get'
-import PropTypes from 'prop-types'
-import { useSelector, useDispatch } from 'react-redux'
 import {
   loadTimeline,
   pagingLengthInMonths,
   updateCurrentDay,
   updateCurrentMonth,
   updateCurrentYear,
+  TimelinePayloadParsed,
 } from '../../redux/timeline/timeline_slice'
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks'
 
 import { mqMin } from '../../helpers/media_queries'
 import { formatDateNumber } from '../../helpers/date_times'
@@ -22,15 +22,21 @@ import Spinner from '../spinner'
 
 import theme from '../../styles/theme'
 
-const TimelineSectionMemoized = memo(function TimelineMemo(props) {
-  return <TimelineSection timelineDays={props.timelineDays} />
-})
-
-TimelineSectionMemoized.propTypes = {
-  timelineDays: PropTypes.array,
+interface TimelineSectionMemoizedProps {
+  timelineDays: TimelinePayloadParsed[]
 }
 
-const StyledTimeline = styled.div`
+const TimelineSectionMemoized: React.FC<TimelineSectionMemoizedProps> = memo(
+  ({ timelineDays }) => {
+    return <TimelineSection timelineDays={timelineDays} />
+  },
+)
+
+interface StyledTimelineProps {
+  $loadMoreVisible: boolean
+}
+
+const StyledTimeline = styled.div<StyledTimelineProps>`
   color: white;
   display: flex;
   flex-grow: 1;
@@ -96,18 +102,47 @@ const StyledTimeline = styled.div`
   }
 `
 
+const StyledActivity = styled.div`
+  .activity-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid ${props => props.theme.colors.timeline.secondary1};
+    border-radius: 4px;
+    height: 400px;
+    &__primary {
+      margin-bottom: 10px;
+      padding: 0 10px;
+      font-size: ${props => props.theme.typography.sizeLarge};
+      color: ${props => props.theme.colors.timeline.text1};
+      text-align: center;
+    }
+    &__secondary {
+      margin-bottom: 10px;
+      padding: 0 10px;
+      color: ${props => props.theme.colors.timeline.text};
+      text-align: center;
+    }
+  }
+`
+
 const Timeline = () => {
   // Returns true if the component at the bottom of the timeline (i.e. intersection) is visible. Used for infinite loading
   const [intersection, setIntersection] = useState(false)
 
   const observerTarget = useRef(null)
 
-  const dispatch = useDispatch()
-  const pagingStart = useSelector(state => state.timeline.pagingStart)
-  const pagingEnd = useSelector(state => state.timeline.pagingEnd)
-  const pagingChannels = useSelector(state => state.timeline.pagingChannels)
-  const timelineLoading = useSelector(state => state.timeline.loading)
-  const timelineSections = useSelector(state => state.timeline.sections)
+  const dispatch = useAppDispatch()
+  const pagingStart = useAppSelector(state => state.timeline.pagingStart)
+  const pagingEnd = useAppSelector(state => state.timeline.pagingEnd)
+  const pagingChannels = useAppSelector(state => state.timeline.pagingChannels)
+  const timelineLoading = useAppSelector(state => state.timeline.loading)
+  const timelineSections = useAppSelector(state => state.timeline.sections)
+  const activity = useAppSelector(state => state.timeline.activity)
+  const activityLoading = useAppSelector(
+    state => state.timeline.activityLoading,
+  )
 
   useEffect(() => {
     const date = new Date()
@@ -175,6 +210,37 @@ const Timeline = () => {
     )
   }
 
+  const renderActivity = () => {
+    if (activity) {
+      return (
+        <Activity
+          startAt={activity.startAt}
+          endAt={activity.endAt}
+          activityType={activity.activityType}
+          gameShow={activity.gameShow}
+          platform={activity.platform}
+          completed={activity.completed}
+        />
+      )
+    } else {
+      return (
+        <StyledActivity>
+          {activityLoading ? (
+            <div className="activity-container">
+              <Spinner spinnerColour={theme.colors.text} />
+            </div>
+          ) : (
+            <div className="activity-container">
+              <div className="activity-container__primary">{`Timeline`}</div>
+              <div className="activity-container__secondary">{`Scroll down the timeline to see what shows I've been watching and games I've been playing.`}</div>
+              <div className="activity-container__secondary">{`Click on an activity for more details.`}</div>
+            </div>
+          )}
+        </StyledActivity>
+      )
+    }
+  }
+
   return (
     <Layout
       bodyColour={theme.colors.timeline.background}
@@ -206,9 +272,7 @@ const Timeline = () => {
                 </div>
               </div>
             </div>
-            <div className="secondary">
-              <Activity />
-            </div>
+            <div className="secondary">{renderActivity()}</div>
           </div>
         </Container>
       </StyledTimeline>

@@ -1,13 +1,13 @@
 import { useEffect, useState, useRef, memo } from 'react'
 import styled from 'styled-components'
 import _get from 'lodash/get'
-import PropTypes from 'prop-types'
 import {
   loadTimeline,
   pagingLengthInMonths,
   updateCurrentDay,
   updateCurrentMonth,
   updateCurrentYear,
+  TimelinePayloadParsed,
 } from '../../redux/timeline/timeline_slice'
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks'
 
@@ -22,13 +22,15 @@ import Spinner from '../spinner'
 
 import theme from '../../styles/theme'
 
-const TimelineSectionMemoized = memo(function TimelineMemo(props) {
-  return <TimelineSection timelineDays={props.timelineDays} />
-})
-
-TimelineSectionMemoized.propTypes = {
-  timelineDays: PropTypes.array,
+interface TimelineSectionMemoizedProps {
+  timelineDays: TimelinePayloadParsed[]
 }
+
+const TimelineSectionMemoized: React.FC<TimelineSectionMemoizedProps> = memo(
+  ({ timelineDays }) => {
+    return <TimelineSection timelineDays={timelineDays} />
+  },
+)
 
 interface StyledTimelineProps {
   $loadMoreVisible: boolean

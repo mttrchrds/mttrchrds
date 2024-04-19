@@ -6,6 +6,8 @@ import _get from 'lodash/get'
 
 import { getDaysInMonth, formatDateNumber } from '../../helpers/date_times'
 
+import { TimelinePayloadParsed } from '../../redux/timeline/timeline_slice'
+
 import TimelineActivity from './timeline_activity'
 
 let dayHeight = 40
@@ -33,7 +35,7 @@ const StyledTimelineSection = styled.div`
     &__row {
       height: ${dayHeight}px;
       padding-left: 20px;
-      color: ${props => props.theme.colors.timeline.tex1};
+      color: ${props => props.theme.colors.timeline.text1};
       &--sticky {
         position: sticky;
         top: 20px;
@@ -75,15 +77,19 @@ const StyledTimelineSection = styled.div`
   }
 `
 
-const TimelineSection = props => {
+interface TimelineSectionProps {
+  timelineDays: TimelinePayloadParsed[]
+}
+
+const TimelineSection: React.FC<TimelineSectionProps> = ({ timelineDays }) => {
   const date = new Date()
   const currentMonth = formatDateNumber(date.getMonth() + 1)
   const currentYear = String(date.getFullYear())
 
-  const renderChannel = (channelIndex, day) => {
-    const channelActivityId = _get(day, ['channels', channelIndex, 'id'])
-    if (channelActivityId) {
-      const channelActivity = _get(day, ['channels', channelIndex])
+  const renderChannel = (channelIndex: number, day: TimelinePayloadParsed) => {
+    const channelActivity = _get(day, ['channels', channelIndex])
+    const channelColour = _get(day, ['channelColours', channelIndex])
+    if (channelActivity && channelColour) {
       return (
         <div
           className="day-channels__channel day-channels__channel--active"
@@ -94,7 +100,7 @@ const TimelineSection = props => {
               {...channelActivity}
               dayHeight={dayHeight}
               channelWidth={channelWidth}
-              activityColour={_get(day, ['channelColours', channelIndex])}
+              activityColour={channelColour}
               channelIndex={channelIndex}
             />
           </div>
@@ -105,7 +111,7 @@ const TimelineSection = props => {
     }
   }
 
-  const calculateDayLabel = (day, index) => {
+  const calculateDayLabel = (day: TimelinePayloadParsed, index: number) => {
     if (day.month === currentMonth && day.year === currentYear) {
       if (index === 0) {
         return 'Today'
@@ -114,7 +120,7 @@ const TimelineSection = props => {
     } else {
       const totalDays = getDaysInMonth(Number(day.year), Number(day.month))
       if (totalDays === Number(day.day)) {
-        let monthLength = 'short'
+        let monthLength: 'short' | 'long' = 'short'
         if (window.screen.width >= 768) {
           monthLength = 'long'
         }
@@ -125,7 +131,7 @@ const TimelineSection = props => {
   }
 
   const renderLabels = () => {
-    return props.timelineDays.map((d, i) => {
+    return timelineDays.map((d, i) => {
       const dayLabel = calculateDayLabel(d, i)
       return (
         <div
@@ -145,7 +151,7 @@ const TimelineSection = props => {
 
   const renderChannels = () => {
     let dayCounter = 1
-    return props.timelineDays.map(d => {
+    return timelineDays.map(d => {
       let highlight = false
       if (dayCounter % 7 === 0) {
         highlight = true
@@ -184,14 +190,6 @@ const TimelineSection = props => {
       </div>
     </StyledTimelineSection>
   )
-}
-
-TimelineSection.defaultProps = {
-  timelineDays: [],
-}
-
-TimelineSection.propTypes = {
-  timelineDays: PropTypes.array,
 }
 
 export default TimelineSection

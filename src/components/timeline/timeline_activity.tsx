@@ -211,7 +211,7 @@ const TimelineActivity: React.FC<TimelineActivityProps> = ({
   const [tooltipY, setTooltipY] = useState(0)
   const [displayActivityModal, setDisplayActivityModal] = useState(false)
 
-  const timelineActivityRef = useRef(null)
+  const timelineActivityRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
     if (displayActivityModal) {
@@ -226,13 +226,12 @@ const TimelineActivity: React.FC<TimelineActivityProps> = ({
 
   const newEndAt =
     endAt === null ? `${currentYear}-${currentMonth}-${currentDay}` : endAt
-  const daysTotal = Math.ceil(
-    DateTime.fromISO(newEndAt)
-      .diff(DateTime.fromISO(startAt), 'days')
-      .toObject().days,
-  )
+  const daysTotal = DateTime.fromISO(newEndAt)
+    .diff(DateTime.fromISO(startAt), 'days')
+    .toObject().days
+  const daysTotalRounded = daysTotal ? Math.ceil(daysTotal) : 0
 
-  const handleClickActivity = e => {
+  const handleClickActivity = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault()
     if (window.screen.width < 768) {
       setDisplayActivityModal(true)
@@ -252,7 +251,10 @@ const TimelineActivity: React.FC<TimelineActivityProps> = ({
     setActivityHover(false)
   }
 
-  const handleMouseMove = e => {
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!timelineActivityRef.current) {
+      return null
+    }
     const bounding = timelineActivityRef.current.getBoundingClientRect()
     const x = e.clientX - bounding.left
     const y = e.clientY - bounding.top
@@ -260,13 +262,15 @@ const TimelineActivity: React.FC<TimelineActivityProps> = ({
     setTooltipY(y)
   }
 
-  const handleClickActivityModal = e => {
-    if ([...e.target.classList].includes('activity-modal')) {
-      setDisplayActivityModal(false)
+  const handleClickActivityModal = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target instanceof HTMLElement) {
+      if ([...e.target.classList].includes('activity-modal')) {
+        setDisplayActivityModal(false)
+      }
     }
   }
 
-  const handleClickCloseIcon = e => {
+  const handleClickCloseIcon = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault()
     setDisplayActivityModal(false)
   }
@@ -343,7 +347,7 @@ const TimelineActivity: React.FC<TimelineActivityProps> = ({
     <>
       <StyledTimelineActivity
         $channelWidth={channelWidth}
-        $activityHeight={daysTotal * dayHeight}
+        $activityHeight={daysTotalRounded * dayHeight}
         $activityColour={activityColour}
         $thumbnail={gameShow.thumbnail_url}
         $activityHover={activityHover}

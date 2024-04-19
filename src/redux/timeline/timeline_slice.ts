@@ -15,7 +15,7 @@ interface TimelinePayload {
   channels: (Activity | null)[]
 }
 
-interface TimelinePayloadParsed extends TimelinePayload {
+export interface TimelinePayloadParsed extends TimelinePayload {
   channelColours: (string | null)[]
 }
 
@@ -67,10 +67,14 @@ export const pagingLengthInMonths = 3
 
 export const loadTimeline = createAsyncThunk(
   'timeline/loadTimline',
-  async payload => {
-    const start = _get(payload, 'start')
-    const end = _get(payload, 'end')
-    const channels = _get(payload, 'channels', [])
+  async (payload: {
+    start: string
+    end: string
+    channels: (number | null)[]
+  }) => {
+    const start = payload.start
+    const end = payload.end
+    const channels = payload.channels
     const response = await axios
       .get(
         /* eslint-disable-next-line no-undef */
@@ -83,11 +87,11 @@ export const loadTimeline = createAsyncThunk(
 
 export const loadActivity = createAsyncThunk(
   'timeline/loadActivity',
-  async payload => {
+  async (activityId: number) => {
     const response = await axios
       .get(
         /* eslint-disable-next-line no-undef */
-        `${import.meta.env.VITE_API_DOMAIN}/api/activities/${payload}`,
+        `${import.meta.env.VITE_API_DOMAIN}/api/activities/${activityId}`,
       )
       .then(apiResponse => apiResponse)
     return response.data

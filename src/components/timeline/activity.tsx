@@ -164,7 +164,10 @@ const Activity: React.FC<ActivityProps> = ({
         {ratingArray.map((r, i) => {
           if (r === true) {
             return (
-              <div className="rating-item" key={`rating-${i}`}>
+              <div
+                className="rating-item rating-item--filled"
+                key={`rating-${i}`}
+              >
                 {renderRatingFilled()}
               </div>
             )
@@ -179,45 +182,50 @@ const Activity: React.FC<ActivityProps> = ({
     )
   }
 
-  const renderActiveGameShow = () => (
-    <div className="game-show">
-      <div className="game-show__image">
-        <img src={gameShow.image_url} />
-      </div>
-      <div className="game-show__name">{`${gameShow.name} (${platform.name})`}</div>
-      {endAt && (
-        <div className="game-show__row game-show__row--primary">
-          <div className="game-show__row__label">Rating:</div>
-          <div className="game-show__row__value">{renderRating()}</div>
+  const renderActiveGameShow = () => {
+    const name = `${gameShow.name} (${platform.name})`
+    return (
+      <div className="game-show">
+        <div className="game-show__image">
+          <img src={gameShow.image_url} alt={name} />
         </div>
-      )}
-      <div className="game-show__row">
-        <div className="game-show__row__label">Started:</div>
-        <div className="game-show__row__value">
-          {DateTime.fromISO(startAt).toLocaleString(DateTime.DATE_FULL)}
+        <h3 className="game-show__name">{name}</h3>
+        {endAt && (
+          <div className="game-show__row game-show__row--primary">
+            <div className="game-show__row__label">Rating:</div>
+            <div className="game-show__row__value">{renderRating()}</div>
+          </div>
+        )}
+        <div className="game-show__row">
+          <div className="game-show__row__label">Started:</div>
+          <div className="game-show__row__value">
+            {DateTime.fromISO(startAt).toLocaleString(DateTime.DATE_FULL)}
+          </div>
+        </div>
+        {renderEndAt()}
+        <div className="game-show__row">
+          <div className="game-show__row__label">
+            {activityType === ActivityType.SHOW
+              ? 'Series completed'
+              : 'Game completed'}
+            :
+          </div>
+          <div className="game-show__row__value">
+            {completed ? 'Yes' : 'No'}
+          </div>
+        </div>
+        <div className="game-show__link">
+          <a
+            href={`https://www.imdb.com/title/${gameShow.imdb_id}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            View on IMDB
+          </a>
         </div>
       </div>
-      {renderEndAt()}
-      <div className="game-show__row">
-        <div className="game-show__row__label">
-          {activityType === ActivityType.SHOW
-            ? 'Series completed'
-            : 'Game completed'}
-          :
-        </div>
-        <div className="game-show__row__value">{completed ? 'Yes' : 'No'}</div>
-      </div>
-      <div className="game-show__link">
-        <a
-          href={`https://www.imdb.com/title/${gameShow.imdb_id}`}
-          target="_blank"
-          rel="noreferrer"
-        >
-          View on IMDB
-        </a>
-      </div>
-    </div>
-  )
+    )
+  }
 
   const renderContent = () => {
     return renderActiveGameShow()

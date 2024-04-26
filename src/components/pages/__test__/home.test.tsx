@@ -92,7 +92,7 @@ describe('Home', () => {
     )
 
     expect(
-      await within(homeTitle).getByRole('heading', {
+      within(homeTitle).getByRole('heading', {
         hidden: true,
       }),
     ).toHaveTextContent(/Latest shows watched/i)
@@ -131,7 +131,7 @@ describe('Home', () => {
     )
 
     expect(
-      await within(homeTitle).getByRole('heading', {
+      within(homeTitle).getByRole('heading', {
         hidden: true,
       }),
     ).toHaveTextContent(/Latest games played/i)

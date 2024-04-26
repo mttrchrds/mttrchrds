@@ -32,24 +32,22 @@ export interface Platform {
 
 export type TimelinePlatform = Pick<Platform, 'id' | 'name'>
 
-export interface Activity {
+interface BaseActivity {
   id: number
   startAt: string
   endAt: string | null
   completed: boolean
-  gameShow: GameShow
-  platform: Platform
   activityType: ActivityType
 }
 
-export interface TimelineActivity {
-  id: number
-  startAt: string
-  endAt: string | null
-  completed: boolean
+export interface Activity extends BaseActivity {
+  gameShow: GameShow
+  platform: Platform
+}
+
+export interface TimelineActivity extends BaseActivity {
   gameShow: TimelineGameShow
   platform: TimelinePlatform
-  activityType: ActivityType
 }
 
 export interface ActivityRaw {

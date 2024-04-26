@@ -191,7 +191,10 @@ const Activity: React.FC<ActivityProps> = ({
         </div>
         <h3 className="game-show__name">{name}</h3>
         {endAt && (
-          <div className="game-show__row game-show__row--primary">
+          <div
+            className="game-show__row game-show__row--primary"
+            data-testid="activity-rating"
+          >
             <div className="game-show__row__label">Rating:</div>
             <div className="game-show__row__value">{renderRating()}</div>
           </div>

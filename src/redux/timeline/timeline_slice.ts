@@ -3,16 +3,16 @@ import axios from 'axios'
 import _get from 'lodash/get'
 
 import { getDaysInMonth, formatDateNumber } from '../../helpers/date_times'
-import { parseRawActivity } from '../../helpers/redux'
+import { parseRawActivity, parseRawTimlineActivity } from '../../helpers/redux'
 
-import { Activity } from '../../types/timeline'
+import { Activity, TimelineActivity } from '../../types/timeline'
 
 interface TimelinePayload {
   date: string
   day: string
   month: string
   year: string
-  channels: (Activity | null)[]
+  channels: (TimelineActivity | null)[]
 }
 
 export interface TimelinePayloadParsed extends TimelinePayload {
@@ -146,7 +146,7 @@ const generateActiveColourIndex = (currentIndex: number) => {
   }
 }
 
-const parseApiPayload = (
+const parseTimelinePayload = (
   payload: TimelinePayload[],
   state: Timeline,
 ): {
@@ -177,7 +177,7 @@ const parseApiPayload = (
           }
           tmpChannelColours.push(activityColours[activeColourIndex])
           renderedActivityIds.push(_get(c, 'id'))
-          return parseRawActivity(c)
+          return parseRawTimlineActivity(c)
         }
       }
     })
@@ -231,7 +231,7 @@ export const timelineSlice = createSlice({
         if (payload.length > 0) {
           state.pagingChannels = buildNextChannelsList(payload)
           const { parsedPayload, renderedActivityIds, activeColourIndex } =
-            parseApiPayload(payload, state)
+            parseTimelinePayload(payload, state)
           state.activeColourIndex = activeColourIndex
           state.renderedActivityIds = renderedActivityIds
           state.sections = [...state.sections, parsedPayload]

@@ -24,9 +24,18 @@ export const handlers = [
           image_url: 'https://mttrchrdsapi.s3.amazonaws.com/shows/shogun.jpg',
           thumbnail_url:
             'https://mttrchrdsapi.s3.amazonaws.com/shows/thumbnails/shogun_thumb.jpg',
+          creator: {
+            id: 332,
+            name: 'FXP',
+            image_url:
+              'https://mttrchrdsapi.s3.amazonaws.com/shows/creators/fxp.png',
+          },
         },
         show_platform: {
+          id: 97,
           name: 'Disney+',
+          image_url:
+            'https://mttrchrdsapi.s3.amazonaws.com/shows/platforms/disney_plus.png',
         },
         game_activity: null,
         game_platform: null,
@@ -52,9 +61,18 @@ export const handlers = [
             'https://mttrchrdsapi.s3.amazonaws.com/games/elden_ring.webp',
           thumbnail_url:
             'https://mttrchrdsapi.s3.amazonaws.com/games/thumbnails/elden_ring_thumb.webp',
+          creator: {
+            id: 44,
+            name: 'From Software',
+            image_url:
+              'https://mttrchrdsapi.s3.amazonaws.com/games/creators/from_software.png',
+          },
         },
         game_platform: {
+          id: 37,
           name: 'PS5',
+          image_url:
+            'https://mttrchrdsapi.s3.amazonaws.com/games/platforms/ps5.png',
         },
       },
     ])

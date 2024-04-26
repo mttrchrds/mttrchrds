@@ -4,7 +4,6 @@ import { DateTime } from 'luxon'
 import _get from 'lodash/get'
 import { loadActivity } from '../../redux/timeline/timeline_slice'
 
-import { GameShow, Platform } from '../../types/timeline'
 import { useAppSelector, useAppDispatch } from '../../hooks/hooks'
 import { ActivityType } from '../../helpers/enums'
 
@@ -164,7 +163,7 @@ const tooltipWidth = 250
 interface TimelineActivityGameShow {
   id: number
   name: string
-  thumbnail_url: string
+  thumbnailUrl: string
 }
 
 interface TimelineActivityPlatform {
@@ -349,7 +348,7 @@ const TimelineActivity: React.FC<TimelineActivityProps> = ({
         $channelWidth={channelWidth}
         $activityHeight={daysTotalRounded * dayHeight}
         $activityColour={activityColour}
-        $thumbnail={gameShow.thumbnail_url}
+        $thumbnail={gameShow.thumbnailUrl}
         $activityHover={activityHover}
         onClick={handleClickActivity}
         onMouseEnter={handleMouseEnterActivity}

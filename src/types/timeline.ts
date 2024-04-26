@@ -3,7 +3,7 @@ import { ActivityType } from '../helpers/enums'
 export interface Creator {
   id: number
   name: string
-  image_url: string
+  imageUrl: string
 }
 
 export interface Category {
@@ -14,19 +14,23 @@ export interface Category {
 export interface GameShow {
   id: number
   name: string
-  imdb_id: string
-  image_url: string
-  thumbnail_url: string
+  imdbId: string
+  imageUrl: string
+  thumbnailUrl: string
   rating: number
   creator: Creator
   categories: Category[]
 }
 
+export type TimelineGameShow = Pick<GameShow, 'id' | 'name' | 'thumbnailUrl'>
+
 export interface Platform {
   id: number
   name: string
-  image_url: string
+  imageUrl: string
 }
+
+export type TimelinePlatform = Pick<Platform, 'id' | 'name'>
 
 export interface Activity {
   id: number
@@ -35,6 +39,16 @@ export interface Activity {
   completed: boolean
   gameShow: GameShow
   platform: Platform
+  activityType: ActivityType
+}
+
+export interface TimelineActivity {
+  id: number
+  startAt: string
+  endAt: string | null
+  completed: boolean
+  gameShow: TimelineGameShow
+  platform: TimelinePlatform
   activityType: ActivityType
 }
 

@@ -153,7 +153,7 @@ const HomeActivities: React.FC<HomeActivitiesProps> = ({
     return (
       <div className="activity" key={activity.id}>
         <div className="activity__image">
-          <img src={activity.gameShow.thumbnail_url} />
+          <img src={activity.gameShow.thumbnailUrl} />
         </div>
         <div className="activity__details">
           <div className="activity__details">
@@ -188,7 +188,7 @@ const HomeActivities: React.FC<HomeActivitiesProps> = ({
             )}
             <div className="activity__details__link">
               <a
-                href={`https://www.imdb.com/title/${activity.gameShow.imdb_id}`}
+                href={`https://www.imdb.com/title/${activity.gameShow.imdbId}`}
                 target="_blank"
                 rel="noreferrer"
               >

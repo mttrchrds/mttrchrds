@@ -187,7 +187,7 @@ const Activity: React.FC<ActivityProps> = ({
     return (
       <div className="game-show">
         <div className="game-show__image">
-          <img src={gameShow.image_url} alt={name} />
+          <img src={gameShow.imageUrl} alt={name} />
         </div>
         <h3 className="game-show__name">{name}</h3>
         {endAt && (
@@ -216,7 +216,7 @@ const Activity: React.FC<ActivityProps> = ({
         </div>
         <div className="game-show__link">
           <a
-            href={`https://www.imdb.com/title/${gameShow.imdb_id}`}
+            href={`https://www.imdb.com/title/${gameShow.imdbId}`}
             target="_blank"
             rel="noreferrer"
           >

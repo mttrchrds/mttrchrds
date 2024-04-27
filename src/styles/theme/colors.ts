@@ -26,4 +26,10 @@ export default {
     other: '#077444',
     other2: '#6a6a6a',
   },
+  stats: {
+    background: '#ffffff',
+    text0: '#1e2639',
+    text: '#c7c7c7',
+    text1: '#f5f5f5',
+  },
 }

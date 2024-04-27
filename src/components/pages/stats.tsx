@@ -1,15 +1,8 @@
 import { useEffect } from 'react'
 import styled from 'styled-components'
 import _get from 'lodash/get'
-// import {
-//   loadTimeline,
-//   pagingLengthInMonths,
-//   updateCurrentDay,
-//   updateCurrentMonth,
-//   updateCurrentYear,
-//   TimelinePayloadParsed,
-// } from '../../redux/timeline/timeline_slice'
-// import { useAppDispatch, useAppSelector } from '../../hooks/hooks'
+import { loadGameDays } from '../../redux/stats/stats_slice'
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks'
 
 import { mqMin } from '../../helpers/media_queries'
 
@@ -29,17 +22,17 @@ const StyledStats = styled.div`
 `
 
 const Stats = () => {
-  // const dispatch = useAppDispatch()
-  // const activity = useAppSelector(state => state.timeline.activity)
-  // const activityLoading = useAppSelector(
-  //   state => state.timeline.activityLoading,
-  // )
+  const dispatch = useAppDispatch()
+  const gameDays = useAppSelector(state => state.stats.gameDays)
+  const gameDaysLoading = useAppSelector(state => state.stats.gameDaysLoading)
 
   useEffect(() => {
-    // if (timelineSections.length === 0) {
-    //   dispatch(loadTimeline({ start: queryStart, end: queryEnd, channels: [] }))
-    // }
+    if (gameDays.length === 0) {
+      dispatch(loadGameDays())
+    }
   }, [])
+
+  console.log({ gameDays })
 
   return (
     <Layout bodyColour={theme.colors.stats.background} navigationTitle="Stats">

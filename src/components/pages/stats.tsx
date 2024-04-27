@@ -1,19 +1,23 @@
-import { useEffect } from 'react'
 import styled from 'styled-components'
 import _get from 'lodash/get'
-import { loadGameDays } from '../../redux/stats/stats_slice'
+import { updateActiveTab } from '../../redux/stats/stats_slice'
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks'
 
 import { mqMin } from '../../helpers/media_queries'
 
+import { StatsTab } from '../../helpers/enums'
+
 import Layout from '../layout/layout'
 import Container from '../layout/container'
-import Spinner from '../spinner'
+import StatsTabs from '../stats/stats_tabs'
+import StatsLayout from '../stats/stats_layout'
 
 import theme from '../../styles/theme'
 
 const StyledStats = styled.div`
   .stats-container {
+    background-color: ${props => props.theme.colors.stats.primary};
+    height: 100vh;
   }
   @media ${props => mqMin(props.theme.breakPoints.md)} {
     .timeline-container {
@@ -23,22 +27,26 @@ const StyledStats = styled.div`
 
 const Stats = () => {
   const dispatch = useAppDispatch()
-  const gameDays = useAppSelector(state => state.stats.gameDays)
-  const gameDaysLoading = useAppSelector(state => state.stats.gameDaysLoading)
+  const activeTab = useAppSelector(state => state.stats.activeTab)
 
-  useEffect(() => {
-    if (gameDays.length === 0) {
-      dispatch(loadGameDays())
-    }
-  }, [])
-
-  console.log({ gameDays })
+  const handleClickTab = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    tab: StatsTab,
+  ) => {
+    e.preventDefault()
+    dispatch(updateActiveTab(tab))
+  }
 
   return (
     <Layout bodyColour={theme.colors.stats.background} navigationTitle="Stats">
       <StyledStats>
         <Container>
-          <div className="timeline-container"></div>
+          <StatsLayout
+            activeTab={activeTab}
+            tabs={
+              <StatsTabs activeTab={activeTab} clickHandler={handleClickTab} />
+            }
+          />
         </Container>
       </StyledStats>
     </Layout>

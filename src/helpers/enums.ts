@@ -10,3 +10,12 @@ export enum ActivityType {
   GAME = 'GAME',
   SHOW = 'SHOW',
 }
+
+export enum StatsTab {
+  GAME = 'GAME',
+  SHOW = 'SHOW',
+}
+
+export enum StatsGameTab {
+  GAME_DAYS = 'GAME_DAYS',
+}

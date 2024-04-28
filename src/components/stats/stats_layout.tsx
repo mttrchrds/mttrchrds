@@ -11,11 +11,17 @@ const StyledStatsLayout = styled.div`
   .stats-tabs-container {
     display: flex;
     padding-left: 200px;
+    background-color: ${props => props.theme.colors.stats.background};
+    margin-top: 10px;
   }
   .stats-layout-container {
     display: flex;
     &__nav {
       width: 200px;
+    }
+    &__content {
+      flex-grow: 1;
+      background-color: ${props => props.theme.colors.stats.contentBackground};
     }
   }
 `
@@ -42,7 +48,9 @@ const StatsLayout: React.FC<StatsLayoutProps> = ({ activeTab, tabs }) => {
         <div className="stats-layout-container__nav">
           <StatsNavigation activeTab={activeTab} />
         </div>
-        {renderStatsContent()}
+        <div className="stats-layout-container__content">
+          {renderStatsContent()}
+        </div>
       </div>
     </StyledStatsLayout>
   )

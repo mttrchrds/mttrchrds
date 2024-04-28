@@ -16,7 +16,7 @@ import theme from '../../styles/theme'
 
 const StyledStats = styled.div`
   .stats-container {
-    background-color: ${props => props.theme.colors.stats.primary};
+    background-color: ${props => props.theme.colors.stats.contentBackground};
     height: 100vh;
   }
   @media ${props => mqMin(props.theme.breakPoints.md)} {
@@ -30,7 +30,7 @@ const Stats = () => {
   const activeTab = useAppSelector(state => state.stats.activeTab)
 
   const handleClickTab = (
-    e: React.MouseEvent<HTMLButtonElement>,
+    e: React.MouseEvent<HTMLAnchorElement>,
     tab: StatsTab,
   ) => {
     e.preventDefault()

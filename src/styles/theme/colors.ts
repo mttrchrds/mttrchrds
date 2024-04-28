@@ -28,13 +28,11 @@ export default {
   },
   stats: {
     background: '#e8e8e8',
-    text0: '#1e2639',
-    text: '#c7c7c7',
-    text1: '#f5f5f5',
     contentBackground: '#ffffff',
+    navigationBackground: '#d0d0d0',
+    text: '#565656',
     tabs: {
       inactiveBackground: '#d6d5d5',
-      text: '#565656',
       inactiveText: '#8f8f8f',
     },
   },

@@ -15,15 +15,16 @@ const StyledStatsTab = styled.a<StyledStatsTabProps>`
   &:link,
   &:visited,
   &:active {
-    color: ${props => props =>
+    color: ${props =>
       props.$active
-        ? props.theme.colors.stats.tabs.text
+        ? props.theme.colors.stats.text
         : props.theme.colors.stats.tabs.inactiveText};
     text-decoration: none;
   }
   &:hover {
     text-decoration: none;
   }
+  cursor: pointer;
   font-size: ${props => props.theme.typography.sizeLarger};
   font-weight: 400;
   padding: 16px;
@@ -48,14 +49,12 @@ const StatsTabs: React.FC<StatsTabsProps> = ({ activeTab, clickHandler }) => {
       <StyledStatsTab
         $active={activeTab === StatsTab.GAME ? true : false}
         onClick={e => clickHandler(e, StatsTab.GAME)}
-        href="#"
       >
         Games
       </StyledStatsTab>
       <StyledStatsTab
         $active={activeTab === StatsTab.SHOW ? true : false}
         onClick={e => clickHandler(e, StatsTab.SHOW)}
-        href="#"
       >
         Shows
       </StyledStatsTab>

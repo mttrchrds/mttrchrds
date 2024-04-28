@@ -15,7 +15,29 @@ interface StyledStatsNavigationItemProps {
   $active: boolean
 }
 
-const StyledStatsNavigationItem = styled.button<StyledStatsNavigationItemProps>``
+const StyledStatsNavigationItem = styled.a<StyledStatsNavigationItemProps>`
+  &:link,
+  &:visited,
+  &:active {
+    color: ${props => props.theme.colors.stats.text};
+    text-decoration: none;
+  }
+  &:hover {
+    text-decoration: none;
+  }
+  cursor: pointer;
+  padding: 10px;
+  border-top: 1px solid #8c8c8c;
+  font-weight: ${props => (props.$active ? 'bold' : 'regular')};
+  background-color: ${props =>
+    props.$active ? props.theme.colors.stats.contentBackground : 'transparent'};
+  &:first-child {
+    border-top: 0;
+  }
+  &:last-child {
+    border-bottom: 1px solid #8c8c8c;
+  }
+`
 
 interface StatsNavigationProps {
   activeTab: StatsTab

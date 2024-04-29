@@ -1,10 +1,11 @@
 import React, { ReactNode } from 'react'
 import styled from 'styled-components'
 
-import { StatsGameTab, StatsTab } from '../../helpers/enums'
+import { StatsTab } from '../../helpers/enums'
 
-import { updateActiveGameTab } from '../../redux/stats/stats_slice'
 import { useAppSelector, useAppDispatch } from '../../hooks/hooks'
+
+import { updateActiveTab } from '../../redux/stats/stats_slice'
 
 const StyledStatsNavigation = styled.nav`
   display: flex;
@@ -43,17 +44,17 @@ interface StatsNavigationProps {
   activeTab: StatsTab
 }
 
-const StatsNavigation: React.FC<StatsNavigationProps> = ({ activeTab }) => {
+const StatsNavigation = () => {
   const dispatch = useAppDispatch()
-  const activeGameTab = useAppSelector(state => state.stats.activeGameTab)
+  const activeTab = useAppSelector(state => state.stats.activeTab)
 
-  const renderGameNavigation = () => (
-    <>
+  return (
+    <StyledStatsNavigation>
       <StyledStatsNavigationItem
-        $active={activeGameTab === StatsGameTab.GAME_DAYS ? true : false}
+        $active={activeTab === StatsTab.GAME_DAYS ? true : false}
         onClick={e => {
           e.preventDefault()
-          dispatch(updateActiveGameTab(StatsGameTab.GAME_DAYS))
+          dispatch(updateActiveTab(StatsTab.GAME_DAYS))
         }}
       >
         Most played games
@@ -64,23 +65,8 @@ const StatsNavigation: React.FC<StatsNavigationProps> = ({ activeTab }) => {
       >
         Games chart 2
       </StyledStatsNavigationItem>
-    </>
+    </StyledStatsNavigation>
   )
-
-  const renderShowNavigation = () => (
-    <StyledStatsNavigationItem $active={false}>
-      Show chart 1
-    </StyledStatsNavigationItem>
-  )
-
-  const renderNavigation = () => {
-    if (activeTab === StatsTab.SHOW) {
-      return renderShowNavigation()
-    }
-    return renderGameNavigation()
-  }
-
-  return <StyledStatsNavigation>{renderNavigation()}</StyledStatsNavigation>
 }
 
 export default StatsNavigation

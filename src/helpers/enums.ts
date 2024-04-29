@@ -12,10 +12,5 @@ export enum ActivityType {
 }
 
 export enum StatsTab {
-  GAME = 'GAME',
-  SHOW = 'SHOW',
-}
-
-export enum StatsGameTab {
   GAME_DAYS = 'GAME_DAYS',
 }

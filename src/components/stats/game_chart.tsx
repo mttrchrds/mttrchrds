@@ -2,7 +2,7 @@ import React, { useEffect, ReactNode } from 'react'
 import styled from 'styled-components'
 import { useAppSelector, useAppDispatch } from '../../hooks/hooks'
 
-import { StatsGameTab } from '../../helpers/enums'
+import { StatsTab } from '../../helpers/enums'
 
 import { loadGameDays } from '../../redux/stats/stats_slice'
 
@@ -30,17 +30,17 @@ interface GameChartProps {}
 
 const GameChart: React.FC<GameChartProps> = () => {
   const dispatch = useAppDispatch()
-  const activeGameTab = useAppSelector(state => state.stats.activeGameTab)
+  const activeTab = useAppSelector(state => state.stats.activeTab)
   const chartLoading = useAppSelector(state => state.stats.chartLoading)
   const gameDays = useAppSelector(state => state.stats.gameDays)
 
   useEffect(() => {
-    if (activeGameTab === StatsGameTab.GAME_DAYS) {
+    if (activeTab === StatsTab.GAME_DAYS) {
       if (gameDays.length === 0) {
         dispatch(loadGameDays())
       }
     }
-  }, [activeGameTab])
+  }, [activeTab])
 
   const renderChart = (
     title: string,
@@ -62,7 +62,7 @@ const GameChart: React.FC<GameChartProps> = () => {
         </div>
       )
     }
-    // if (activeGameTab === StatsGameTab.GAME_DAYS) {
+    // if (activeTab === StatsTab.GAME_DAYS) {
     // }
     return renderChart(
       'Most played games',

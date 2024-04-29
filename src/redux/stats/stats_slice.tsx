@@ -3,20 +3,18 @@ import axios from 'axios'
 
 import { GameDay } from '../../types/stats'
 
-import { StatsGameTab, StatsTab } from '../../helpers/enums'
+import { StatsTab } from '../../helpers/enums'
 
 interface Stats {
   gameDays: GameDay[]
   chartLoading: boolean
   activeTab: StatsTab
-  activeGameTab: StatsGameTab
 }
 
 const initialState: Stats = {
   gameDays: [],
   chartLoading: false,
-  activeTab: StatsTab.GAME,
-  activeGameTab: StatsGameTab.GAME_DAYS,
+  activeTab: StatsTab.GAME_DAYS,
 }
 
 export const loadGameDays = createAsyncThunk('gameDays/load', async () => {
@@ -35,9 +33,6 @@ export const statsSlice = createSlice({
     updateActiveTab: (state, action) => {
       state.activeTab = action.payload
     },
-    updateActiveGameTab: (state, action) => {
-      state.activeGameTab = action.payload
-    },
   },
   initialState,
   extraReducers: builder => {
@@ -55,6 +50,6 @@ export const statsSlice = createSlice({
   },
 })
 
-export const { updateActiveTab, updateActiveGameTab } = statsSlice.actions
+export const { updateActiveTab } = statsSlice.actions
 
 export default statsSlice.reducer

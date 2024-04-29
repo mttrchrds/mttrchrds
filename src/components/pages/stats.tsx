@@ -1,15 +1,11 @@
-import { updateActiveTab } from '../../redux/stats/stats_slice'
-import { useAppDispatch, useAppSelector } from '../../hooks/hooks'
 import styled from 'styled-components'
-
-import { StatsTab } from '../../helpers/enums'
 
 import { mqMin } from '../../helpers/media_queries'
 
 import Layout from '../layout/layout'
 import StatsNavigation from '../stats/stats_navigation'
 import Container from '../layout/container'
-import GameChart from '../stats/game_chart'
+import Chart from '../stats/chart'
 
 import theme from '../../styles/theme'
 
@@ -47,17 +43,6 @@ const StyledStatsPage = styled.div`
 `
 
 const Stats = () => {
-  const dispatch = useAppDispatch()
-  const activeTab = useAppSelector(state => state.stats.activeTab)
-
-  const handleClickTab = (
-    e: React.MouseEvent<HTMLAnchorElement>,
-    tab: StatsTab,
-  ) => {
-    e.preventDefault()
-    dispatch(updateActiveTab(tab))
-  }
-
   return (
     <Layout bodyColour={theme.colors.stats.background} navigationTitle="Stats">
       <StyledStatsPage>
@@ -67,7 +52,7 @@ const Stats = () => {
               <StatsNavigation />
             </div>
             <div className="stats-layout-container__content">
-              <GameChart />
+              <Chart />
             </div>
           </div>
         </Container>

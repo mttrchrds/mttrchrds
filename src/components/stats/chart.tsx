@@ -9,7 +9,7 @@ import { loadGameDays } from '../../redux/stats/stats_slice'
 import GameDays from './charts/game_days'
 import Spinner from '../spinner'
 
-const StyledGameChart = styled.section`
+const StyledChart = styled.section`
   .chart-loading-container {
     width: 100%;
     height: 100%;
@@ -26,9 +26,9 @@ const StyledGameChart = styled.section`
   }
 `
 
-interface GameChartProps {}
+interface ChartProps {}
 
-const GameChart: React.FC<GameChartProps> = () => {
+const Chart: React.FC<ChartProps> = () => {
   const dispatch = useAppDispatch()
   const activeTab = useAppSelector(state => state.stats.activeTab)
   const chartLoading = useAppSelector(state => state.stats.chartLoading)
@@ -71,7 +71,7 @@ const GameChart: React.FC<GameChartProps> = () => {
     )
   }
 
-  return <StyledGameChart>{renderContent()}</StyledGameChart>
+  return <StyledChart>{renderContent()}</StyledChart>
 }
 
-export default GameChart
+export default Chart

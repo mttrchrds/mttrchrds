@@ -12,18 +12,10 @@ interface StyledStatsTabProps {
 }
 
 const StyledStatsTab = styled.a<StyledStatsTabProps>`
-  &:link,
-  &:visited,
-  &:active {
-    color: ${props =>
-      props.$active
-        ? props.theme.colors.stats.text
-        : props.theme.colors.stats.tabs.inactiveText};
-    text-decoration: none;
-  }
-  &:hover {
-    text-decoration: none;
-  }
+  color: ${props =>
+    props.$active
+      ? props.theme.colors.stats.text
+      : props.theme.colors.stats.tabs.inactiveText};
   cursor: pointer;
   font-size: ${props => props.theme.typography.sizeLarger};
   font-weight: 400;
@@ -36,6 +28,14 @@ const StyledStatsTab = styled.a<StyledStatsTabProps>`
   border-top-right-radius: 8px;
   border-top-left-radius: 8px;
   line-height: 1;
+  &:link,
+  &:visited,
+  &:active {
+    text-decoration: none;
+  }
+  &:hover {
+    text-decoration: none;
+  }
 `
 
 interface StatsTabsProps {

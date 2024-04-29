@@ -61,6 +61,7 @@ const activityColours = [
   '#dc3839',
   '#ee6579',
   '#9d60d1',
+  '#50aa4f',
 ]
 
 export const pagingLengthInMonths = 3

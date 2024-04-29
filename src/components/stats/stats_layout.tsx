@@ -3,12 +3,14 @@ import styled from 'styled-components'
 
 import { StatsTab } from '../../helpers/enums'
 
+import { mqMin } from '../../helpers/media_queries'
+
 import StatsNavigation from './stats_navigation'
 import GameChart from './game_chart'
 import ShowChart from './show_chart'
 import Container from '../layout/container'
 
-const navWidth = '220px'
+const navWidth = '240px'
 
 const StyledStatsLayout = styled.div`
   display: flex;
@@ -23,9 +25,9 @@ const StyledStatsLayout = styled.div`
   .stats-layout-container {
     display: flex;
     flex-grow: 1;
-    background-color: green;
+    flex-direction: column;
     &__nav {
-      width: ${navWidth};
+      width: 100%;
       background-color: ${props =>
         props.theme.colors.stats.navigationBackground};
     }
@@ -33,6 +35,16 @@ const StyledStatsLayout = styled.div`
       flex-grow: 1;
       padding: 20px;
       background-color: ${props => props.theme.colors.stats.contentBackground};
+    }
+  }
+  @media ${props => mqMin(props.theme.breakPoints.md)} {
+    .stats-layout-container {
+      margin-top: 20px;
+      flex-direction: row;
+      &__nav {
+        margin-top: 36px;
+        width: ${props => navWidth};
+      }
     }
   }
 `
@@ -55,7 +67,7 @@ const StatsLayout: React.FC<StatsLayoutProps> = ({ activeTab, tabs }) => {
   return (
     <StyledStatsLayout>
       <Container stretch={true}>
-        <div className="stats-tabs-container">{tabs}</div>
+        {/* <div className="stats-tabs-container">{tabs}</div> */}
         <div className="stats-layout-container">
           <div className="stats-layout-container__nav">
             <StatsNavigation activeTab={activeTab} />

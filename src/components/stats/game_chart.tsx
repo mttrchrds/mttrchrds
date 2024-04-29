@@ -17,6 +17,13 @@ const StyledGameChart = styled.section`
     justify-content: center;
     align-items: center;
   }
+  .chart-title {
+    margin-top: 0;
+    margin-bottom: 20px;
+  }
+  .chart-subtitle {
+    margin-bottom: 0;
+  }
 `
 
 interface GameChartProps {}
@@ -35,7 +42,19 @@ const GameChart: React.FC<GameChartProps> = () => {
     }
   }, [activeGameTab])
 
-  const renderChart = (): ReactNode => {
+  const renderChart = (
+    title: string,
+    subtitle: string,
+    chart: ReactNode,
+  ): ReactNode => (
+    <>
+      <h1 className="chart-title">{title}</h1>
+      <h3 className="chart-subtitle">{subtitle}</h3>
+      {chart}
+    </>
+  )
+
+  const renderContent = (): ReactNode => {
     if (chartLoading) {
       return (
         <div className="chart-loading-container">
@@ -43,13 +62,16 @@ const GameChart: React.FC<GameChartProps> = () => {
         </div>
       )
     }
-    if (activeGameTab === StatsGameTab.GAME_DAYS) {
-      return <GameDays data={gameDays} />
-    }
-    return <GameDays data={gameDays} />
+    // if (activeGameTab === StatsGameTab.GAME_DAYS) {
+    // }
+    return renderChart(
+      'Most played games',
+      'My top 10 games based on the total number of recorded days being my active game',
+      <GameDays data={gameDays} />,
+    )
   }
 
-  return <StyledGameChart>{renderChart()}</StyledGameChart>
+  return <StyledGameChart>{renderContent()}</StyledGameChart>
 }
 
 export default GameChart

@@ -23,7 +23,7 @@ export const loadGameDays = createAsyncThunk('gameDays/load', async () => {
   const response = await axios
     .get(
       /* eslint-disable-next-line no-undef */
-      `${import.meta.env.VITE_API_DOMAIN}/api/stats-game-days/?limit=20`,
+      `${import.meta.env.VITE_API_DOMAIN}/api/stats-game-days`,
     )
     .then(apiResponse => apiResponse)
   return response.data

@@ -29,11 +29,8 @@ export default {
   stats: {
     background: '#e8e8e8',
     contentBackground: '#ffffff',
-    navigationBackground: '#d0d0d0',
+    navigationBackground: '#e0dcdc',
     text: '#565656',
-    tabs: {
-      inactiveBackground: '#d6d5d5',
-      inactiveText: '#8f8f8f',
-    },
+    border: '#bdbcbc',
   },
 }

@@ -26,7 +26,7 @@ const StyledStatsPage = styled.div`
     }
     &__content {
       flex-grow: 1;
-      padding: 20px;
+      padding: 20px 15px;
       background-color: ${props => props.theme.colors.stats.contentBackground};
     }
   }

@@ -60,10 +60,13 @@ const StatsNavigation = () => {
           Most played games
         </StatsNavigationItem>
         <StatsNavigationItem
-          active={false}
-          clickHandler={e => console.log('coming soon', e)}
+          active={activeTab === StatsTab.SHOW_PLATFORMS_YEARS ? true : false}
+          clickHandler={e => {
+            e.preventDefault()
+            dispatch(updateActiveTab(StatsTab.SHOW_PLATFORMS_YEARS))
+          }}
         >
-          Games chart 2
+          TV show platform popularity
         </StatsNavigationItem>
       </div>
     </StyledStatsNavigation>

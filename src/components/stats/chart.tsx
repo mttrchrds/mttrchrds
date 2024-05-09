@@ -4,9 +4,13 @@ import { useAppSelector, useAppDispatch } from '../../hooks/hooks'
 
 import { StatsTab } from '../../helpers/enums'
 
-import { loadGameDays } from '../../redux/stats/stats_slice'
+import {
+  loadGameDays,
+  loadShowPlatformsYears,
+} from '../../redux/stats/stats_slice'
 
 import GameDays from './charts/game_days'
+import ShowPlatformsYears from './charts/show_platforms_years'
 import Spinner from '../spinner'
 
 const StyledChart = styled.section`
@@ -33,11 +37,19 @@ const Chart: React.FC<ChartProps> = () => {
   const activeTab = useAppSelector(state => state.stats.activeTab)
   const chartLoading = useAppSelector(state => state.stats.chartLoading)
   const gameDays = useAppSelector(state => state.stats.gameDays)
+  const showPlatformsYears = useAppSelector(
+    state => state.stats.showPlatformsYears,
+  )
 
   useEffect(() => {
     if (activeTab === StatsTab.GAME_DAYS) {
       if (gameDays.length === 0) {
         dispatch(loadGameDays())
+      }
+    }
+    if (activeTab === StatsTab.SHOW_PLATFORMS_YEARS) {
+      if (showPlatformsYears.data.length === 0) {
+        dispatch(loadShowPlatformsYears())
       }
     }
   }, [activeTab])
@@ -62,13 +74,20 @@ const Chart: React.FC<ChartProps> = () => {
         </div>
       )
     }
-    // if (activeTab === StatsTab.GAME_DAYS) {
-    // }
-    return renderChart(
-      'Most played games',
-      'My top 10 games based on the total number of recorded days being my active game',
-      <GameDays data={gameDays} />,
-    )
+    if (activeTab === StatsTab.GAME_DAYS) {
+      return renderChart(
+        'Most played games',
+        'My top 10 games based on the total number of recorded days being my active game',
+        <GameDays data={gameDays} />,
+      )
+    }
+    if (activeTab === StatsTab.SHOW_PLATFORMS_YEARS) {
+      return renderChart(
+        'TV show platform popularity',
+        'The number of TV shows watched on each TV platform each year',
+        <ShowPlatformsYears payload={showPlatformsYears} />,
+      )
+    }
   }
 
   return <StyledChart>{renderContent()}</StyledChart>

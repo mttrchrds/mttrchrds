@@ -46,7 +46,7 @@ const StatsNavigationItem: React.FC<StatsNavigationItemProps> = ({
   children,
 }) => {
   return (
-    <StyledStatsNavigationItem $active={active} onClick={e => clickHandler}>
+    <StyledStatsNavigationItem $active={active} onClick={clickHandler}>
       {children}
     </StyledStatsNavigationItem>
   )

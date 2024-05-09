@@ -3,3 +3,19 @@ export interface GameDay {
   name: string
   total: number
 }
+
+export interface ShowPlatformsYearsDataYear {
+  name: string
+  total: number
+}
+
+export interface ShowPlatformsYearsData {
+  platform: string
+  years: ShowPlatformsYearsDataYear[]
+}
+
+export interface ShowPlatformsYears {
+  years: string[]
+  highest: number
+  data: ShowPlatformsYearsData[]
+}

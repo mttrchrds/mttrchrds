@@ -6,8 +6,9 @@ import Home from './components/pages/home'
 import Error from './components/pages/error'
 import HomeLoading from './components/home/home_loading'
 const Timeline = lazy(() => import('./components/pages/timeline'))
+const Stats = lazy(() => import('./components/pages/stats'))
 
-const StyledTimelineLoading = styled.div`
+const StyledLoading = styled.div`
   height: calc(100vh - 80px);
   width: 100%;
   display: flex;
@@ -15,10 +16,10 @@ const StyledTimelineLoading = styled.div`
   justify-content: center;
 `
 
-const renderTimelineLoading = () => (
-  <StyledTimelineLoading>
+const renderHomeLoading = () => (
+  <StyledLoading>
     <HomeLoading />
-  </StyledTimelineLoading>
+  </StyledLoading>
 )
 
 export default createBrowserRouter([
@@ -30,8 +31,17 @@ export default createBrowserRouter([
   {
     path: '/timeline',
     element: (
-      <Suspense fallback={renderTimelineLoading()}>
+      <Suspense fallback={renderHomeLoading()}>
         <Timeline />
+      </Suspense>
+    ),
+    errorElement: <Error />,
+  },
+  {
+    path: '/stats',
+    element: (
+      <Suspense fallback={renderHomeLoading()}>
+        <Stats />
       </Suspense>
     ),
     errorElement: <Error />,

@@ -3,7 +3,11 @@ import styled from 'styled-components'
 
 import { mqMin } from '../../helpers/media_queries'
 
-const StyledContainer = styled.div`
+interface StyledContainerProps {
+  $stretch: boolean
+}
+
+const StyledContainer = styled.div<StyledContainerProps>`
   width: 100%;
   margin: 0 auto;
   @media ${props => mqMin(props.theme.breakPoints.sm)} {
@@ -21,14 +25,18 @@ const StyledContainer = styled.div`
   @media ${props => mqMin(props.theme.breakPoints.xxl)} {
     width: 1320px;
   }
+  display: ${props => (props.$stretch ? 'flex' : 'block')};
+  flex-grow: ${props => (props.$stretch ? 1 : 0)};
+  flex-direction: column;
 `
 
 interface ContainerProps {
   children: ReactNode
+  stretch?: boolean
 }
 
-const Container: React.FC<ContainerProps> = ({ children }) => {
-  return <StyledContainer>{children}</StyledContainer>
+const Container: React.FC<ContainerProps> = ({ children, stretch = false }) => {
+  return <StyledContainer $stretch={stretch}>{children}</StyledContainer>
 }
 
 export default Container

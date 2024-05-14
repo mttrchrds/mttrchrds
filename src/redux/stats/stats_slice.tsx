@@ -1,11 +1,12 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
 
-import { GameDay, ShowPlatformsYears } from '../../types/stats'
+import { GameDay, ShowPlatformsYears, GameCategory } from '../../types/stats'
 
 import { StatsTab } from '../../helpers/enums'
 
 interface Stats {
+  gameCategories: GameCategory[]
   showPlatformsYears: ShowPlatformsYears
   gameDays: GameDay[]
   chartLoading: boolean
@@ -13,6 +14,7 @@ interface Stats {
 }
 
 const initialState: Stats = {
+  gameCategories: [],
   showPlatformsYears: {
     years: [],
     highest: 0,
@@ -22,6 +24,19 @@ const initialState: Stats = {
   chartLoading: false,
   activeTab: StatsTab.GAME_DAYS,
 }
+
+export const loadGameCategories = createAsyncThunk(
+  'gameCategories/load',
+  async () => {
+    const response = await axios
+      .get(
+        /* eslint-disable-next-line no-undef */
+        `${import.meta.env.VITE_API_DOMAIN}/api/stats-game-categories`,
+      )
+      .then(apiResponse => apiResponse)
+    return response.data
+  },
+)
 
 export const loadGameDays = createAsyncThunk('gameDays/load', async () => {
   const response = await axios
@@ -56,16 +71,27 @@ export const statsSlice = createSlice({
   initialState,
   extraReducers: builder => {
     builder
-      .addCase(loadGameDays.pending, state => {
+      .addCase(loadGameCategories.pending, state => {
         state.chartLoading = true
       })
-      .addCase(loadGameDays.rejected, (state, error) => {
-        console.log('error loading stats game days', error)
+      .addCase(loadGameCategories.rejected, (state, error) => {
+        console.log('error loading stats game categories', error)
       })
-      .addCase(loadGameDays.fulfilled, (state, action) => {
+      .addCase(loadGameCategories.fulfilled, (state, action) => {
         state.chartLoading = false
-        state.gameDays = action.payload
+        state.gameCategories = action.payload
       }),
+      builder
+        .addCase(loadGameDays.pending, state => {
+          state.chartLoading = true
+        })
+        .addCase(loadGameDays.rejected, (state, error) => {
+          console.log('error loading stats game days', error)
+        })
+        .addCase(loadGameDays.fulfilled, (state, action) => {
+          state.chartLoading = false
+          state.gameDays = action.payload
+        }),
       builder
         .addCase(loadShowPlatformsYears.pending, state => {
           state.chartLoading = true

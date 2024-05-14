@@ -19,3 +19,8 @@ export interface ShowPlatformsYears {
   highest: number
   data: ShowPlatformsYearsData[]
 }
+export interface GameCategory {
+  id: number
+  name: string
+  total: number
+}

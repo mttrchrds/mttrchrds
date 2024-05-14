@@ -68,6 +68,15 @@ const StatsNavigation = () => {
         >
           Streaming platform popularity
         </StatsNavigationItem>
+        <StatsNavigationItem
+          active={activeTab === StatsTab.GAME_CATEGORIES ? true : false}
+          clickHandler={e => {
+            e.preventDefault()
+            dispatch(updateActiveTab(StatsTab.GAME_CATEGORIES))
+          }}
+        >
+          Gaming genres
+        </StatsNavigationItem>
       </div>
     </StyledStatsNavigation>
   )

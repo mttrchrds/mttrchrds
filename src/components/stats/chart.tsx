@@ -7,11 +7,13 @@ import { StatsTab } from '../../helpers/enums'
 import {
   loadGameDays,
   loadShowPlatformsYears,
+  loadGameCategories,
 } from '../../redux/stats/stats_slice'
 
 import GameDays from './charts/game_days'
 import ShowPlatformsYears from './charts/show_platforms_years'
 import Spinner from '../spinner'
+import GameCategories from './charts/game_categories'
 
 const StyledChart = styled.section`
   .chart-loading-container {
@@ -40,8 +42,14 @@ const Chart: React.FC<ChartProps> = () => {
   const showPlatformsYears = useAppSelector(
     state => state.stats.showPlatformsYears,
   )
+  const gameCategories = useAppSelector(state => state.stats.gameCategories)
 
   useEffect(() => {
+    if (activeTab === StatsTab.GAME_CATEGORIES) {
+      if (gameCategories.length === 0) {
+        dispatch(loadGameCategories())
+      }
+    }
     if (activeTab === StatsTab.GAME_DAYS) {
       if (gameDays.length === 0) {
         dispatch(loadGameDays())
@@ -86,6 +94,13 @@ const Chart: React.FC<ChartProps> = () => {
         'Streaming platform popularity',
         "The number of TV shows I've watched on each platform each year",
         <ShowPlatformsYears payload={showPlatformsYears} />,
+      )
+    }
+    if (activeTab === StatsTab.GAME_CATEGORIES) {
+      return renderChart(
+        'Gaming genres',
+        "Breakdown of genre of games I've played from 2021",
+        <GameCategories data={gameCategories} />,
       )
     }
   }

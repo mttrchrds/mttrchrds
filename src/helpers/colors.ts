@@ -13,9 +13,9 @@ export const demoColours = [
 
 export const demoColoursMixed = [
   '#dc3839',
-  '#fecc2f',
   '#40a4d8',
   '#50aa4f',
+  '#fecc2f',
   '#9d60d1',
   '#f8a227',
   '#33beb7',

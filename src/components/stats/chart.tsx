@@ -83,8 +83,8 @@ const Chart: React.FC<ChartProps> = () => {
     }
     if (activeTab === StatsTab.SHOW_PLATFORMS_YEARS) {
       return renderChart(
-        'TV show platform popularity',
-        'The number of TV shows watched on each TV platform each year',
+        'Streaming platform popularity',
+        "The number of TV shows I've watched on each platform each year",
         <ShowPlatformsYears payload={showPlatformsYears} />,
       )
     }

@@ -66,7 +66,7 @@ const StatsNavigation = () => {
             dispatch(updateActiveTab(StatsTab.SHOW_PLATFORMS_YEARS))
           }}
         >
-          TV show platform popularity
+          Streaming platform popularity
         </StatsNavigationItem>
       </div>
     </StyledStatsNavigation>

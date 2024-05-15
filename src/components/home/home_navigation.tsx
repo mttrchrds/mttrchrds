@@ -73,10 +73,10 @@ const HomeNavigation: React.FC<HomeNavigationProps> = ({
   const renderSideNavigation = () => {
     const homeSections = [
       HomeSection.NEWS,
-      HomeSection.SHOWS,
-      HomeSection.GAMES,
-      HomeSection.MUSIC,
       HomeSection.PROJECTS,
+      HomeSection.GAMES,
+      HomeSection.SHOWS,
+      // HomeSection.MUSIC,
     ]
     const activeSectionIndex = _findIndex(
       homeSections,

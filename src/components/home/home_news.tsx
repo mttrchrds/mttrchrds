@@ -79,6 +79,14 @@ const HomeNews = () => {
   return (
     <StyledHomeNews>
       {renderItem(
+        'Stats added',
+        '15 May 2024',
+        <p>
+          My latest project is now live. See{' '}
+          <Link to="/stats">data visualisation</Link> based on my activities
+        </p>,
+      )}
+      {renderItem(
         'Rated',
         '25 March 2024',
         <p>Games and shows now have a rating out of 10</p>,
@@ -87,7 +95,7 @@ const HomeNews = () => {
         'Timeline added',
         '15 March 2024',
         <p>
-          Latest project is now live. View an interactive{' '}
+          First project is now live. View an interactive{' '}
           <Link to="/timeline">timeline</Link> of all the shows I&apos;ve
           watched and games I&apos;ve played
         </p>,

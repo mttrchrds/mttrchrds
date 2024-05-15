@@ -80,6 +80,26 @@ const HomeProjects = () => {
   return (
     <StyledHomeProjects>
       {renderItem(
+        'Stats',
+        '15 May 2024',
+        <>
+          <p>
+            {`Keen to investigate React charting libraries, I created a data visualisation
+            project called Stats. Various endpoints were added to my API which deliver statistical data.`}
+          </p>
+          <p>
+            {`Stats consumes this data and utilises various chart components from the React library `}
+            <a target="blank" href="https://recharts.org">
+              Recharts
+            </a>
+            .
+          </p>
+          <p>
+            <Link to="/stats">View Stats</Link>
+          </p>
+        </>,
+      )}
+      {renderItem(
         'Timeline',
         '15 March 2024',
         <>

@@ -8,12 +8,14 @@ import {
   loadGameDays,
   loadShowPlatformsYears,
   loadGameCategories,
+  loadActivityMonths,
 } from '../../redux/stats/stats_slice'
 
 import GameDays from './charts/game_days'
 import ShowPlatformsYears from './charts/show_platforms_years'
 import Spinner from '../spinner'
 import GameCategories from './charts/game_categories'
+import ActivityMonths from './charts/activity_months'
 
 const StyledChart = styled.section`
   .chart-loading-container {
@@ -39,6 +41,7 @@ const Chart: React.FC<ChartProps> = () => {
   const activeTab = useAppSelector(state => state.stats.activeTab)
   const chartLoading = useAppSelector(state => state.stats.chartLoading)
   const gameDays = useAppSelector(state => state.stats.gameDays)
+  const activityMonths = useAppSelector(state => state.stats.activityMonths)
   const showPlatformsYears = useAppSelector(
     state => state.stats.showPlatformsYears,
   )
@@ -58,6 +61,11 @@ const Chart: React.FC<ChartProps> = () => {
     if (activeTab === StatsTab.SHOW_PLATFORMS_YEARS) {
       if (showPlatformsYears.data.length === 0) {
         dispatch(loadShowPlatformsYears())
+      }
+    }
+    if (activeTab === StatsTab.ACTIVITY_MONTHS) {
+      if (activityMonths.data.length === 0) {
+        dispatch(loadActivityMonths())
       }
     }
   }, [activeTab])
@@ -92,15 +100,22 @@ const Chart: React.FC<ChartProps> = () => {
     if (activeTab === StatsTab.SHOW_PLATFORMS_YEARS) {
       return renderChart(
         'Streaming platform popularity',
-        "The number of TV shows I've watched on each platform each year",
+        "Comparison of the number of TV shows I've watched on each platform each year",
         <ShowPlatformsYears payload={showPlatformsYears} />,
       )
     }
     if (activeTab === StatsTab.GAME_CATEGORIES) {
       return renderChart(
         'Gaming genres',
-        "Breakdown of genre of games I've played from 2021",
+        "Breakdown of game genres I've played since 2021",
         <GameCategories data={gameCategories} />,
+      )
+    }
+    if (activeTab === StatsTab.ACTIVITY_MONTHS) {
+      return renderChart(
+        'Monthly activity',
+        'Number of active games and TV shows per month for each year since 2021',
+        <ActivityMonths payload={activityMonths} />,
       )
     }
   }

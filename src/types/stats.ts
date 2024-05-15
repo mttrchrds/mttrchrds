@@ -24,3 +24,18 @@ export interface GameCategory {
   name: string
   total: number
 }
+
+export interface ActivityMonthsYears {
+  name: string
+  total: number
+}
+
+export interface ActivityMonthsData {
+  name: string
+  years: ActivityMonthsYears[]
+}
+
+export interface ActivityMonths {
+  years: string[]
+  data: ActivityMonthsData[]
+}

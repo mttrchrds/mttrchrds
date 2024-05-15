@@ -51,6 +51,15 @@ const StatsNavigation = () => {
       />
       <div className="nav-items-container">
         <StatsNavigationItem
+          active={activeTab === StatsTab.ACTIVITY_MONTHS ? true : false}
+          clickHandler={e => {
+            e.preventDefault()
+            dispatch(updateActiveTab(StatsTab.ACTIVITY_MONTHS))
+          }}
+        >
+          Monthly activity
+        </StatsNavigationItem>
+        <StatsNavigationItem
           active={activeTab === StatsTab.GAME_DAYS ? true : false}
           clickHandler={e => {
             e.preventDefault()

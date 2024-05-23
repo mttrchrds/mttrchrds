@@ -7,8 +7,6 @@ import { ActivityType } from '../../helpers/enums'
 import { GameShow, Platform } from '../../types/timeline'
 
 const StyledActivity = styled.div`
-  position: sticky;
-  top: 20px;
   .game-show {
     &__image {
       margin-bottom: 20px;

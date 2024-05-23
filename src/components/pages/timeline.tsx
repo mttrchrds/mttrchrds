@@ -103,6 +103,8 @@ const StyledTimeline = styled.div<StyledTimelineProps>`
 `
 
 const StyledActivity = styled.div`
+  position: sticky;
+  top: 20px;
   .activity-container {
     display: flex;
     flex-direction: column;
@@ -211,6 +213,13 @@ const Timeline = () => {
   }
 
   const renderActivity = () => {
+    if (activityLoading) {
+      return (
+        <div className="activity-container">
+          <Spinner spinnerColour={theme.colors.text} />
+        </div>
+      )
+    }
     if (activity) {
       return (
         <Activity
@@ -222,23 +231,14 @@ const Timeline = () => {
           completed={activity.completed}
         />
       )
-    } else {
-      return (
-        <StyledActivity>
-          {activityLoading ? (
-            <div className="activity-container">
-              <Spinner spinnerColour={theme.colors.text} />
-            </div>
-          ) : (
-            <div className="activity-container">
-              <div className="activity-container__primary">{`Timeline`}</div>
-              <div className="activity-container__secondary">{`Scroll down the timeline to see what shows I've been watching and games I've been playing.`}</div>
-              <div className="activity-container__secondary">{`Click on an activity for more details.`}</div>
-            </div>
-          )}
-        </StyledActivity>
-      )
     }
+    return (
+      <div className="activity-container">
+        <div className="activity-container__primary">{`Timeline`}</div>
+        <div className="activity-container__secondary">{`Scroll down the timeline to see what shows I've been watching and games I've been playing.`}</div>
+        <div className="activity-container__secondary">{`Click on an activity for more details.`}</div>
+      </div>
+    )
   }
 
   return (
@@ -272,7 +272,9 @@ const Timeline = () => {
                 </div>
               </div>
             </div>
-            <div className="secondary">{renderActivity()}</div>
+            <div className="secondary">
+              <StyledActivity>{renderActivity()}</StyledActivity>
+            </div>
           </div>
         </Container>
       </StyledTimeline>

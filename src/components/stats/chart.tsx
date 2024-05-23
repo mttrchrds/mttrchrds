@@ -78,14 +78,14 @@ const Chart: React.FC<ChartProps> = () => {
     <>
       <h1 className="chart-title">{title}</h1>
       <h3 className="chart-subtitle">{subtitle}</h3>
-      {chart}
+      <div data-testid="chart">{chart}</div>
     </>
   )
 
   const renderContent = (): ReactNode => {
     if (chartLoading) {
       return (
-        <div className="chart-loading-container">
+        <div className="chart-loading-container" data-testid="loading">
           <Spinner />
         </div>
       )

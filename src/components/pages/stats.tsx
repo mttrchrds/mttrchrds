@@ -48,10 +48,16 @@ const Stats = () => {
       <StyledStatsPage>
         <Container stretch={true}>
           <div className="stats-layout-container">
-            <div className="stats-layout-container__nav">
+            <div
+              className="stats-layout-container__nav"
+              data-testid="statsNavigation"
+            >
               <StatsNavigation />
             </div>
-            <div className="stats-layout-container__content">
+            <div
+              className="stats-layout-container__content"
+              data-testid="statsContent"
+            >
               <Chart />
             </div>
           </div>

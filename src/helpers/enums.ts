@@ -11,9 +11,9 @@ export enum ActivityType {
   SHOW = 'SHOW',
 }
 
-export enum StatsTab {
-  GAME_DAYS = 'GAME_DAYS',
-  SHOW_PLATFORMS_YEARS = 'SHOW_PLATFORMS_YEARS',
-  GAME_CATEGORIES = 'GAME_CATEGORIES',
-  ACTIVITY_MONTHS = 'ACTIVITY_MONTHS',
+export enum StatsType {
+  gamedays = 'gamedays',
+  showplatformyears = 'showplatformyears',
+  gamecategories = 'gamecategories',
+  activitymonths = 'activitymonths',
 }

@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { useParams } from 'react-router-dom'
 
 import { mqMin } from '../../helpers/media_queries'
 
@@ -8,6 +9,7 @@ import Container from '../layout/container'
 import Chart from '../stats/chart'
 
 import theme from '../../styles/theme'
+import { StatsType } from '../../helpers/enums'
 
 const navWidth = '240px'
 
@@ -43,22 +45,27 @@ const StyledStatsPage = styled.div`
 `
 
 const Stats = () => {
+  const { statsType } = useParams()
+  const activeStatsType = statsType
+    ? StatsType[statsType as keyof typeof StatsType]
+    : StatsType.activitymonths
   return (
-    <Layout bodyColour={theme.colors.stats.background} navigationTitle="Stats">
+    <Layout
+      bodyColour={theme.colors.stats.background}
+      navigationTitle="Stats"
+      key={statsType}
+    >
       <StyledStatsPage>
         <Container stretch={true}>
           <div className="stats-layout-container">
-            <div
-              className="stats-layout-container__nav"
-              data-testid="statsNavigation"
-            >
-              <StatsNavigation />
+            <div className="stats-layout-container__nav">
+              <StatsNavigation statsType={activeStatsType} />
             </div>
             <div
               className="stats-layout-container__content"
               data-testid="statsContent"
             >
-              <Chart />
+              <Chart statsType={activeStatsType} />
             </div>
           </div>
         </Container>

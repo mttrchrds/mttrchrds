@@ -1,16 +1,12 @@
 import { useState } from 'react'
 import styled from 'styled-components'
+import { useNavigate } from 'react-router-dom'
 
-import { StatsTab } from '../../helpers/enums'
-
-import { useAppSelector, useAppDispatch } from '../../hooks/hooks'
-
-import { updateActiveTab } from '../../redux/stats/stats_slice'
+import { StatsType } from '../../helpers/enums'
+import { buildLink } from '../../helpers/links'
 
 import { mqMin } from '../../helpers/media_queries'
 
-import IconBurger from '../icons/icon_burger'
-import IconClose from '../icons/icon_close'
 import StatsNavigationItem from './navigation/stats_navigation_item'
 import StatsNavigationToggle from './navigation/stats_navigation_toggle'
 
@@ -29,10 +25,12 @@ const StyledStatsNavigation = styled.nav<StyledStatsNavigationProps>`
   }
 `
 
-const StatsNavigation = () => {
-  const dispatch = useAppDispatch()
+interface StatsNavigationProps {
+  statsType: StatsType
+}
 
-  const activeTab = useAppSelector(state => state.stats.activeTab)
+const StatsNavigation: React.FC<StatsNavigationProps> = ({ statsType }) => {
+  const navigate = useNavigate()
 
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
 
@@ -51,37 +49,37 @@ const StatsNavigation = () => {
       />
       <div className="nav-items-container">
         <StatsNavigationItem
-          active={activeTab === StatsTab.ACTIVITY_MONTHS ? true : false}
+          active={statsType === StatsType.activitymonths ? true : false}
           clickHandler={e => {
             e.preventDefault()
-            dispatch(updateActiveTab(StatsTab.ACTIVITY_MONTHS))
+            navigate(buildLink.stats(StatsType.activitymonths))
           }}
         >
           Monthly activity
         </StatsNavigationItem>
         <StatsNavigationItem
-          active={activeTab === StatsTab.GAME_DAYS ? true : false}
+          active={statsType === StatsType.gamedays ? true : false}
           clickHandler={e => {
             e.preventDefault()
-            dispatch(updateActiveTab(StatsTab.GAME_DAYS))
+            navigate(buildLink.stats(StatsType.gamedays))
           }}
         >
           Most played games
         </StatsNavigationItem>
         <StatsNavigationItem
-          active={activeTab === StatsTab.SHOW_PLATFORMS_YEARS ? true : false}
+          active={statsType === StatsType.showplatformyears ? true : false}
           clickHandler={e => {
             e.preventDefault()
-            dispatch(updateActiveTab(StatsTab.SHOW_PLATFORMS_YEARS))
+            navigate(buildLink.stats(StatsType.showplatformyears))
           }}
         >
           Streaming platform popularity
         </StatsNavigationItem>
         <StatsNavigationItem
-          active={activeTab === StatsTab.GAME_CATEGORIES ? true : false}
+          active={statsType === StatsType.gamecategories ? true : false}
           clickHandler={e => {
             e.preventDefault()
-            dispatch(updateActiveTab(StatsTab.GAME_CATEGORIES))
+            navigate(buildLink.stats(StatsType.gamecategories))
           }}
         >
           Gaming genres

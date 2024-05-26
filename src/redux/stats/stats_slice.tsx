@@ -8,7 +8,7 @@ import {
   ActivityMonths,
 } from '../../types/stats'
 
-import { StatsTab } from '../../helpers/enums'
+import { StatsType } from '../../helpers/enums'
 
 interface Stats {
   activityMonths: ActivityMonths
@@ -16,7 +16,6 @@ interface Stats {
   showPlatformsYears: ShowPlatformsYears
   gameDays: GameDay[]
   chartLoading: boolean
-  activeTab: StatsTab
 }
 
 const initialState: Stats = {
@@ -32,7 +31,6 @@ const initialState: Stats = {
   },
   gameDays: [],
   chartLoading: false,
-  activeTab: StatsTab.ACTIVITY_MONTHS,
 }
 
 export const loadActivityMonths = createAsyncThunk(
@@ -86,11 +84,7 @@ export const loadShowPlatformsYears = createAsyncThunk(
 
 export const statsSlice = createSlice({
   name: 'stats',
-  reducers: {
-    updateActiveTab: (state, action) => {
-      state.activeTab = action.payload
-    },
-  },
+  reducers: {},
   initialState,
   extraReducers: builder => {
     builder
@@ -139,7 +133,5 @@ export const statsSlice = createSlice({
         })
   },
 })
-
-export const { updateActiveTab } = statsSlice.actions
 
 export default statsSlice.reducer

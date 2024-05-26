@@ -46,4 +46,13 @@ export default createBrowserRouter([
     ),
     errorElement: <Error />,
   },
+  {
+    path: '/stats/:statsType',
+    element: (
+      <Suspense fallback={renderHomeLoading()}>
+        <Stats />
+      </Suspense>
+    ),
+    errorElement: <Error />,
+  },
 ])

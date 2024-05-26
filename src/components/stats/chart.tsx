@@ -2,7 +2,7 @@ import React, { useEffect, ReactNode } from 'react'
 import styled from 'styled-components'
 import { useAppSelector, useAppDispatch } from '../../hooks/hooks'
 
-import { StatsTab } from '../../helpers/enums'
+import { StatsType } from '../../helpers/enums'
 
 import {
   loadGameDays,
@@ -34,11 +34,12 @@ const StyledChart = styled.section`
   }
 `
 
-interface ChartProps {}
+interface ChartProps {
+  statsType: StatsType
+}
 
-const Chart: React.FC<ChartProps> = () => {
+const Chart: React.FC<ChartProps> = ({ statsType }) => {
   const dispatch = useAppDispatch()
-  const activeTab = useAppSelector(state => state.stats.activeTab)
   const chartLoading = useAppSelector(state => state.stats.chartLoading)
   const gameDays = useAppSelector(state => state.stats.gameDays)
   const activityMonths = useAppSelector(state => state.stats.activityMonths)
@@ -48,27 +49,27 @@ const Chart: React.FC<ChartProps> = () => {
   const gameCategories = useAppSelector(state => state.stats.gameCategories)
 
   useEffect(() => {
-    if (activeTab === StatsTab.GAME_CATEGORIES) {
+    if (statsType === StatsType.gamecategories) {
       if (gameCategories.length === 0) {
         dispatch(loadGameCategories())
       }
     }
-    if (activeTab === StatsTab.GAME_DAYS) {
+    if (statsType === StatsType.gamedays) {
       if (gameDays.length === 0) {
         dispatch(loadGameDays())
       }
     }
-    if (activeTab === StatsTab.SHOW_PLATFORMS_YEARS) {
+    if (statsType === StatsType.showplatformyears) {
       if (showPlatformsYears.data.length === 0) {
         dispatch(loadShowPlatformsYears())
       }
     }
-    if (activeTab === StatsTab.ACTIVITY_MONTHS) {
+    if (statsType === StatsType.activitymonths) {
       if (activityMonths.data.length === 0) {
         dispatch(loadActivityMonths())
       }
     }
-  }, [activeTab])
+  }, [])
 
   const renderChart = (
     title: string,
@@ -90,28 +91,28 @@ const Chart: React.FC<ChartProps> = () => {
         </div>
       )
     }
-    if (activeTab === StatsTab.GAME_DAYS) {
+    if (statsType === StatsType.gamedays) {
       return renderChart(
         'Most played games',
         'My top 10 games based on the total number of recorded days being my active game',
         <GameDays data={gameDays} />,
       )
     }
-    if (activeTab === StatsTab.SHOW_PLATFORMS_YEARS) {
+    if (statsType === StatsType.showplatformyears) {
       return renderChart(
         'Streaming platform popularity',
         "Comparison of the number of TV shows I've watched on each platform each year",
         <ShowPlatformsYears payload={showPlatformsYears} />,
       )
     }
-    if (activeTab === StatsTab.GAME_CATEGORIES) {
+    if (statsType === StatsType.gamecategories) {
       return renderChart(
         'Gaming genres',
         "Breakdown of game genres I've played since 2021",
         <GameCategories data={gameCategories} />,
       )
     }
-    if (activeTab === StatsTab.ACTIVITY_MONTHS) {
+    if (statsType === StatsType.activitymonths) {
       return renderChart(
         'Monthly activity',
         'Number of active games and TV shows per month for each year since 2021',

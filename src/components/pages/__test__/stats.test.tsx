@@ -1,9 +1,10 @@
 import React from 'react'
 import { http, HttpResponse, delay } from 'msw'
 import { setupServer } from 'msw/node'
-import { fireEvent, screen } from '@testing-library/react'
+import { screen } from '@testing-library/react'
 import { renderWithProviders } from '../../../testing/render_redux'
 import { within } from '@testing-library/dom'
+import { Route, Routes } from 'react-router-dom'
 
 import Stats from '../stats'
 
@@ -113,18 +114,15 @@ afterEach(() => server.resetHandlers())
 afterAll(() => server.close())
 
 describe('Stats', () => {
-  it('should load in and render a chart when navigation link is clicked', async () => {
-    renderWithProviders(<Stats />)
-
-    const navigation = screen.getByTestId('statsNavigation')
-    const content = screen.getByTestId('statsContent')
-
-    fireEvent.click(
-      within(navigation).getByRole('link', {
-        name: /Most played games/i,
-        hidden: true,
-      }),
+  it('should load in and render a chart on a specific chart page', async () => {
+    renderWithProviders(
+      <Routes>
+        <Route path="stats/:statsType" element={<Stats />}></Route>
+      </Routes>,
+      ['/stats/gamedays'],
     )
+
+    const content = screen.getByTestId('statsContent')
 
     expect(within(content).getByTestId('loading')).toBeInTheDocument()
 

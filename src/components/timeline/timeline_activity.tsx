@@ -64,7 +64,8 @@ const StyledTimelineActivity = styled.div<StyledTimelineActivityProps>`
     position: relative;
     z-index: 1;
     background-color: ${props => props.$activityColour};
-    height: ${props => props.$activityHeight - 10}px;
+    height: ${props => props.$activityHeight - 5}px;
+    margin-bottom: 5px;
     width: ${props => props.$channelWidth - 10}px;
     border-radius: 20px;
     filter: ${props =>

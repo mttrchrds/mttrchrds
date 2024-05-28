@@ -75,8 +75,13 @@ const StyledTimeline = styled.div<StyledTimelineProps>`
       }
     }
   }
+  .timelines {
+    &__spacer {
+      width: 100%;
+      height: 20px;
+    }
+  }
   @media ${props => mqMin(props.theme.breakPoints.sm)} {
-    padding-top: 20px;
     .loading-container {
       height: 100%;
     }
@@ -256,6 +261,7 @@ const Timeline = () => {
                 </div>
               )}
               <div className="timelines">
+                <div className="timelines__spacer"></div>
                 {timelineSections.map(td => (
                   <TimelineSectionMemoized
                     key={_get(td, ['0', 'date'])}

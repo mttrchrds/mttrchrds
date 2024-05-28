@@ -25,10 +25,6 @@ const StyledTimelineSection = styled.div`
     ${props => props.theme.colors.timeline.primary} 1.46%,
     ${props => props.theme.colors.timeline.primary1} 100%
   );
-  .top-spacer {
-    width: 100%;
-    height: 20px;
-  }
   .day-labels {
     width: 20%;
     background-color: ${props => props.theme.colors.timeline.primary};
@@ -180,14 +176,8 @@ const TimelineSection: React.FC<TimelineSectionProps> = ({ timelineDays }) => {
 
   return (
     <StyledTimelineSection>
-      <div className="day-labels">
-        <div className="top-spacer" />
-        {renderLabels()}
-      </div>
-      <div className="day-channels">
-        <div className="top-spacer" />
-        {renderChannels()}
-      </div>
+      <div className="day-labels">{renderLabels()}</div>
+      <div className="day-channels">{renderChannels()}</div>
     </StyledTimelineSection>
   )
 }

@@ -5,6 +5,7 @@ import { DateTime } from 'luxon'
 
 import { ActivityType } from '../../helpers/enums'
 import { GameShow, Platform } from '../../types/timeline'
+import RatingEmoji from '../rating_emoji'
 
 const StyledActivity = styled.div`
   .game-show {
@@ -35,6 +36,18 @@ const StyledActivity = styled.div`
       }
       &__value {
         color: ${props => props.theme.colors.timeline.text1};
+        &__emoji {
+          position: relative;
+          top: 1px;
+          padding-left: 5px;
+          font-size: ${props => props.theme.typography.sizeMedium};
+        }
+        &--flex {
+          display: flex;
+          align-items: center;
+          position: relative;
+          top: -3px;
+        }
       }
     }
     &__link {
@@ -79,10 +92,8 @@ interface StyledRatingProps {
   $rating: number
 }
 
-const StyledRating = styled.div<StyledRatingProps>`
-  display: flex;
-  position: relative;
-  top: -3px;
+const StyledRating = styled.span<StyledRatingProps>`
+  display: inline-flex;
   .rating-item {
     display: flex;
     svg {
@@ -194,7 +205,12 @@ const Activity: React.FC<ActivityProps> = ({
             data-testid="activity-rating"
           >
             <div className="game-show__row__label">Rating:</div>
-            <div className="game-show__row__value">{renderRating()}</div>
+            <div className="game-show__row__value game-show__row__value--flex">
+              {renderRating()}
+              <span className="game-show__row__value__emoji">
+                <RatingEmoji rating={gameShow.rating} />
+              </span>
+            </div>
           </div>
         )}
         <div className="game-show__row">

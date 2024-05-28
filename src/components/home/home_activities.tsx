@@ -10,6 +10,7 @@ import { Activity } from '../../types/timeline'
 
 import HomeLoading from './home_loading'
 import BlankState from '../../styles/components/blank_state'
+import RatingEmoji from '../rating_emoji'
 
 const StyledHomeActivities = styled.article`
   .activity {
@@ -45,6 +46,9 @@ const StyledHomeActivities = styled.article`
         font-weight: bold;
         margin-bottom: 20px;
         margin-top: 0;
+        &__emoji {
+          padding-left: 5px;
+        }
       }
       &__row {
         display: flex;
@@ -148,6 +152,17 @@ const HomeActivities: React.FC<HomeActivitiesProps> = ({
     return null
   }
 
+  const renderEmoji = (rating: number, skip: boolean) => {
+    if (!skip) {
+      return (
+        <span className="activity__details__name__emoji">
+          <RatingEmoji rating={rating} />
+        </span>
+      )
+    }
+    return null
+  }
+
   const renderActivity = (activity: Activity) => {
     const endAt = activity.endAt ? activity.endAt : false
     return (
@@ -160,6 +175,7 @@ const HomeActivities: React.FC<HomeActivitiesProps> = ({
             <h5 className="activity__details__name">
               {`${activity.gameShow.name} (${activity.platform.name})`}{' '}
               {renderRating(activity ? activity.gameShow.rating : 1, !endAt)}
+              {renderEmoji(activity ? activity.gameShow.rating : 1, !endAt)}
             </h5>
             <div className="activity__details__row">
               <div className="activity__details__row__label">Started:</div>

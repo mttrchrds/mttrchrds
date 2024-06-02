@@ -31,6 +31,8 @@ const activityOngoing = {
       },
     ],
     rating: 9,
+    image_width: 1000,
+    image_height: 1250,
   },
   show_platform: {
     id: 97,
@@ -61,6 +63,8 @@ const activityComponent = (ongoing: boolean) => (
         imageUrl: activityOngoing.show_activity.creator.image_url,
       },
       categories: activityOngoing.show_activity.categories,
+      imageWidth: activityOngoing.show_activity.image_width,
+      imageHeight: activityOngoing.show_activity.image_height,
     }}
     activityType={activityOngoing.activity_type}
     platform={{

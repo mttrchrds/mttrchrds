@@ -20,6 +20,8 @@ export interface GameShow {
   rating: number
   creator: Creator
   categories: Category[]
+  imageWidth: number
+  imageHeight: number
 }
 
 export type TimelineGameShow = Pick<GameShow, 'id' | 'name' | 'thumbnailUrl'>

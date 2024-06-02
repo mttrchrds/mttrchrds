@@ -40,6 +40,8 @@ const parseRawGameShow = ({
   rating,
   creator,
   categories,
+  image_width,
+  image_height,
 }: any): GameShow => {
   return {
     id,
@@ -50,6 +52,8 @@ const parseRawGameShow = ({
     rating,
     creator: parseRawCreator(creator),
     categories,
+    imageWidth: image_width,
+    imageHeight: image_height,
   }
 }
 

@@ -6,6 +6,7 @@ import { DateTime } from 'luxon'
 import { ActivityType } from '../../helpers/enums'
 import { GameShow, Platform } from '../../types/timeline'
 import RatingEmoji from '../rating_emoji'
+import Image from '../image'
 
 const StyledActivity = styled.div`
   .game-show {
@@ -196,7 +197,12 @@ const Activity: React.FC<ActivityProps> = ({
     return (
       <div className="game-show">
         <div className="game-show__image">
-          <img src={gameShow.imageUrl} alt={name} />
+          <Image
+            src={gameShow.imageUrl}
+            altText={name}
+            width={gameShow.imageWidth}
+            height={gameShow.imageHeight}
+          />
         </div>
         <h3 className="game-show__name">{name}</h3>
         {endAt && (

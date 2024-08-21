@@ -134,8 +134,11 @@ const HomeNews: React.FC<HomeNewsProps> = ({ setHomeSection }) => {
         'Website complete',
         '6 March 2024',
         <p>
-          Website is now live, in the style of the Sevastolink terminal from
-          Alien:Isolation 🤓. Next, hooking it up to the API for some content...
+          Website is now live, in the style of the Sevastolink terminal from{' '}
+          <a href="https://www.imdb.com/title/tt3391132/" target="blank">
+            Alien:Isolation
+          </a>{' '}
+          🤓. Next, hooking it up to the API for some content...
         </p>,
       )}
     </StyledHomeNews>

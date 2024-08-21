@@ -80,6 +80,35 @@ const HomeProjects = () => {
   return (
     <StyledHomeProjects>
       {renderItem(
+        'Material UI Autocomplete',
+        '21 Aug 2024',
+        <>
+          <p>
+            {`Upon using Material UI and Google Maps on another project I discovered that the example Autocomplete component in the MUI docs did not use the latest version of the Google Maps Places API.`}
+          </p>
+          <p>
+            {`After refactoring this to use the latest API (which included creating manual session tokens and creating my own type definitions) I decided to add this a `}
+            <a
+              target="blank"
+              href="https://github.com/mttrchrds/mui-autocomplete-places-new"
+            >
+              Github repo
+            </a>
+            {` to potentially help other developers.`}
+          </p>
+          <p>
+            {`A `}
+            <a
+              target="blank"
+              href="https://mui-autocomplete-places-new.onrender.com"
+            >
+              Live demo
+            </a>
+            {` of the component is also available.`}
+          </p>
+        </>,
+      )}
+      {renderItem(
         'Stats',
         '15 May 2024',
         <>

@@ -1,7 +1,9 @@
+import { MouseEventHandler } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 
 import { mqMin } from '../../helpers/media_queries'
+import { HomeSection } from '../../helpers/enums'
 
 const StyledHomeNews = styled.article`
   .news-item {
@@ -61,7 +63,16 @@ const StyledHomeNews = styled.article`
   }
 `
 
-const HomeNews = () => {
+interface HomeNewsProps {
+  setHomeSection: (section: HomeSection) => void
+}
+
+const HomeNews: React.FC<HomeNewsProps> = ({ setHomeSection }) => {
+  const handleClickProject: MouseEventHandler<HTMLAnchorElement> = e => {
+    e.preventDefault()
+    setHomeSection(HomeSection.PROJECTS)
+  }
+
   const renderItem = (
     title: string,
     date: string,
@@ -78,6 +89,17 @@ const HomeNews = () => {
 
   return (
     <StyledHomeNews>
+      {renderItem(
+        'New project',
+        '21 Aug 2024',
+        <p>
+          A{' '}
+          <a href="#" onClick={handleClickProject}>
+            new project
+          </a>{' '}
+          has been added based on the Material UI Autocomplete component.
+        </p>,
+      )}
       {renderItem(
         'Stats added',
         '15 May 2024',

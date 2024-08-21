@@ -150,7 +150,7 @@ const Home = () => {
     if (activeSection === HomeSection.PROJECTS) {
       return <HomeProjects />
     }
-    return <HomeNews />
+    return <HomeNews setHomeSection={setActiveSection} />
   }
 
   return (

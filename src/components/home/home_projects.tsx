@@ -80,6 +80,34 @@ const HomeProjects = () => {
   return (
     <StyledHomeProjects>
       {renderItem(
+        'Bluesky bot',
+        '9 Nov 2024',
+        <>
+          <p>
+            {`After recently switching to Bluesky from Twitter/X, one of the things I missed was a news aggregator for Liverpool FC. So I deceided to create one!`}
+          </p>
+          <p>
+            {`I created a simple TypeScript Node app using the Bluesky API and Cheerio (for scraping). The app is scheduled throughout the day using Github Actions.`}
+          </p>
+          <p>
+            <a
+              target="blank"
+              href="https://github.com/mttrchrds/bsky-lfcnews"
+            >
+              View Github repo
+            </a>
+          </p>
+          <p>
+            <a
+              target="blank"
+              href="https://bsky.app/profile/lfcnews.bsky.social"
+            >
+              View Bluesky profile
+            </a>
+          </p>
+        </>,
+      )}
+      {renderItem(
         'Material UI Autocomplete',
         '21 Aug 2024',
         <>

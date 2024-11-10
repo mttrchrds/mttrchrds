@@ -90,6 +90,13 @@ const HomeNews: React.FC<HomeNewsProps> = ({ setHomeSection }) => {
   return (
     <StyledHomeNews>
       {renderItem(
+        'Bluesky bot',
+        '9 Nov 2024',
+        <p>
+          I create a <a href="#" onClick={handleClickProject}>Bluesky bot</a> using TypeScript/Node.
+        </p>,
+      )}
+      {renderItem(
         'New project',
         '21 Aug 2024',
         <p>

@@ -84,10 +84,10 @@ const HomeProjects = () => {
         '9 Nov 2024',
         <>
           <p>
-            {`After recently switching to Bluesky from Twitter/X, one of the things I missed was a news aggregator for Liverpool FC. So I deceided to create one!`}
+            {`After recently switching to Bluesky from Twitter/X, one of the things I missed was a news aggregator for Liverpool FC. So I deceided to build one!`}
           </p>
           <p>
-            {`I created a simple TypeScript Node app using the Bluesky API and Cheerio (for scraping). The app is scheduled throughout the day using Github Actions.`}
+            {`I created a simple TypeScript Node app using the Bluesky API, Axios and Cheerio. The app is scheduled throughout the day using Github Actions.`}
           </p>
           <p>
             <a

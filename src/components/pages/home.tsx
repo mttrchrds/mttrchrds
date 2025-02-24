@@ -118,6 +118,9 @@ const Home = () => {
     if (activeSection === HomeSection.MUSIC) {
       setActiveTitle('Latest music played')
     }
+    if (activeSection === HomeSection.PROJECTS) {
+      setActiveTitle('Latest projects')
+    }
   }, [activeSection])
 
   const renderContentBody = () => {

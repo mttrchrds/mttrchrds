@@ -1,3 +1,4 @@
+import React from 'react'
 import { MouseEventHandler } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
@@ -76,7 +77,7 @@ const HomeNews: React.FC<HomeNewsProps> = ({ setHomeSection }) => {
   const renderItem = (
     title: string,
     date: string,
-    description: JSX.Element,
+    description: React.JSX.Element,
   ) => (
     <div className="news-item">
       <div className="news-item__primary">

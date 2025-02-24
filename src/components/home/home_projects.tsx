@@ -1,3 +1,4 @@
+import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 
@@ -66,7 +67,7 @@ const HomeProjects = () => {
   const renderItem = (
     title: string,
     date: string,
-    description: JSX.Element,
+    description: React.JSX.Element,
   ) => (
     <div className="project-item">
       <div className="project-item__primary">

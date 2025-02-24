@@ -20,7 +20,6 @@ export const renderWithProviders = (
     store,
   }
 
-  /* eslint-disable-next-line react/prop-types */
   const AllTheProviders = ({ children }: { children: React.ReactNode }) => (
     <Provider store={store}>
       <ThemeProvider theme={theme}>

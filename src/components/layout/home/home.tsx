@@ -1,0 +1,153 @@
+import React, { ReactNode } from 'react'
+import styled from 'styled-components'
+import { useLocation } from '@tanstack/react-router'
+
+import { homePaths } from '../../../helpers/links'
+
+import Layout from '../layout';
+import Container from '../container';
+import HomeNavigation from './home_navigation';
+import HomeTitle from './home_title';
+
+import { mqMin } from '../../../helpers/media_queries'
+
+const StyledHome = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding-right: 15px;
+  padding-left: 15px;
+  padding-bottom: 15px;
+  @media ${props => mqMin(props.theme.breakPoints.md)} {
+    flex-direction: row;
+    padding-top: 20px;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+  }
+  .navigation {
+    flex-shrink: 0;
+    @media ${props => mqMin(props.theme.breakPoints.md)} {
+      width: 300px;
+    }
+  }
+  .content {
+    flex-grow: 1;
+    position: relative;
+    left: -2px;
+    z-index: 3;
+    &__head {
+      display: none;
+      @media ${props => mqMin(props.theme.breakPoints.md)} {
+        display: flex;
+        &__connector {
+          width: 25px;
+          flex-shrink: 0;
+          display: flex;
+          align-items: flex-end;
+          background-color: ${props => props.theme.colors.primary};
+          &__inner {
+            width: 100%;
+            height: 50%;
+            border-top: 2px solid ${props => props.theme.colors.highlight};
+            border-left: 2px solid ${props => props.theme.colors.highlight};
+          }
+        }
+        &__title {
+          flex-grow: 1;
+        }
+      }
+    }
+    &__body {
+      &__box {
+        margin-top: 10px;
+        @media ${props => mqMin(props.theme.breakPoints.md)} {
+          margin-top: 25px;
+          margin-left: 25px;
+        }
+        &__primary {
+          background-color: ${props => props.theme.colors.secondary1};
+          height: 30px;
+          width: 100%;
+        }
+        &__secondary {
+          min-height: 500px;
+          border-right: 2px solid ${props => props.theme.colors.primary1};
+          border-bottom: 2px solid ${props => props.theme.colors.primary1};
+          border-left: 2px solid ${props => props.theme.colors.primary1};
+          padding: 20px;
+          font-size: ${props => props.theme.typography.sizeMedium};
+          font-family: 'Silkscreen';
+          color: ${props => props.theme.colors.text};
+        }
+      }
+    }
+  }
+`
+
+interface HomeProps {
+  children: ReactNode
+}
+
+const Home: React.FC<HomeProps> = ({ children }) => {
+  const pathname = useLocation({
+    select: (location) => location.pathname.split('/')[1],
+  })
+
+  let activeTitle = ''
+
+  switch (pathname) {
+    case homePaths.news: {
+      activeTitle = 'Latest News'
+      break;
+    }
+    case homePaths.projects: {
+      activeTitle = 'Latest Projects'
+      break;
+    }
+    case homePaths.games: {
+      activeTitle = 'Latest Games Played'
+      break;
+    }
+    case homePaths.shows: {
+      activeTitle = 'Latest Shows Watched'
+      break;
+    }
+  }
+
+  return (
+    <Layout>
+      <Container>
+        <StyledHome>
+          <section className="navigation" data-testid="homeNavigation">
+            <HomeNavigation
+              activePath={pathname}
+            />
+          </section>
+          <section className="content">
+            <div className="content__head">
+              <div className="content__head__connector">
+                <div className="content__head__connector__inner"></div>
+              </div>
+              <div className="content__head__title" data-testid="homeTitle">
+                <HomeTitle title={activeTitle} />
+              </div>
+            </div>
+            <div className="content__body">
+              <div className="content__body__box">
+                <div className="content__body__box__primary"></div>
+                <div
+                  className="content__body__box__secondary"
+                  data-testid="homeContent"
+                >
+                  {children}
+                </div>
+              </div>
+            </div>
+          </section>
+        </StyledHome>
+      </Container>
+    </Layout>
+  )
+}
+
+export default Home

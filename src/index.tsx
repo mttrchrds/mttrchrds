@@ -1,27 +1,29 @@
-import React from 'react'
+import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { RouterProvider } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components'
-import { setupStore } from './redux/store'
-import { Provider } from 'react-redux'
-
-import router from './router'
+import { RouterProvider, createRouter } from '@tanstack/react-router'
 
 import theme from './styles/theme'
 
 import GlobalStyles from './styles/global_styles'
 
+import { routeTree } from './routeTree.gen'
+
+const router = createRouter({ routeTree })
+
 const loadingPlaceholder = document.getElementById('loading') as HTMLElement
 loadingPlaceholder.style.display = 'none'
 
-const container = document.getElementById('app') as HTMLElement
-const root = createRoot(container)
+const rootElement = document.getElementById('app') as HTMLElement
 
-root.render(
-  <Provider store={setupStore()}>
-    <ThemeProvider theme={theme}>
-      <GlobalStyles />
-      <RouterProvider router={router} />
-    </ThemeProvider>
-  </Provider>,
-)
+if (!rootElement.innerHTML) {
+  const root = createRoot(rootElement)
+  root.render(
+    <StrictMode>
+      <ThemeProvider theme={theme}>
+        <GlobalStyles />
+        <RouterProvider router={router} />
+      </ThemeProvider>
+    </StrictMode>,
+  )
+}

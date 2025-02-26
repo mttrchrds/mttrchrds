@@ -56,7 +56,7 @@ const StyledHeader = styled.header`
       &:link,
       &:visited,
       &:active {
-        background-color: ${props => props.theme.colors.secondary};
+        background-color: ${props => props.theme.colors.primary};
         text-decoration: none;
       }
       &:hover {

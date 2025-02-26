@@ -15,11 +15,10 @@ const StyledHome = styled.div`
   display: flex;
   flex-direction: column;
   padding-right: 15px;
-  padding-left: 15px;
   padding-bottom: 15px;
+  padding-left: 15px;
   @media ${props => mqMin(props.theme.breakPoints.md)} {
     flex-direction: row;
-    padding-top: 20px;
     padding-right: 0;
     padding-bottom: 0;
     padding-left: 0;

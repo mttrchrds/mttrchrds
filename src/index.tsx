@@ -13,7 +13,13 @@ const router = createRouter({ routeTree })
 const loadingPlaceholder = document.getElementById('loading') as HTMLElement
 loadingPlaceholder.style.display = 'none'
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5,
+    },
+  },
+})
 
 const rootElement = document.getElementById('app') as HTMLElement
 

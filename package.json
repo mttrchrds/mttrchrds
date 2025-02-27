@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.6.0",
+    "@tanstack/react-query": "^5.66.9",
     "@tanstack/react-router": "^1.111.7",
     "axios": "^1.7.9",
     "lodash": "^4.17.21",
@@ -23,6 +24,7 @@
     "vite": "^6.1.1"
   },
   "devDependencies": {
+    "@tanstack/eslint-plugin-query": "^5.66.1",
     "@tanstack/router-devtools": "^1.111.7",
     "@tanstack/router-plugin": "^1.111.7",
     "@testing-library/jest-dom": "^6.6.3",

@@ -11,7 +11,7 @@ import HomeTitle from './home_title';
 
 import { mqMin } from '../../../helpers/media_queries'
 
-const StyledHome = styled.div`
+const StyledHomeLayout = styled.div`
   display: flex;
   flex-direction: column;
   padding-right: 15px;
@@ -83,11 +83,11 @@ const StyledHome = styled.div`
   }
 `
 
-interface HomeProps {
+interface HomeLayoutProps {
   children: ReactNode
 }
 
-const Home: React.FC<HomeProps> = ({ children }) => {
+const HomeLayout: React.FC<HomeLayoutProps> = ({ children }) => {
   const pathname = useLocation({
     select: (location) => location.pathname.split('/')[1],
   })
@@ -116,7 +116,7 @@ const Home: React.FC<HomeProps> = ({ children }) => {
   return (
     <Layout>
       <Container>
-        <StyledHome>
+        <StyledHomeLayout>
           <section className="navigation" data-testid="homeNavigation">
             <HomeNavigation
               activePath={pathname}
@@ -143,10 +143,10 @@ const Home: React.FC<HomeProps> = ({ children }) => {
               </div>
             </div>
           </section>
-        </StyledHome>
+        </StyledHomeLayout>
       </Container>
     </Layout>
   )
 }
 
-export default Home
+export default HomeLayout

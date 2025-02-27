@@ -8,33 +8,38 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
+import { createFileRoute } from '@tanstack/react-router'
+
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as ShowsImport } from './routes/shows'
-import { Route as ProjectsImport } from './routes/projects'
-import { Route as GamesImport } from './routes/games'
 import { Route as IndexImport } from './routes/index'
+
+// Create Virtual Routes
+
+const ShowsLazyImport = createFileRoute('/shows')()
+const ProjectsLazyImport = createFileRoute('/projects')()
+const GamesLazyImport = createFileRoute('/games')()
 
 // Create/Update Routes
 
-const ShowsRoute = ShowsImport.update({
+const ShowsLazyRoute = ShowsLazyImport.update({
   id: '/shows',
   path: '/shows',
   getParentRoute: () => rootRoute,
-} as any)
+} as any).lazy(() => import('./routes/shows.lazy').then((d) => d.Route))
 
-const ProjectsRoute = ProjectsImport.update({
+const ProjectsLazyRoute = ProjectsLazyImport.update({
   id: '/projects',
   path: '/projects',
   getParentRoute: () => rootRoute,
-} as any)
+} as any).lazy(() => import('./routes/projects.lazy').then((d) => d.Route))
 
-const GamesRoute = GamesImport.update({
+const GamesLazyRoute = GamesLazyImport.update({
   id: '/games',
   path: '/games',
   getParentRoute: () => rootRoute,
-} as any)
+} as any).lazy(() => import('./routes/games.lazy').then((d) => d.Route))
 
 const IndexRoute = IndexImport.update({
   id: '/',
@@ -57,21 +62,21 @@ declare module '@tanstack/react-router' {
       id: '/games'
       path: '/games'
       fullPath: '/games'
-      preLoaderRoute: typeof GamesImport
+      preLoaderRoute: typeof GamesLazyImport
       parentRoute: typeof rootRoute
     }
     '/projects': {
       id: '/projects'
       path: '/projects'
       fullPath: '/projects'
-      preLoaderRoute: typeof ProjectsImport
+      preLoaderRoute: typeof ProjectsLazyImport
       parentRoute: typeof rootRoute
     }
     '/shows': {
       id: '/shows'
       path: '/shows'
       fullPath: '/shows'
-      preLoaderRoute: typeof ShowsImport
+      preLoaderRoute: typeof ShowsLazyImport
       parentRoute: typeof rootRoute
     }
   }
@@ -81,24 +86,24 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/games': typeof GamesRoute
-  '/projects': typeof ProjectsRoute
-  '/shows': typeof ShowsRoute
+  '/games': typeof GamesLazyRoute
+  '/projects': typeof ProjectsLazyRoute
+  '/shows': typeof ShowsLazyRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/games': typeof GamesRoute
-  '/projects': typeof ProjectsRoute
-  '/shows': typeof ShowsRoute
+  '/games': typeof GamesLazyRoute
+  '/projects': typeof ProjectsLazyRoute
+  '/shows': typeof ShowsLazyRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/games': typeof GamesRoute
-  '/projects': typeof ProjectsRoute
-  '/shows': typeof ShowsRoute
+  '/games': typeof GamesLazyRoute
+  '/projects': typeof ProjectsLazyRoute
+  '/shows': typeof ShowsLazyRoute
 }
 
 export interface FileRouteTypes {
@@ -112,16 +117,16 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  GamesRoute: typeof GamesRoute
-  ProjectsRoute: typeof ProjectsRoute
-  ShowsRoute: typeof ShowsRoute
+  GamesLazyRoute: typeof GamesLazyRoute
+  ProjectsLazyRoute: typeof ProjectsLazyRoute
+  ShowsLazyRoute: typeof ShowsLazyRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  GamesRoute: GamesRoute,
-  ProjectsRoute: ProjectsRoute,
-  ShowsRoute: ShowsRoute,
+  GamesLazyRoute: GamesLazyRoute,
+  ProjectsLazyRoute: ProjectsLazyRoute,
+  ShowsLazyRoute: ShowsLazyRoute,
 }
 
 export const routeTree = rootRoute
@@ -144,13 +149,13 @@ export const routeTree = rootRoute
       "filePath": "index.tsx"
     },
     "/games": {
-      "filePath": "games.tsx"
+      "filePath": "games.lazy.tsx"
     },
     "/projects": {
-      "filePath": "projects.tsx"
+      "filePath": "projects.lazy.tsx"
     },
     "/shows": {
-      "filePath": "shows.tsx"
+      "filePath": "shows.lazy.tsx"
     }
   }
 }

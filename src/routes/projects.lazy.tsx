@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createLazyFileRoute, Link } from '@tanstack/react-router'
 import styled from 'styled-components'
 
 import { mqMin } from '../helpers/media_queries'
@@ -6,7 +6,7 @@ import { homePaths } from '../helpers/links'
 
 import HomeLayout from '../components/layout/home/home'
 
-export const Route = createFileRoute('/projects')({
+export const Route = createLazyFileRoute('/projects')({
   component: Projects,
 })
 

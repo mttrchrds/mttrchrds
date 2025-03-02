@@ -13,21 +13,15 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as ShowsImport } from './routes/shows'
+import { Route as GamesImport } from './routes/games'
 import { Route as IndexImport } from './routes/index'
 
 // Create Virtual Routes
 
-const ShowsLazyImport = createFileRoute('/shows')()
 const ProjectsLazyImport = createFileRoute('/projects')()
-const GamesLazyImport = createFileRoute('/games')()
 
 // Create/Update Routes
-
-const ShowsLazyRoute = ShowsLazyImport.update({
-  id: '/shows',
-  path: '/shows',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/shows.lazy').then((d) => d.Route))
 
 const ProjectsLazyRoute = ProjectsLazyImport.update({
   id: '/projects',
@@ -35,11 +29,17 @@ const ProjectsLazyRoute = ProjectsLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/projects.lazy').then((d) => d.Route))
 
-const GamesLazyRoute = GamesLazyImport.update({
+const ShowsRoute = ShowsImport.update({
+  id: '/shows',
+  path: '/shows',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const GamesRoute = GamesImport.update({
   id: '/games',
   path: '/games',
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/games.lazy').then((d) => d.Route))
+} as any)
 
 const IndexRoute = IndexImport.update({
   id: '/',
@@ -62,7 +62,14 @@ declare module '@tanstack/react-router' {
       id: '/games'
       path: '/games'
       fullPath: '/games'
-      preLoaderRoute: typeof GamesLazyImport
+      preLoaderRoute: typeof GamesImport
+      parentRoute: typeof rootRoute
+    }
+    '/shows': {
+      id: '/shows'
+      path: '/shows'
+      fullPath: '/shows'
+      preLoaderRoute: typeof ShowsImport
       parentRoute: typeof rootRoute
     }
     '/projects': {
@@ -72,13 +79,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProjectsLazyImport
       parentRoute: typeof rootRoute
     }
-    '/shows': {
-      id: '/shows'
-      path: '/shows'
-      fullPath: '/shows'
-      preLoaderRoute: typeof ShowsLazyImport
-      parentRoute: typeof rootRoute
-    }
   }
 }
 
@@ -86,47 +86,47 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/games': typeof GamesLazyRoute
+  '/games': typeof GamesRoute
+  '/shows': typeof ShowsRoute
   '/projects': typeof ProjectsLazyRoute
-  '/shows': typeof ShowsLazyRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/games': typeof GamesLazyRoute
+  '/games': typeof GamesRoute
+  '/shows': typeof ShowsRoute
   '/projects': typeof ProjectsLazyRoute
-  '/shows': typeof ShowsLazyRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/games': typeof GamesLazyRoute
+  '/games': typeof GamesRoute
+  '/shows': typeof ShowsRoute
   '/projects': typeof ProjectsLazyRoute
-  '/shows': typeof ShowsLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/games' | '/projects' | '/shows'
+  fullPaths: '/' | '/games' | '/shows' | '/projects'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/games' | '/projects' | '/shows'
-  id: '__root__' | '/' | '/games' | '/projects' | '/shows'
+  to: '/' | '/games' | '/shows' | '/projects'
+  id: '__root__' | '/' | '/games' | '/shows' | '/projects'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  GamesLazyRoute: typeof GamesLazyRoute
+  GamesRoute: typeof GamesRoute
+  ShowsRoute: typeof ShowsRoute
   ProjectsLazyRoute: typeof ProjectsLazyRoute
-  ShowsLazyRoute: typeof ShowsLazyRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  GamesLazyRoute: GamesLazyRoute,
+  GamesRoute: GamesRoute,
+  ShowsRoute: ShowsRoute,
   ProjectsLazyRoute: ProjectsLazyRoute,
-  ShowsLazyRoute: ShowsLazyRoute,
 }
 
 export const routeTree = rootRoute
@@ -141,21 +141,21 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/games",
-        "/projects",
-        "/shows"
+        "/shows",
+        "/projects"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
     "/games": {
-      "filePath": "games.lazy.tsx"
+      "filePath": "games.tsx"
+    },
+    "/shows": {
+      "filePath": "shows.tsx"
     },
     "/projects": {
       "filePath": "projects.lazy.tsx"
-    },
-    "/shows": {
-      "filePath": "shows.lazy.tsx"
     }
   }
 }

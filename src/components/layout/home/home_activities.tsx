@@ -135,13 +135,11 @@ const StyledRating = styled.span<StyledRatingProps>`
 
 interface HomeActivitiesProps {
   shows?: boolean
-  loading?: boolean
   activities?: Activity[]
 }
 
 const HomeActivities: React.FC<HomeActivitiesProps> = ({
   shows = false,
-  loading = false,
   activities = [],
 }) => {
   const renderRating = (rating: number, skip: boolean) => {
@@ -236,7 +234,6 @@ const HomeActivities: React.FC<HomeActivitiesProps> = ({
         </BlankState>
       )
     }
-    // return <p>Hello World</p>
     return (
       <StyledHomeActivities>
         {activities.map(a => renderActivity(a))}
@@ -249,12 +246,6 @@ const HomeActivities: React.FC<HomeActivitiesProps> = ({
         </div>
       </StyledHomeActivities>
     )
-  }
-
-  console.log({activities})
-
-  if (loading) {
-    return <HomeLoading />
   }
 
   return renderActivities()

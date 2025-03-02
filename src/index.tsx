@@ -7,12 +7,6 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import theme from './styles/theme'
 import GlobalStyles from './styles/global_styles'
 
-import { routeTree } from './routeTree.gen'
-const router = createRouter({ routeTree })
-
-const loadingPlaceholder = document.getElementById('loading') as HTMLElement
-loadingPlaceholder.style.display = 'none'
-
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -20,6 +14,12 @@ const queryClient = new QueryClient({
     },
   },
 })
+
+import { routeTree } from './routeTree.gen'
+const router = createRouter({ routeTree, context: { queryClient } })
+
+const loadingPlaceholder = document.getElementById('loading') as HTMLElement
+loadingPlaceholder.style.display = 'none'
 
 const rootElement = document.getElementById('app') as HTMLElement
 

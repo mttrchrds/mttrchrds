@@ -2,8 +2,6 @@ import React, { ReactNode } from 'react'
 import styled from 'styled-components'
 import { useLocation } from '@tanstack/react-router'
 
-import { homePaths } from '../../../helpers/links'
-
 import Layout from '../layout';
 import Container from '../container';
 import HomeNavigation from './home_navigation';
@@ -83,34 +81,36 @@ const StyledHomeLayout = styled.div`
   }
 `
 
+const homePaths = {
+  news: '',
+  projects: 'projects',
+  games: 'games',
+  shows: 'shows',
+}
+
+export const homeSections = [
+  { label: 'News', title: 'Latest News', path: homePaths.news, },
+  { label: 'Projects', title: 'Latest projects', path: homePaths.projects, },
+  { label: 'Games', title: 'Latest Games Played', path: homePaths.games, },
+  { label: 'Shows', title: 'Latest Shows Watched', path: homePaths.shows, },
+]
 interface HomeLayoutProps {
   children: ReactNode
 }
 
 const HomeLayout: React.FC<HomeLayoutProps> = ({ children }) => {
-  const pathname = useLocation({
+  const activePath = useLocation({
     select: (location) => location.pathname.split('/')[1],
   })
 
-  let activeTitle = ''
-
-  switch (pathname) {
-    case homePaths.news: {
-      activeTitle = 'Latest News'
-      break;
-    }
-    case homePaths.projects: {
-      activeTitle = 'Latest Projects'
-      break;
-    }
-    case homePaths.games: {
-      activeTitle = 'Latest Games Played'
-      break;
-    }
-    case homePaths.shows: {
-      activeTitle = 'Latest Shows Watched'
-      break;
-    }
+  const getActiveTitle = () => {
+    let activeTitle = ''
+    homeSections.forEach((section) => {
+      if (section.path === activePath) {
+        activeTitle = section.title
+      }
+    })
+    return activeTitle
   }
 
   return (
@@ -118,9 +118,7 @@ const HomeLayout: React.FC<HomeLayoutProps> = ({ children }) => {
       <Container>
         <StyledHomeLayout>
           <section className="navigation" data-testid="homeNavigation">
-            <HomeNavigation
-              activePath={pathname}
-            />
+            <HomeNavigation activePath={activePath} />
           </section>
           <section className="content">
             <div className="content__head">
@@ -128,7 +126,7 @@ const HomeLayout: React.FC<HomeLayoutProps> = ({ children }) => {
                 <div className="content__head__connector__inner"></div>
               </div>
               <div className="content__head__title" data-testid="homeTitle">
-                <HomeTitle title={activeTitle} />
+                <HomeTitle title={getActiveTitle()} />
               </div>
             </div>
             <div className="content__body">

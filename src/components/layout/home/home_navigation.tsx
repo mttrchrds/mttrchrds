@@ -1,11 +1,12 @@
 import React, { ReactNode } from 'react'
 import styled from 'styled-components'
 import _findIndex from 'lodash/findIndex'
+import { useLocation } from '@tanstack/react-router'
 
-import { homePaths } from '../../../helpers/links'
 import { mqMin } from '../../../helpers/media_queries'
 
 import HomeNavigationButton from './home_navigation_button';
+import { homeSections } from './home'
 
 const StyledHomeNavigation = styled.nav`
   width: 100%;
@@ -57,12 +58,6 @@ interface HomeNavigationProps {
 const HomeNavigation: React.FC<HomeNavigationProps> = ({ activePath }) => {
   
   const renderSideNavigation = () => {
-    const homeSections = [
-      { label: 'News', path: homePaths.news, },
-      { label: 'Projects', path: homePaths.projects, },
-      { label: 'Games', path: homePaths.games, },
-      { label: 'Shows', path: homePaths.shows, },
-    ]
     const activeSectionIndex = _findIndex(
       homeSections,
       hs => hs.path === activePath,

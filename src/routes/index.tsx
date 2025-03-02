@@ -2,7 +2,6 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import styled from 'styled-components'
 
 import { mqMin } from '../helpers/media_queries'
-import { homePaths } from '../helpers/links'
 
 import HomeLayout from '../components/layout/home/home'
 
@@ -91,7 +90,7 @@ function Index() {
           'Bluesky bot',
           '9 Nov 2024',
           <p>
-            I create a <Link to={`/${homePaths.projects}`}>Bluesky bot</Link> using TypeScript/Node.
+            I create a <Link to="/">Bluesky bot</Link> using TypeScript/Node.
           </p>,
         )}
         {renderItem(
@@ -99,7 +98,7 @@ function Index() {
           '21 Aug 2024',
           <p>
             A{' '}
-            <Link to={`/${homePaths.projects}`}>
+            <Link to="/projects">
               new project
             </Link>{' '}
             has been added based on the Material UI Autocomplete component.
@@ -110,7 +109,7 @@ function Index() {
           '15 May 2024',
           <p>
             My latest project is now live. See{' '}
-            <Link to="/stats">data visualisation</Link> based on my activities
+            <Link to="/">data visualisation</Link> based on my activities
           </p>,
         )}
         {renderItem(
@@ -123,7 +122,7 @@ function Index() {
           '15 March 2024',
           <p>
             First project is now live. View an interactive{' '}
-            <Link to="/timeline">timeline</Link> of all the shows I&apos;ve
+            <Link to="/">timeline</Link> of all the shows I&apos;ve
             watched and games I&apos;ve played
           </p>,
         )}

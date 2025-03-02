@@ -2,7 +2,6 @@ import { createLazyFileRoute, Link } from '@tanstack/react-router'
 import styled from 'styled-components'
 
 import { mqMin } from '../helpers/media_queries'
-import { homePaths } from '../helpers/links'
 
 import HomeLayout from '../components/layout/home/home'
 
@@ -161,7 +160,7 @@ function Projects() {
               .
             </p>
             <p>
-              <Link to="/stats">View Stats</Link>
+              <Link to="/">View Stats</Link>
             </p>
           </>,
         )}
@@ -192,7 +191,7 @@ function Projects() {
               </a>
             </p>
             <p>
-              <Link to="/timeline">View Timeline</Link>
+              <Link to="/">View Timeline</Link>
             </p>
           </>,
         )}

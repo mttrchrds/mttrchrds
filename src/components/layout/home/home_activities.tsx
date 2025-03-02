@@ -238,7 +238,7 @@ const HomeActivities: React.FC<HomeActivitiesProps> = ({
       <StyledHomeActivities>
         {activities.map(a => renderActivity(a))}
         <div className="activities-footer">
-          <Link to="/timeline">
+          <Link to="/">
             {shows
               ? 'View all shows on Timeline'
               : 'View all games on Timeline'}

@@ -1,12 +1,11 @@
 import React, { ReactNode } from 'react'
 import styled from 'styled-components'
 import _findIndex from 'lodash/findIndex'
-import { useLocation } from '@tanstack/react-router'
 
 import { mqMin } from '../../../helpers/media_queries'
 
-import HomeNavigationButton from './home_navigation_button';
-import { homeSections } from './home'
+import HomeNavigationButton from './home_navigation_button'
+import { homeItems } from './home'
 
 const StyledHomeNavigation = styled.nav`
   width: 100%;
@@ -56,24 +55,23 @@ interface HomeNavigationProps {
 }
 
 const HomeNavigation: React.FC<HomeNavigationProps> = ({ activePath }) => {
-  
-  const renderSideNavigation = () => {
+  const renderNavigation = () => {
     const activeSectionIndex = _findIndex(
-      homeSections,
-      hs => hs.path === activePath,
+      homeItems,
+      hi => hi.path === activePath,
     )
-    return homeSections.map((hs, idx) => {
+    return homeItems.map((hi, idx) => {
       let previousItem = false
       if (idx < activeSectionIndex) {
         previousItem = true
       }
-      const active = activePath === hs.path ? true : false
+      const active = activePath === hi.path ? true : false
       return (
-        <div key={hs.path} className="nav-primary__item">
+        <div key={hi.path} className="nav-primary__item">
           <HomeNavigationButton
             active={active}
-            link={`/${hs.path}`}
-            label={hs.label}
+            link={`/${hi.path}`}
+            label={hi.label}
             previousButton={previousItem}
           />
         </div>
@@ -85,7 +83,7 @@ const HomeNavigation: React.FC<HomeNavigationProps> = ({ activePath }) => {
     <StyledHomeNavigation>
       <div className="nav-primary">
         <h3 className="nav-primary__title">MENU</h3>
-        {renderSideNavigation()}
+        {renderNavigation()}
         <div className="nav-primary__filler"></div>
       </div>
       <div className="nav-secondary">

@@ -69,21 +69,20 @@ const StyledHomeProjects = styled.article`
 `
 
 function Projects() {
-
   const renderItem = (
-      title: string,
-      date: string,
-      description: React.JSX.Element,
-    ) => (
-      <div className="project-item">
-        <div className="project-item__primary">
-          <h4 className="project-item__primary__title">{title}</h4>
-          <p className="project-item__primary__date">{date}</p>
-        </div>
-        <div className="project-item__secondary">{description}</div>
+    title: string,
+    date: string,
+    description: React.JSX.Element,
+  ) => (
+    <div className="project-item">
+      <div className="project-item__primary">
+        <h4 className="project-item__primary__title">{title}</h4>
+        <p className="project-item__primary__date">{date}</p>
       </div>
-    )
-  
+      <div className="project-item__secondary">{description}</div>
+    </div>
+  )
+
   return (
     <HomeLayout>
       <StyledHomeProjects>
@@ -160,7 +159,7 @@ function Projects() {
               .
             </p>
             <p>
-              <Link to="/">View Stats</Link>
+              <Link to="/stats">View Stats</Link>
             </p>
           </>,
         )}

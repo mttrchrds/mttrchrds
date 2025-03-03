@@ -2,10 +2,10 @@ import React, { ReactNode } from 'react'
 import styled from 'styled-components'
 import { useLocation } from '@tanstack/react-router'
 
-import Layout from '../layout';
-import Container from '../container';
-import HomeNavigation from './home_navigation';
-import HomeTitle from './home_title';
+import Layout from '../layout'
+import Container from '../container'
+import HomeNavigation from './home_navigation'
+import HomeTitle from './home_title'
 
 import { mqMin } from '../../../helpers/media_queries'
 
@@ -88,26 +88,27 @@ const homePaths = {
   shows: 'shows',
 }
 
-export const homeSections = [
-  { label: 'News', title: 'Latest News', path: homePaths.news, },
-  { label: 'Projects', title: 'Latest projects', path: homePaths.projects, },
-  { label: 'Games', title: 'Latest Games Played', path: homePaths.games, },
-  { label: 'Shows', title: 'Latest Shows Watched', path: homePaths.shows, },
+export const homeItems = [
+  { label: 'News', title: 'Latest News', path: homePaths.news },
+  { label: 'Projects', title: 'Latest projects', path: homePaths.projects },
+  { label: 'Games', title: 'Latest Games Played', path: homePaths.games },
+  { label: 'Shows', title: 'Latest Shows Watched', path: homePaths.shows },
 ]
+
 interface HomeLayoutProps {
   children: ReactNode
 }
 
 const HomeLayout: React.FC<HomeLayoutProps> = ({ children }) => {
   const activePath = useLocation({
-    select: (location) => location.pathname.split('/')[1],
+    select: location => location.pathname.split('/')[1],
   })
 
   const getActiveTitle = () => {
     let activeTitle = ''
-    homeSections.forEach((section) => {
-      if (section.path === activePath) {
-        activeTitle = section.title
+    homeItems.forEach(item => {
+      if (item.path === activePath) {
+        activeTitle = item.title
       }
     })
     return activeTitle

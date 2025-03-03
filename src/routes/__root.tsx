@@ -1,4 +1,8 @@
-import { createRootRouteWithContext, Link, Outlet } from '@tanstack/react-router'
+import {
+  createRootRouteWithContext,
+  Link,
+  Outlet,
+} from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 import { QueryClient } from '@tanstack/react-query'
 
@@ -7,8 +11,8 @@ import Error from '../components/error'
 import PageNotFound from '../components/page_not_found'
 
 type MyRouterContext = {
-  queryClient: QueryClient;
-};
+  queryClient: QueryClient
+}
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   component: () => (
@@ -18,5 +22,5 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
     </>
   ),
   notFoundComponent: PageNotFound,
-  errorComponent: Error
+  errorComponent: Error,
 })

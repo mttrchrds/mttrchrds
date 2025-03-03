@@ -68,7 +68,6 @@ const StyledHomeNews = styled.article`
 `
 
 function Index() {
-
   const renderItem = (
     title: string,
     date: string,
@@ -97,11 +96,8 @@ function Index() {
           'New project',
           '21 Aug 2024',
           <p>
-            A{' '}
-            <Link to="/projects">
-              new project
-            </Link>{' '}
-            has been added based on the Material UI Autocomplete component.
+            A <Link to="/projects">new project</Link> has been added based on
+            the Material UI Autocomplete component.
           </p>,
         )}
         {renderItem(
@@ -109,7 +105,7 @@ function Index() {
           '15 May 2024',
           <p>
             My latest project is now live. See{' '}
-            <Link to="/">data visualisation</Link> based on my activities
+            <Link to="/stats">data visualisation</Link> based on my activities
           </p>,
         )}
         {renderItem(
@@ -122,8 +118,8 @@ function Index() {
           '15 March 2024',
           <p>
             First project is now live. View an interactive{' '}
-            <Link to="/">timeline</Link> of all the shows I&apos;ve
-            watched and games I&apos;ve played
+            <Link to="/">timeline</Link> of all the shows I&apos;ve watched and
+            games I&apos;ve played
           </p>,
         )}
         {renderItem(

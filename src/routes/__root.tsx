@@ -3,6 +3,7 @@ import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 import { QueryClient } from '@tanstack/react-query'
 
 import Layout from '../components/layout/layout'
+import { Error } from '../components/error'
 
 type MyRouterContext = {
   queryClient: QueryClient;
@@ -28,14 +29,5 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
       </Layout>
     )
   },
-  errorComponent: () => {
-    return (
-      <Layout>
-        <div>
-          <p>An error occurred! :(</p>
-          <Link to="/">Start Over</Link>
-        </div>
-      </Layout>
-    )
-  },
+  errorComponent: Error
 })

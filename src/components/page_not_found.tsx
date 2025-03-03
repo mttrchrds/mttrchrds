@@ -1,12 +1,10 @@
-import { useEffect } from "react";
-import { useQueryErrorResetBoundary } from "@tanstack/react-query";
-import { ErrorComponentProps, useRouter, Link } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import styled from 'styled-components'
 
 import Layout from "./layout/layout";
 import Container from "./layout/container";
 
-const StyledError = styled.div`
+const StyledPageNotFound = styled.div`
   height: inherit;
   min-height: 70vh;
   width: 100%;
@@ -48,30 +46,19 @@ const StyledError = styled.div`
   }
 `
 
-const Error = ({ reset }: ErrorComponentProps) => {
-  const router = useRouter();
-
-  const queryErrorResetBoundary = useQueryErrorResetBoundary();
-
-  useEffect(() => {
-    queryErrorResetBoundary.reset();
-  }, [queryErrorResetBoundary]);
-
+const PageNotFound = () => {
   return (
     <Layout>
       <Container>
-        <StyledError>
-          <h5>Unfortunately an error has occurred</h5>
+        <StyledPageNotFound>
+          <h5>Sorry, that page doesn't exist</h5>
           <p>
-          <a href="#" onClick={() => {
-              reset();
-              router.invalidate();
-            }}>Retry this page</a> or <Link to="/">go back to the homepage</Link>
+            <Link to="/">Back to the homepage</Link>
           </p>
-        </StyledError>
+        </StyledPageNotFound>
       </Container>
     </Layout>
   );
 };
 
-export default Error
+export default PageNotFound;

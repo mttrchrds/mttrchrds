@@ -18,7 +18,7 @@ import { Route as GamesImport } from './routes/games'
 import { Route as StatsRouteImport } from './routes/stats/route'
 import { Route as IndexImport } from './routes/index'
 import { Route as StatsIndexImport } from './routes/stats/index'
-import { Route as StatsShowPlatformYearsImport } from './routes/stats/show-platform-years'
+import { Route as StatsShowPlatformsYearsImport } from './routes/stats/show-platforms-years'
 import { Route as StatsGameDaysImport } from './routes/stats/game-days'
 import { Route as StatsGameCategoriesImport } from './routes/stats/game-categories'
 
@@ -64,9 +64,9 @@ const StatsIndexRoute = StatsIndexImport.update({
   getParentRoute: () => StatsRouteRoute,
 } as any)
 
-const StatsShowPlatformYearsRoute = StatsShowPlatformYearsImport.update({
-  id: '/show-platform-years',
-  path: '/show-platform-years',
+const StatsShowPlatformsYearsRoute = StatsShowPlatformsYearsImport.update({
+  id: '/show-platforms-years',
+  path: '/show-platforms-years',
   getParentRoute: () => StatsRouteRoute,
 } as any)
 
@@ -135,11 +135,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StatsGameDaysImport
       parentRoute: typeof StatsRouteImport
     }
-    '/stats/show-platform-years': {
-      id: '/stats/show-platform-years'
-      path: '/show-platform-years'
-      fullPath: '/stats/show-platform-years'
-      preLoaderRoute: typeof StatsShowPlatformYearsImport
+    '/stats/show-platforms-years': {
+      id: '/stats/show-platforms-years'
+      path: '/show-platforms-years'
+      fullPath: '/stats/show-platforms-years'
+      preLoaderRoute: typeof StatsShowPlatformsYearsImport
       parentRoute: typeof StatsRouteImport
     }
     '/stats/': {
@@ -157,14 +157,14 @@ declare module '@tanstack/react-router' {
 interface StatsRouteRouteChildren {
   StatsGameCategoriesRoute: typeof StatsGameCategoriesRoute
   StatsGameDaysRoute: typeof StatsGameDaysRoute
-  StatsShowPlatformYearsRoute: typeof StatsShowPlatformYearsRoute
+  StatsShowPlatformsYearsRoute: typeof StatsShowPlatformsYearsRoute
   StatsIndexRoute: typeof StatsIndexRoute
 }
 
 const StatsRouteRouteChildren: StatsRouteRouteChildren = {
   StatsGameCategoriesRoute: StatsGameCategoriesRoute,
   StatsGameDaysRoute: StatsGameDaysRoute,
-  StatsShowPlatformYearsRoute: StatsShowPlatformYearsRoute,
+  StatsShowPlatformsYearsRoute: StatsShowPlatformsYearsRoute,
   StatsIndexRoute: StatsIndexRoute,
 }
 
@@ -180,7 +180,7 @@ export interface FileRoutesByFullPath {
   '/projects': typeof ProjectsLazyRoute
   '/stats/game-categories': typeof StatsGameCategoriesRoute
   '/stats/game-days': typeof StatsGameDaysRoute
-  '/stats/show-platform-years': typeof StatsShowPlatformYearsRoute
+  '/stats/show-platforms-years': typeof StatsShowPlatformsYearsRoute
   '/stats/': typeof StatsIndexRoute
 }
 
@@ -191,7 +191,7 @@ export interface FileRoutesByTo {
   '/projects': typeof ProjectsLazyRoute
   '/stats/game-categories': typeof StatsGameCategoriesRoute
   '/stats/game-days': typeof StatsGameDaysRoute
-  '/stats/show-platform-years': typeof StatsShowPlatformYearsRoute
+  '/stats/show-platforms-years': typeof StatsShowPlatformsYearsRoute
   '/stats': typeof StatsIndexRoute
 }
 
@@ -204,7 +204,7 @@ export interface FileRoutesById {
   '/projects': typeof ProjectsLazyRoute
   '/stats/game-categories': typeof StatsGameCategoriesRoute
   '/stats/game-days': typeof StatsGameDaysRoute
-  '/stats/show-platform-years': typeof StatsShowPlatformYearsRoute
+  '/stats/show-platforms-years': typeof StatsShowPlatformsYearsRoute
   '/stats/': typeof StatsIndexRoute
 }
 
@@ -218,7 +218,7 @@ export interface FileRouteTypes {
     | '/projects'
     | '/stats/game-categories'
     | '/stats/game-days'
-    | '/stats/show-platform-years'
+    | '/stats/show-platforms-years'
     | '/stats/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -228,7 +228,7 @@ export interface FileRouteTypes {
     | '/projects'
     | '/stats/game-categories'
     | '/stats/game-days'
-    | '/stats/show-platform-years'
+    | '/stats/show-platforms-years'
     | '/stats'
   id:
     | '__root__'
@@ -239,7 +239,7 @@ export interface FileRouteTypes {
     | '/projects'
     | '/stats/game-categories'
     | '/stats/game-days'
-    | '/stats/show-platform-years'
+    | '/stats/show-platforms-years'
     | '/stats/'
   fileRoutesById: FileRoutesById
 }
@@ -285,7 +285,7 @@ export const routeTree = rootRoute
       "children": [
         "/stats/game-categories",
         "/stats/game-days",
-        "/stats/show-platform-years",
+        "/stats/show-platforms-years",
         "/stats/"
       ]
     },
@@ -306,8 +306,8 @@ export const routeTree = rootRoute
       "filePath": "stats/game-days.tsx",
       "parent": "/stats"
     },
-    "/stats/show-platform-years": {
-      "filePath": "stats/show-platform-years.tsx",
+    "/stats/show-platforms-years": {
+      "filePath": "stats/show-platforms-years.tsx",
       "parent": "/stats"
     },
     "/stats/": {

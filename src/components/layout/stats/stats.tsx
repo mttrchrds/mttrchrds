@@ -44,7 +44,7 @@ const StyledStatsLayout = styled.div`
 const statsPaths = {
   activitymonths: '',
   gamedays: 'game-days',
-  showplatformyears: 'show-platform-years',
+  showplatformyears: 'show-platforms-years',
   gamecategories: 'game-categories',
 }
 

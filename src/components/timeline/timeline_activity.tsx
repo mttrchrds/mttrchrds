@@ -5,7 +5,7 @@ import _get from 'lodash/get'
 import { loadActivity } from '../../redux/timeline/timeline_slice'
 
 import { useAppSelector, useAppDispatch } from '../../hooks/hooks'
-import { ActivityType } from '../../helpers/enums'
+import { TimelineActivity as TimelineActivityType } from '../../types/timeline'
 
 import TimelineActivityTooltip from './timeline_activity_tooltip'
 import Activity from './activity'
@@ -18,7 +18,7 @@ interface StyledTimelineActivityProps {
   $activityHeight: number
   $activityHover: boolean
   $activityColour: string
-  $thumbnail: string
+  $thumbnail: string | undefined
 }
 
 const StyledTimelineActivity = styled.div<StyledTimelineActivityProps>`
@@ -161,24 +161,7 @@ const StyledActivityModal = styled.div`
 
 const tooltipWidth = 250
 
-interface TimelineActivityGameShow {
-  id: number
-  name: string
-  thumbnailUrl: string
-}
-
-interface TimelineActivityPlatform {
-  id: number
-  name: string
-}
-
-interface TimelineActivityProps {
-  id: number
-  startAt: string
-  endAt: string | null
-  platform: TimelineActivityPlatform
-  gameShow: TimelineActivityGameShow
-  activityType: ActivityType
+interface TimelineActivityProps extends TimelineActivityType {
   dayHeight: number
   channelWidth: number
   activityColour: string
@@ -187,11 +170,13 @@ interface TimelineActivityProps {
 
 const TimelineActivity: React.FC<TimelineActivityProps> = ({
   id,
-  startAt,
-  endAt,
-  platform,
-  gameShow,
-  activityType,
+  start_at,
+  end_at,
+  game_activity,
+  game_platform,
+  show_activity,
+  show_platform,
+  activity_type,
   dayHeight,
   channelWidth,
   activityColour,
@@ -225,9 +210,9 @@ const TimelineActivity: React.FC<TimelineActivityProps> = ({
   }, [displayActivityModal])
 
   const newEndAt =
-    endAt === null ? `${currentYear}-${currentMonth}-${currentDay}` : endAt
+    end_at === null ? `${currentYear}-${currentMonth}-${currentDay}` : end_at
   const daysTotal = DateTime.fromISO(newEndAt)
-    .diff(DateTime.fromISO(startAt), 'days')
+    .diff(DateTime.fromISO(start_at), 'days')
     .toObject().days
   const daysTotalRounded = daysTotal ? Math.ceil(daysTotal) : 0
   // We add 1 to days total to make it span full length i.e. 4 days total needs to span 5 rows
@@ -288,7 +273,7 @@ const TimelineActivity: React.FC<TimelineActivityProps> = ({
     if (!daysTotal) {
       return null
     }
-    if (activityType === ActivityType.SHOW) {
+    if (activity_type === 'SHOW') {
       return (
         <div className="activity-tail">
           <svg
@@ -347,11 +332,19 @@ const TimelineActivity: React.FC<TimelineActivityProps> = ({
     if (activeActivity) {
       return (
         <Activity
-          startAt={activeActivity.startAt}
-          endAt={activeActivity.endAt}
-          activityType={activeActivity.activityType}
-          gameShow={activeActivity.gameShow}
-          platform={activeActivity.platform}
+          startAt={activeActivity.start_at}
+          endAt={activeActivity.end_at}
+          activityType={activeActivity.activity_type}
+          gameShow={
+            activeActivity.activity_type === 'GAME'
+              ? activeActivity.game_activity
+              : activeActivity.show_activity
+          }
+          platform={
+            activeActivity.activity_type === 'GAME'
+              ? activeActivity.game_platform
+              : activeActivity.show_platform
+          }
           completed={activeActivity.completed}
         />
       )
@@ -365,7 +358,11 @@ const TimelineActivity: React.FC<TimelineActivityProps> = ({
         $channelWidth={channelWidth}
         $activityHeight={activityHeight}
         $activityColour={activityColour}
-        $thumbnail={gameShow.thumbnailUrl}
+        $thumbnail={
+          activity_type === 'GAME'
+            ? game_activity?.thumbnail_url
+            : show_activity?.thumbnail_url
+        }
         $activityHover={activityHover}
         onClick={handleClickActivity}
         onMouseEnter={handleMouseEnterActivity}
@@ -384,10 +381,18 @@ const TimelineActivity: React.FC<TimelineActivityProps> = ({
             positionY={tooltipY}
             activityColour={activityColour}
             tooltipWidth={tooltipWidth}
-            startAt={startAt}
-            endAt={endAt}
-            title={gameShow.name}
-            platform={platform.name}
+            startAt={start_at}
+            endAt={end_at}
+            title={
+              activity_type === 'GAME'
+                ? game_activity?.name
+                : show_activity?.name
+            }
+            platform={
+              activity_type === 'GAME'
+                ? game_platform?.name
+                : show_platform?.name
+            }
             alignment={calculateTooltipAlignment()}
           />
         )}

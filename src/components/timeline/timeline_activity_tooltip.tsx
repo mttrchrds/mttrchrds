@@ -38,8 +38,8 @@ interface TimelineActivityTooltipProps {
   activityColour: string
   startAt: string
   endAt: string | null
-  title: string
-  platform: string
+  title: string | undefined
+  platform: string | undefined
   alignment: 'left' | 'right'
 }
 

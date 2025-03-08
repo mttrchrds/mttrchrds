@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react'
+import { ReactElement } from 'react'
 import { render as testingLibraryRender } from '@testing-library/react'
 import { ThemeProvider } from 'styled-components'
 import theme from '../styles/theme'

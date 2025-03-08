@@ -24,9 +24,16 @@ import { Route as StatsGameCategoriesImport } from './routes/stats/game-categori
 
 // Create Virtual Routes
 
+const TimelineLazyImport = createFileRoute('/timeline')()
 const ProjectsLazyImport = createFileRoute('/projects')()
 
 // Create/Update Routes
+
+const TimelineLazyRoute = TimelineLazyImport.update({
+  id: '/timeline',
+  path: '/timeline',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/timeline.lazy').then((d) => d.Route))
 
 const ProjectsLazyRoute = ProjectsLazyImport.update({
   id: '/projects',
@@ -121,6 +128,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProjectsLazyImport
       parentRoute: typeof rootRoute
     }
+    '/timeline': {
+      id: '/timeline'
+      path: '/timeline'
+      fullPath: '/timeline'
+      preLoaderRoute: typeof TimelineLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/stats/game-categories': {
       id: '/stats/game-categories'
       path: '/game-categories'
@@ -178,6 +192,7 @@ export interface FileRoutesByFullPath {
   '/games': typeof GamesRoute
   '/shows': typeof ShowsRoute
   '/projects': typeof ProjectsLazyRoute
+  '/timeline': typeof TimelineLazyRoute
   '/stats/game-categories': typeof StatsGameCategoriesRoute
   '/stats/game-days': typeof StatsGameDaysRoute
   '/stats/show-platforms-years': typeof StatsShowPlatformsYearsRoute
@@ -189,6 +204,7 @@ export interface FileRoutesByTo {
   '/games': typeof GamesRoute
   '/shows': typeof ShowsRoute
   '/projects': typeof ProjectsLazyRoute
+  '/timeline': typeof TimelineLazyRoute
   '/stats/game-categories': typeof StatsGameCategoriesRoute
   '/stats/game-days': typeof StatsGameDaysRoute
   '/stats/show-platforms-years': typeof StatsShowPlatformsYearsRoute
@@ -202,6 +218,7 @@ export interface FileRoutesById {
   '/games': typeof GamesRoute
   '/shows': typeof ShowsRoute
   '/projects': typeof ProjectsLazyRoute
+  '/timeline': typeof TimelineLazyRoute
   '/stats/game-categories': typeof StatsGameCategoriesRoute
   '/stats/game-days': typeof StatsGameDaysRoute
   '/stats/show-platforms-years': typeof StatsShowPlatformsYearsRoute
@@ -216,6 +233,7 @@ export interface FileRouteTypes {
     | '/games'
     | '/shows'
     | '/projects'
+    | '/timeline'
     | '/stats/game-categories'
     | '/stats/game-days'
     | '/stats/show-platforms-years'
@@ -226,6 +244,7 @@ export interface FileRouteTypes {
     | '/games'
     | '/shows'
     | '/projects'
+    | '/timeline'
     | '/stats/game-categories'
     | '/stats/game-days'
     | '/stats/show-platforms-years'
@@ -237,6 +256,7 @@ export interface FileRouteTypes {
     | '/games'
     | '/shows'
     | '/projects'
+    | '/timeline'
     | '/stats/game-categories'
     | '/stats/game-days'
     | '/stats/show-platforms-years'
@@ -250,6 +270,7 @@ export interface RootRouteChildren {
   GamesRoute: typeof GamesRoute
   ShowsRoute: typeof ShowsRoute
   ProjectsLazyRoute: typeof ProjectsLazyRoute
+  TimelineLazyRoute: typeof TimelineLazyRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -258,6 +279,7 @@ const rootRouteChildren: RootRouteChildren = {
   GamesRoute: GamesRoute,
   ShowsRoute: ShowsRoute,
   ProjectsLazyRoute: ProjectsLazyRoute,
+  TimelineLazyRoute: TimelineLazyRoute,
 }
 
 export const routeTree = rootRoute
@@ -274,7 +296,8 @@ export const routeTree = rootRoute
         "/stats",
         "/games",
         "/shows",
-        "/projects"
+        "/projects",
+        "/timeline"
       ]
     },
     "/": {
@@ -297,6 +320,9 @@ export const routeTree = rootRoute
     },
     "/projects": {
       "filePath": "projects.lazy.tsx"
+    },
+    "/timeline": {
+      "filePath": "timeline.lazy.tsx"
     },
     "/stats/game-categories": {
       "filePath": "stats/game-categories.tsx",

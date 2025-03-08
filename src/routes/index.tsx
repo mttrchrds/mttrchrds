@@ -118,8 +118,8 @@ function Index() {
           '15 March 2024',
           <p>
             First project is now live. View an interactive{' '}
-            <Link to="/">timeline</Link> of all the shows I&apos;ve watched and
-            games I&apos;ve played
+            <Link to="/timeline">timeline</Link> of all the shows I&apos;ve
+            watched and games I&apos;ve played
           </p>,
         )}
         {renderItem(

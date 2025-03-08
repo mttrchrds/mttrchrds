@@ -1,7 +1,6 @@
 import { screen } from '@testing-library/react'
 import Activity from '../activity'
 import render from '../../../testing/render'
-import { ActivityType } from '../../../helpers/enums'
 
 const activityOngoing = {
   id: 370,
@@ -42,7 +41,7 @@ const activityOngoing = {
   },
   game_activity: null,
   game_platform: null,
-  activity_type: ActivityType.SHOW,
+  activity_type: 'SHOW' as const,
 }
 
 const activityComponent = (ongoing: boolean) => (
@@ -53,24 +52,24 @@ const activityComponent = (ongoing: boolean) => (
     gameShow={{
       id: activityOngoing.show_activity.id,
       name: activityOngoing.show_activity.name,
-      imdbId: activityOngoing.show_activity.imdb_id,
-      imageUrl: activityOngoing.show_activity.image_url,
-      thumbnailUrl: activityOngoing.show_activity.thumbnail_url,
+      imdb_id: activityOngoing.show_activity.imdb_id,
+      image_url: activityOngoing.show_activity.image_url,
+      thumbnail_url: activityOngoing.show_activity.thumbnail_url,
       rating: activityOngoing.show_activity.rating,
       creator: {
         id: activityOngoing.show_activity.creator.id,
         name: activityOngoing.show_activity.creator.name,
-        imageUrl: activityOngoing.show_activity.creator.image_url,
+        image_url: activityOngoing.show_activity.creator.image_url,
       },
       categories: activityOngoing.show_activity.categories,
-      imageWidth: activityOngoing.show_activity.image_width,
-      imageHeight: activityOngoing.show_activity.image_height,
+      image_width: activityOngoing.show_activity.image_width,
+      image_height: activityOngoing.show_activity.image_height,
     }}
     activityType={activityOngoing.activity_type}
     platform={{
       id: activityOngoing.show_platform.id,
       name: activityOngoing.show_platform.name,
-      imageUrl: activityOngoing.show_platform.image_url,
+      image_url: activityOngoing.show_platform.image_url,
     }}
   />
 )

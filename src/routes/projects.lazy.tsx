@@ -190,7 +190,7 @@ function Projects() {
               </a>
             </p>
             <p>
-              <Link to="/">View Timeline</Link>
+              <Link to="/timeline">View Timeline</Link>
             </p>
           </>,
         )}

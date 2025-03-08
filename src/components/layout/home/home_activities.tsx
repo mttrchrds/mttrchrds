@@ -1,13 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
 import { DateTime } from 'luxon'
-import { Link } from "@tanstack/react-router";
+import { Link } from '@tanstack/react-router'
 
 import { mqMin } from '../../../helpers/media_queries'
 
-import { Activity } from '../../../types/timeline2'
+import { Activity } from '../../../types/timeline'
 
-import HomeLoading from './home_loading'
 import BlankState from '../../../styles/components/blank_state'
 import RatingEmoji from '../../rating_emoji'
 
@@ -161,7 +160,6 @@ const HomeActivities: React.FC<HomeActivitiesProps> = ({
   }
 
   const renderActivity = (activity: Activity) => {
-
     const endAt = activity.end_at ? activity.end_at : false
     const game_show =
       activity.game_activity !== null
@@ -238,7 +236,7 @@ const HomeActivities: React.FC<HomeActivitiesProps> = ({
       <StyledHomeActivities>
         {activities.map(a => renderActivity(a))}
         <div className="activities-footer">
-          <Link to="/">
+          <Link to="/timeline">
             {shows
               ? 'View all shows on Timeline'
               : 'View all games on Timeline'}

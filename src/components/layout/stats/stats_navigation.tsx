@@ -42,7 +42,7 @@ const StatsNavigation: React.FC<StatsNavigationProps> = ({ activePath }) => {
       return (
         <StatsNavigationItem
           key={si.path}
-          path={si.path}
+          link={si.path}
           active={active}
           label={si.label}
         />

@@ -38,16 +38,16 @@ const StyledStatsNavigationItem = styled(Link)<StyledStatsNavigationItemProps>`
 interface StatsNavigationItemProps {
   active: boolean
   label: string
-  path: string
+  link: string
 }
 
 const StatsNavigationItem: React.FC<StatsNavigationItemProps> = ({
   active,
-  path,
+  link,
   label,
 }) => {
   return (
-    <StyledStatsNavigationItem to={path} $active={active}>
+    <StyledStatsNavigationItem to={link} $active={active}>
       {label}
     </StyledStatsNavigationItem>
   )

@@ -4,6 +4,9 @@ import { ThemeProvider } from 'styled-components'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
+import { Provider } from 'react-redux'
+import { setupStore } from './redux/store'
+
 import theme from './styles/theme'
 import GlobalStyles from './styles/global_styles'
 
@@ -38,12 +41,14 @@ if (!rootElement.innerHTML) {
   const root = createRoot(rootElement)
   root.render(
     <StrictMode>
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider theme={theme}>
-          <GlobalStyles />
-          <RouterProvider router={router} />
-        </ThemeProvider>
-      </QueryClientProvider>
+      <Provider store={setupStore()}>
+        <QueryClientProvider client={queryClient}>
+          <ThemeProvider theme={theme}>
+            <GlobalStyles />
+            <RouterProvider router={router} />
+          </ThemeProvider>
+        </QueryClientProvider>
+      </Provider>
     </StrictMode>,
   )
 }

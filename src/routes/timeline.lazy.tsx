@@ -1,5 +1,6 @@
-import { useEffect, useState, useRef, memo } from 'react'
+import { createLazyFileRoute } from '@tanstack/react-router'
 import styled from 'styled-components'
+import { useEffect, useState, useRef, memo } from 'react'
 import _get from 'lodash/get'
 import {
   loadTimeline,
@@ -8,19 +9,23 @@ import {
   updateCurrentMonth,
   updateCurrentYear,
   TimelinePayloadParsed,
-} from '../../redux/timeline/timeline_slice'
-import { useAppDispatch, useAppSelector } from '../../hooks/hooks'
+} from '../redux/timeline/timeline_slice'
+import { useAppDispatch, useAppSelector } from '../hooks/hooks'
 
-import { mqMin } from '../../helpers/media_queries'
-import { formatDateNumber } from '../../helpers/date_times'
+import { mqMin } from '../helpers/media_queries'
+import { formatDateNumber } from '../helpers/date_times'
 
-import Layout from '../layout/layout'
-import Container from '../layout/container'
-import TimelineSection from '../timeline/timeline_section'
-import Activity from '../timeline/activity'
-import Spinner from '../spinner'
+import theme from '../styles/theme'
 
-import theme from '../../styles/theme'
+import Layout from '../components/layout/layout'
+import Container from '../components/layout/container'
+import Spinner from '../components/spinner'
+import TimelineSection from '../components/timeline/timeline_section'
+import Activity from '../components/timeline/activity'
+
+export const Route = createLazyFileRoute('/timeline')({
+  component: TimelineRoute,
+})
 
 interface TimelineSectionMemoizedProps {
   timelineDays: TimelinePayloadParsed[]
@@ -134,7 +139,7 @@ const StyledActivity = styled.div`
   }
 `
 
-const Timeline = () => {
+function TimelineRoute() {
   // Returns true if the component at the bottom of the timeline (i.e. intersection) is visible. Used for infinite loading
   const [intersection, setIntersection] = useState(false)
 
@@ -228,11 +233,19 @@ const Timeline = () => {
     if (activity) {
       return (
         <Activity
-          startAt={activity.startAt}
-          endAt={activity.endAt}
-          activityType={activity.activityType}
-          gameShow={activity.gameShow}
-          platform={activity.platform}
+          startAt={activity.start_at}
+          endAt={activity.end_at}
+          activityType={activity.activity_type}
+          gameShow={
+            activity.activity_type === 'GAME'
+              ? activity.game_activity
+              : activity.show_activity
+          }
+          platform={
+            activity.activity_type === 'GAME'
+              ? activity.game_platform
+              : activity.show_platform
+          }
           completed={activity.completed}
         />
       )
@@ -287,5 +300,3 @@ const Timeline = () => {
     </Layout>
   )
 }
-
-export default Timeline

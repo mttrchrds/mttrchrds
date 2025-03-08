@@ -1,11 +1,10 @@
-import React from 'react'
 import { http, HttpResponse, delay } from 'msw'
 import { setupServer } from 'msw/node'
 import { fireEvent, screen } from '@testing-library/react'
-import { renderWithProviders } from '../../../testing/render_redux'
+// import { renderWithProviders } from '../../../testing/render_redux'
 import { within } from '@testing-library/dom'
 
-import Home from '../home'
+// import Home from '../home'
 
 // Use msw to intercept the network request during the test and return mocked response after 150ms
 export const handlers = [

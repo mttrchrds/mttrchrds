@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react'
 import { render } from '@testing-library/react'
 import { Provider } from 'react-redux'
 import { ThemeProvider } from 'styled-components'
-import { MemoryRouter } from 'react-router-dom'
+// import { MemoryRouter } from 'react-router-dom'
 
 import theme from '../styles/theme'
 

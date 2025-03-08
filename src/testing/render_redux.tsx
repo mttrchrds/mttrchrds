@@ -23,7 +23,7 @@ export const renderWithProviders = (
   const AllTheProviders = ({ children }: { children: React.ReactNode }) => (
     <Provider store={store}>
       <ThemeProvider theme={theme}>
-        <MemoryRouter initialEntries={routerPath}>{children}</MemoryRouter>
+        {/* <MemoryRouter initialEntries={routerPath}>{children}</MemoryRouter> */}
       </ThemeProvider>
     </Provider>
   )

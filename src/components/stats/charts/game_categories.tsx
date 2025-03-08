@@ -34,17 +34,17 @@ const StyledGameCategories = styled.div`
 `
 
 interface GameCategoriesProps {
-  data: GameCategory[]
+  payload: GameCategory[]
 }
 
-const GameCategories: React.FC<GameCategoriesProps> = ({ data }) => {
+const GameCategories: React.FC<GameCategoriesProps> = ({ payload }) => {
   const renderChart = () => {
     return (
       <ResponsiveContainer width="100%" height={600}>
         <Treemap
           width={400}
           height={200}
-          data={data}
+          data={payload}
           dataKey="total"
           aspectRatio={4 / 3}
           stroke="#fff"

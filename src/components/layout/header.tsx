@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Link } from 'react-router-dom'
+import { Link } from "@tanstack/react-router";
 
 import { mqMin } from '../../helpers/media_queries'
 
@@ -56,7 +56,7 @@ const StyledHeader = styled.header`
       &:link,
       &:visited,
       &:active {
-        background-color: ${props => props.theme.colors.secondary};
+        background-color: ${props => props.theme.colors.primary};
         text-decoration: none;
       }
       &:hover {

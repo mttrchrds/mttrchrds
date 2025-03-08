@@ -3,8 +3,8 @@ import styled from 'styled-components'
 import _get from 'lodash/get'
 import { DateTime } from 'luxon'
 
-import { ActivityType } from '../../helpers/enums'
-import { GameShow, Platform } from '../../types/timeline'
+import { GameShow, Platform, BaseActivity } from '../../types/timeline'
+
 import RatingEmoji from '../rating_emoji'
 import Image from '../image'
 
@@ -75,7 +75,7 @@ const calculateRatingColour = (
     bronze: string
     other2: string
   },
-  rating: number,
+  rating: number | undefined,
 ) => {
   if (rating === 10) {
     return colors.gold
@@ -90,7 +90,7 @@ const calculateRatingColour = (
 }
 
 interface StyledRatingProps {
-  $rating: number
+  $rating: number | undefined
 }
 
 const StyledRating = styled.span<StyledRatingProps>`
@@ -108,9 +108,9 @@ interface ActivityProps {
   startAt: string
   endAt: string | null
   completed: boolean
-  gameShow: GameShow
-  activityType: ActivityType
-  platform: Platform
+  gameShow: GameShow | null
+  activityType: BaseActivity['activity_type']
+  platform: Platform | null
 }
 
 const Activity: React.FC<ActivityProps> = ({
@@ -157,15 +157,16 @@ const Activity: React.FC<ActivityProps> = ({
     </svg>
   )
 
-  const renderRating = () => {
+  const renderRatingScore = (rating: number | undefined) => {
     let ratingArray = []
-    const rating = gameShow.rating
 
-    for (let i = 0; i < 10; i++) {
-      if (i + 1 <= rating) {
-        ratingArray.push(true)
-      } else {
-        ratingArray.push(false)
+    if (rating) {
+      for (let i = 0; i < 10; i++) {
+        if (i + 1 <= rating) {
+          ratingArray.push(true)
+        } else {
+          ratingArray.push(false)
+        }
       }
     }
 
@@ -190,35 +191,59 @@ const Activity: React.FC<ActivityProps> = ({
         })}
       </StyledRating>
     )
+
+    return null
+  }
+
+  const renderRating = () => {
+    if (gameShow?.rating) {
+      return (
+        <div
+          className="game-show__row game-show__row--primary"
+          data-testid="activity-rating"
+        >
+          <div className="game-show__row__label">Rating:</div>
+          <div className="game-show__row__value game-show__row__value--flex">
+            {renderRatingScore(gameShow?.rating)}
+            <span className="game-show__row__value__emoji">
+              <RatingEmoji rating={gameShow?.rating} />
+            </span>
+          </div>
+        </div>
+      )
+    }
+
+    return null
+  }
+
+  const renderImage = (name: string) => {
+    if (
+      gameShow?.image_url &&
+      gameShow?.image_width &&
+      gameShow?.image_height
+    ) {
+      return (
+        <Image
+          src={gameShow?.image_url}
+          altText={name}
+          width={gameShow?.image_width}
+          height={gameShow?.image_height}
+        />
+      )
+    }
+    if (gameShow?.image_url) {
+      ;<img src={gameShow?.image_url} alt={name} />
+    }
+    return null
   }
 
   const renderActiveGameShow = () => {
-    const name = `${gameShow.name} (${platform.name})`
+    const name = `${gameShow?.name} (${platform?.name})`
     return (
       <div className="game-show">
-        <div className="game-show__image">
-          <Image
-            src={gameShow.imageUrl}
-            altText={name}
-            width={gameShow.imageWidth}
-            height={gameShow.imageHeight}
-          />
-        </div>
+        <div className="game-show__image">{renderImage(name)}</div>
         <h3 className="game-show__name">{name}</h3>
-        {endAt && (
-          <div
-            className="game-show__row game-show__row--primary"
-            data-testid="activity-rating"
-          >
-            <div className="game-show__row__label">Rating:</div>
-            <div className="game-show__row__value game-show__row__value--flex">
-              {renderRating()}
-              <span className="game-show__row__value__emoji">
-                <RatingEmoji rating={gameShow.rating} />
-              </span>
-            </div>
-          </div>
-        )}
+        {endAt && renderRating()}
         <div className="game-show__row">
           <div className="game-show__row__label">Started:</div>
           <div className="game-show__row__value">
@@ -228,10 +253,7 @@ const Activity: React.FC<ActivityProps> = ({
         {renderEndAt()}
         <div className="game-show__row">
           <div className="game-show__row__label">
-            {activityType === ActivityType.SHOW
-              ? 'Series completed'
-              : 'Game completed'}
-            :
+            {activityType === 'SHOW' ? 'Series completed' : 'Game completed'}:
           </div>
           <div className="game-show__row__value">
             {completed ? 'Yes' : 'No'}
@@ -239,7 +261,7 @@ const Activity: React.FC<ActivityProps> = ({
         </div>
         <div className="game-show__link">
           <a
-            href={`https://www.imdb.com/title/${gameShow.imdbId}`}
+            href={`https://www.imdb.com/title/${gameShow?.imdb_id}`}
             target="_blank"
             rel="noreferrer"
           >

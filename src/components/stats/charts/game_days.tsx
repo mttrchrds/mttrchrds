@@ -49,14 +49,14 @@ const StyledGameDays = styled.div`
 `
 
 interface GameDaysProps {
-  data: GameDay[]
+  payload: GameDay[]
 }
 
 interface GameDayWithColours extends GameDay {
   colour: string
 }
 
-const GameDays: React.FC<GameDaysProps> = ({ data }) => {
+const GameDays: React.FC<GameDaysProps> = ({ payload }) => {
   const activeColourIndex = useRef(0)
 
   const generateActiveColourIndex = (currentIndex: number) => {
@@ -68,9 +68,9 @@ const GameDays: React.FC<GameDaysProps> = ({ data }) => {
     }
   }
 
-  const parsedData: GameDayWithColours[] = data.map(d => {
+  const parsedData: GameDayWithColours[] = payload.map(p => {
     const payload = {
-      ...d,
+      ...p,
       colour: demoColours[activeColourIndex.current],
     }
     activeColourIndex.current = generateActiveColourIndex(

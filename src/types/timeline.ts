@@ -1,9 +1,7 @@
-import { ActivityType } from '../helpers/enums'
-
 export interface Creator {
   id: number
   name: string
-  imageUrl: string
+  image_url: string
 }
 
 export interface Category {
@@ -14,52 +12,44 @@ export interface Category {
 export interface GameShow {
   id: number
   name: string
-  imdbId: string
-  imageUrl: string
-  thumbnailUrl: string
+  imdb_id: string
+  image_url: string
+  thumbnail_url: string
   rating: number
   creator: Creator
   categories: Category[]
-  imageWidth: number
-  imageHeight: number
+  image_width: number
+  image_height: number
 }
 
-export type TimelineGameShow = Pick<GameShow, 'id' | 'name' | 'thumbnailUrl'>
+export type TimelineGameShow = Pick<GameShow, 'id' | 'name' | 'thumbnail_url'>
 
 export interface Platform {
   id: number
   name: string
-  imageUrl: string
+  image_url: string
 }
 
 export type TimelinePlatform = Pick<Platform, 'id' | 'name'>
 
-interface BaseActivity {
-  id: number
-  startAt: string
-  endAt: string | null
-  completed: boolean
-  activityType: ActivityType
-}
-
-export interface Activity extends BaseActivity {
-  gameShow: GameShow
-  platform: Platform
-}
-
-export interface TimelineActivity extends BaseActivity {
-  gameShow: TimelineGameShow
-  platform: TimelinePlatform
-}
-
-export interface ActivityRaw {
+export interface BaseActivity {
   id: number
   start_at: string
   end_at: string | null
   completed: boolean
+  activity_type: 'GAME' | 'SHOW'
+}
+
+export interface Activity extends BaseActivity {
   show_activity: GameShow | null
   show_platform: Platform | null
   game_activity: GameShow | null
   game_platform: Platform | null
-  activity_type: ActivityType
+}
+
+export interface TimelineActivity extends BaseActivity {
+  show_activity: TimelineGameShow | null
+  show_platform: TimelinePlatform | null
+  game_activity: TimelineGameShow | null
+  game_platform: TimelinePlatform | null
 }

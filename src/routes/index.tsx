@@ -89,7 +89,8 @@ function Index() {
           'Bluesky bot',
           '9 Nov 2024',
           <p>
-            I create a <Link to="/">Bluesky bot</Link> using TypeScript/Node.
+            I create a <Link to="/projects">Bluesky bot</Link> using
+            TypeScript/Node.
           </p>,
         )}
         {renderItem(
